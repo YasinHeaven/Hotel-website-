@@ -1,0 +1,437 @@
+/* Global Responsive Utilities */
+
+/* Container responsive padding */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    max-width: 1140px;
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    max-width: 960px;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 720px;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 0 8px;
+  }
+}
+
+/* Responsive Typography */
+.responsive-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.responsive-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+}
+
+.responsive-text {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .responsive-title {
+    font-size: 2.5rem;
+    margin-bottom: 18px;
+  }
+  
+  .responsive-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .responsive-title {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+  
+  .responsive-subtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+  
+  .responsive-text {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .responsive-title {
+    font-size: 1.8rem;
+    margin-bottom: 14px;
+  }
+  
+  .responsive-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+  }
+  
+  .responsive-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-title {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+  }
+  
+  .responsive-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  
+  .responsive-text {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .responsive-title {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  
+  .responsive-subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 16px;
+  }
+  
+  .responsive-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive Grids */
+.responsive-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.responsive-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.responsive-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 1024px) {
+  .responsive-grid-4 {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+  
+  .responsive-grid-3 {
+    gap: 25px;
+  }
+  
+  .responsive-grid-2 {
+    gap: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .responsive-grid-4,
+  .responsive-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .responsive-grid-2 {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .responsive-grid-4,
+  .responsive-grid-3,
+  .responsive-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Responsive Flexbox */
+.responsive-flex {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .responsive-flex {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-flex {
+    gap: 12px;
+  }
+}
+
+/* Responsive Buttons */
+.responsive-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .responsive-btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .responsive-btn {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive Cards */
+.responsive-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .responsive-card {
+    padding: 20px;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .responsive-card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+}
+
+/* Responsive Sections */
+.responsive-section {
+  padding: 80px 0;
+}
+
+@media (max-width: 1024px) {
+  .responsive-section {
+    padding: 60px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .responsive-section {
+    padding: 50px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .responsive-section {
+    padding: 40px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-section {
+    padding: 30px 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .responsive-section {
+    padding: 20px 0;
+  }
+}
+
+/* Responsive Images */
+.responsive-img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .responsive-img {
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-img {
+    border-radius: 8px;
+  }
+}
+
+/* Responsive Form Elements */
+.responsive-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.responsive-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+@media (max-width: 768px) {
+  .responsive-input {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-input {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .responsive-input {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+  }
+}
+
+/* Hide/Show utilities for different screen sizes */
+.hide-mobile {
+  display: block;
+}
+
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none;
+  }
+  
+  .show-mobile {
+    display: block;
+  }
+}
+
+.hide-tablet {
+  display: block;
+}
+
+.show-tablet {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .hide-tablet {
+    display: none;
+  }
+  
+  .show-tablet {
+    display: block;
+  }
+}
+
+/* Touch-friendly utilities */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive spacing utilities */
+.responsive-spacing {
+  margin-bottom: 40px;
+}
+
+@media (max-width: 768px) {
+  .responsive-spacing {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-spacing {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .responsive-spacing {
+    margin-bottom: 16px;
+  }
+}

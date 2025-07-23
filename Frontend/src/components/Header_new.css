@@ -1,0 +1,447 @@
+/* Modern Professional Header Styles */
+.header {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 65px;
+  position: relative;
+}
+
+/* Logo Section */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.logo:hover {
+  transform: scale(1.02);
+}
+
+.logo-image {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid #dc2626;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #dc2626;
+  line-height: 1.2;
+}
+
+.logo-subtitle {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+  margin-top: -2px;
+}
+
+/* Desktop Navigation */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 8px 0;
+  position: relative;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-link:hover {
+  color: #dc2626;
+}
+
+.nav-link.active {
+  color: #dc2626;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #dc2626;
+  border-radius: 1px;
+}
+
+.deals-link {
+  position: relative;
+}
+
+.hot-badge {
+  background: linear-gradient(135deg, #ff4444, #ff0000);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 1px 3px rgba(255, 0, 0, 0.3);
+}
+
+/* Authentication Section */
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info {
+  font-size: 0.9rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.admin-badge {
+  background: #dc2626;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  text-transform: uppercase;
+}
+
+.logout-btn {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.logout-btn:hover {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-login {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-login:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.btn-signup {
+  background: #dc2626;
+  border: 1px solid #dc2626;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-signup:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+.btn-admin {
+  background: #1f2937;
+  border: 1px solid #1f2937;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-admin:hover {
+  background: #111827;
+  border-color: #111827;
+}
+
+/* Mobile Toggle */
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: #374151;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.mobile-toggle:hover {
+  background: #f3f4f6;
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 8px 8px;
+}
+
+.mobile-nav-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-nav-link {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  padding: 12px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-nav-link:hover {
+  background: #f3f4f6;
+  color: #dc2626;
+}
+
+.mobile-nav-link.active {
+  background: #fef2f2;
+  color: #dc2626;
+  border-left: 3px solid #dc2626;
+}
+
+.mobile-auth {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+  margin-top: 8px;
+}
+
+.mobile-user-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-user-info {
+  font-size: 0.9rem;
+  color: #374151;
+  padding: 8px 16px;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+
+.mobile-logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+
+.mobile-logout-btn:hover {
+  background: #dc2626;
+}
+
+.mobile-auth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-btn-login,
+.mobile-btn-signup,
+.mobile-btn-admin {
+  text-decoration: none;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mobile-btn-login {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.mobile-btn-login:hover {
+  background: #f3f4f6;
+}
+
+.mobile-btn-signup {
+  background: #dc2626;
+  color: white;
+  border: 1px solid #dc2626;
+}
+
+.mobile-btn-signup:hover {
+  background: #b91c1c;
+}
+
+.mobile-btn-admin {
+  background: #1f2937;
+  color: white;
+  border: 1px solid #1f2937;
+}
+
+.mobile-btn-admin:hover {
+  background: #111827;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .desktop-nav {
+    gap: 24px;
+  }
+  
+  .nav-link {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+  
+  .auth-section {
+    display: none;
+  }
+  
+  .mobile-toggle {
+    display: block;
+  }
+  
+  .mobile-nav {
+    display: block;
+  }
+  
+  .logo-title {
+    font-size: 1.1rem;
+  }
+  
+  .logo-subtitle {
+    font-size: 0.7rem;
+  }
+  
+  .logo-image {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0 16px;
+  }
+  
+  .header-content {
+    height: 60px;
+  }
+  
+  .logo-title {
+    font-size: 1rem;
+  }
+  
+  .logo-subtitle {
+    display: none;
+  }
+}

@@ -1,0 +1,412 @@
+/* Beach Hotels Page Styles */
+.beach-hotels-page {
+  padding-top: 80px;
+}
+
+/* Beach Hero Section */
+.beach-hero {
+  position: relative;
+  min-height: 70vh;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.beach-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"><path d="M0 0v100c200-20 400-40 600-20 200 20 400 40 400 0V0z" fill="rgba(255,255,255,0.1)"/></svg>');
+  background-size: 1000px 100px;
+  background-repeat: repeat-x;
+  animation: wave 15s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-50px); }
+}
+
+.beach-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.beach-hero-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  text-align: center;
+  color: white;
+}
+
+.beach-hero-text {
+  max-width: 800px;
+  margin: 0 auto 48px;
+}
+
+.hero-highlight {
+  color: #fbbf24;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Hotels Grid Section */
+.hotels-grid-section {
+  background: #f8fafc;
+  padding: 80px 0;
+}
+
+.hotels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 32px;
+  margin-top: 48px;
+}
+
+.hotel-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.hotel-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.hotel-image {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+}
+
+.hotel-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.hotel-card:hover .hotel-image img {
+  transform: scale(1.05);
+}
+
+.hotel-rating {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #0ea5e9;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  backdrop-filter: blur(10px);
+}
+
+.star-icon {
+  color: #fbbf24;
+  font-size: 12px;
+}
+
+.hotel-content {
+  padding: 24px;
+}
+
+.hotel-header {
+  margin-bottom: 16px;
+}
+
+.hotel-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.hotel-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.location-icon {
+  color: #0ea5e9;
+}
+
+.hotel-description {
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.hotel-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.feature-tag {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.beach-feature {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+}
+
+.hotel-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.amenity-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.amenity-icon {
+  color: #0ea5e9;
+  font-size: 12px;
+}
+
+.hotel-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.hotel-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.price-label {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.price-amount {
+  color: #0ea5e9;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.price-period {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.hotel-book-btn {
+  padding: 12px 24px;
+  min-width: 120px;
+}
+
+/* Beach Activities Section */
+.beach-activities {
+  background: white;
+  padding: 80px 0;
+}
+
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  margin-top: 48px;
+}
+
+.activity-card {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 20px;
+  padding: 32px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid #e0f2fe;
+}
+
+.activity-card:hover {
+  transform: translateY(-8px);
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  border-color: #0ea5e9;
+}
+
+.activity-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 24px;
+}
+
+.activity-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+.activity-card p {
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Enhanced Search Card for Beach */
+.beach-hero .search-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.beach-hero .search-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  align-items: end;
+}
+
+.beach-hero .search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.beach-hero .search-field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #374151;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.beach-hero .search-icon {
+  color: #0ea5e9;
+}
+
+.beach-hero .search-input,
+.beach-hero .search-select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: #f9fafb;
+  color: #374151;
+}
+
+.beach-hero .search-input:focus,
+.beach-hero .search-select:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.beach-hero .search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 180px;
+}
+
+.beach-hero .search-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
+}
+
+.search-btn-icon {
+  font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hotels-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .beach-hero .search-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .activities-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hotel-footer {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .hotel-book-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  .beach-hero .search-card {
+    padding: 20px;
+    margin: 0 16px;
+  }
+  
+  .hotel-card {
+    margin: 0 16px;
+  }
+}
