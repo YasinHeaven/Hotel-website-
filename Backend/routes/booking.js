@@ -2,6 +2,8 @@ const express = require('express');
 const Booking = require('../models/Booking');
 const auth = require('../middleware/auth');
 const router = express.Router();
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 // Create Booking (user must be authenticated)
 router.post('/', auth, async (req, res) => {
@@ -169,6 +171,36 @@ router.post('/', auth, async (req, res) => {
     
     await booking.save();
     console.log('✅ Booking created successfully:', booking._id);
+
+    // Send email to admin
+    try {
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_USER || 'muhammadhaiderali2710@gmail.com',
+          pass: process.env.GMAIL_PASS || 'qfru ziks molv nwcx'
+        }
+      });
+      // Compose email
+      let mailOptions = {
+        from: 'no-reply@yasinheavenstar.com',
+        to: process.env.ADMIN_NOTIFICATION_EMAIL || 'muhammadhaiderali2710@gmail.com',
+        subject: 'New Room Booking Notification',
+        text: `A new room booking has been made.\n\n` +
+          `Name: ${booking.customerInfo.name}\n` +
+          `Email: ${booking.customerInfo.email}\n` +
+          `Phone: ${booking.customerInfo.phone}\n` +
+          `Room: ${booking.room}\n` +
+          `Check-in: ${booking.checkIn.toISOString().split('T')[0]}\n` +
+          `Check-out: ${booking.checkOut.toISOString().split('T')[0]}\n` +
+          `Guests: ${booking.guests}\n` +
+          `Booking ID: ${booking._id}`
+      };
+      let info = await transporter.sendMail(mailOptions);
+      console.log('📧 Booking notification sent to admin:', info.messageId);
+    } catch (mailErr) {
+      console.error('❌ Failed to send booking notification email:', mailErr);
+    }
     
     // Populate for response
     await booking.populate('room', 'type price features images number');
