@@ -214,8 +214,9 @@
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 30px;
+  padding: 0 20px;
 }
 
 .menu-item {
@@ -304,6 +305,9 @@
 
 .menu-item-content {
   padding: 20px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-item-header {
@@ -354,8 +358,10 @@
 
 .menu-item-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  margin-top: auto;
+  padding-top: 15px;
 }
 
 .menu-item-price {
@@ -530,11 +536,27 @@
   .category-filter {
     flex-direction: column;
     align-items: center;
+    gap: 10px;
   }
   
   .menu-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+    padding: 0 10px;
+  }
+  
+  .menu-item-content {
+    padding: 16px;
+    min-height: 180px;
+  }
+  
+  .menu-item-name {
+    font-size: 1.1rem;
+  }
+  
+  .menu-item-description {
+    font-size: 14px;
+    margin-bottom: 12px;
   }
   
   .reservation-content {

@@ -41,7 +41,6 @@ const RestaurantPage = () => {
       id: 1,
       name: 'Truffle Arancini',
       description: 'Crispy risotto balls with truffle oil, parmesan, and wild mushrooms',
-      price: 18,
       category: 'appetizers',
       image: '/assets/T1.jpg',
       rating: 4.8,
@@ -52,7 +51,6 @@ const RestaurantPage = () => {
       id: 2,
       name: 'Seared Scallops',
       description: 'Pan-seared scallops with cauliflower purée and pancetta crisps',
-      price: 24,
       category: 'appetizers',
       image: '/assets/T2.jpg',
       rating: 4.9,
@@ -63,7 +61,6 @@ const RestaurantPage = () => {
       id: 3,
       name: 'Burrata Caprese',
       description: 'Fresh burrata with heirloom tomatoes, basil, and aged balsamic',
-      price: 16,
       category: 'appetizers',
       image: '/assets/Master .jpg',
       rating: 4.7,
@@ -74,7 +71,6 @@ const RestaurantPage = () => {
       id: 4,
       name: 'Wagyu Beef Tenderloin',
       description: 'Grade A5 wagyu with roasted vegetables and red wine reduction',
-      price: 65,
       category: 'mains',
       image: '/assets/Home 1.jpg',
       rating: 4.9,
@@ -85,7 +81,6 @@ const RestaurantPage = () => {
       id: 5,
       name: 'Chilean Sea Bass',
       description: 'Miso-glazed sea bass with forbidden rice and bok choy',
-      price: 42,
       category: 'mains',
       image: '/assets/Home 2.jpg',
       rating: 4.8,
@@ -95,7 +90,6 @@ const RestaurantPage = () => {
       id: 6,
       name: 'Lobster Ravioli',
       description: 'House-made pasta with lobster, ricotta, and saffron cream sauce',
-      price: 38,
       category: 'mains',
       image: '/assets/home 3.jpg',
       rating: 4.7,
@@ -107,7 +101,6 @@ const RestaurantPage = () => {
       id: 7,
       name: 'Chocolate Lava Cake',
       description: 'Warm chocolate cake with molten center and vanilla ice cream',
-      price: 14,
       category: 'desserts',
       image: '/assets/View.jpg',
       rating: 4.9,
@@ -118,7 +111,6 @@ const RestaurantPage = () => {
       id: 8,
       name: 'Crème Brûlée',
       description: 'Classic vanilla custard with caramelized sugar and fresh berries',
-      price: 12,
       category: 'desserts',
       image: '/assets/Single Bed Pic.jpg',
       rating: 4.8,
@@ -129,7 +121,6 @@ const RestaurantPage = () => {
       id: 9,
       name: 'Sommelier\'s Selection',
       description: 'Curated wine pairing for your meal',
-      price: 25,
       category: 'beverages',
       image: '/assets/Single Bed Close.jpg',
       rating: 4.9,
@@ -139,7 +130,6 @@ const RestaurantPage = () => {
       id: 10,
       name: 'Craft Cocktails',
       description: 'House-crafted cocktails with premium spirits',
-      price: 16,
       category: 'beverages',
       image: '/assets/Washroom Dulex.jpg',
       rating: 4.8,
@@ -156,11 +146,6 @@ const RestaurantPage = () => {
       icon: <FaUtensils />,
       title: 'Fine Dining',
       description: 'Michelin-starred chef with international cuisine'
-    },
-    {
-      icon: <FaWineGlass />,
-      title: 'Wine Collection',
-      description: 'Over 500 premium wines from around the world'
     },
     {
       icon: <FaClock />,
@@ -201,10 +186,6 @@ const RestaurantPage = () => {
                 <div className="stat">
                   <div className="stat-number">🏆 Michelin</div>
                   <div className="stat-label">Starred Chef</div>
-                </div>
-                <div className="stat">
-                  <div className="stat-number">🍷 500+</div>
-                  <div className="stat-label">Wine Selection</div>
                 </div>
               </div>
             </div>
@@ -292,9 +273,8 @@ const RestaurantPage = () => {
                     </div>
                   )}
                   <div className="menu-item-footer">
-                    <div className="menu-item-price">${item.price}</div>
                     <button className="btn btn-primary">
-                      Add to Order
+                      View Details
                     </button>
                   </div>
                 </div>

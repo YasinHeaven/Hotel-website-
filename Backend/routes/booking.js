@@ -177,14 +177,14 @@ router.post('/', auth, async (req, res) => {
       let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.GMAIL_USER || 'muhammadhaiderali2710@gmail.com',
-          pass: process.env.GMAIL_PASS || 'qfru ziks molv nwcx'
+          user: process.env.GMAIL_USER || 'yasinheavenstarhotel@gmail.com',
+          pass: process.env.GMAIL_PASS || 'cqgh dpdb gitv glxi'
         }
       });
       // Compose email
       let mailOptions = {
         from: 'no-reply@yasinheavenstar.com',
-        to: process.env.ADMIN_NOTIFICATION_EMAIL || 'muhammadhaiderali2710@gmail.com',
+        to: process.env.ADMIN_NOTIFICATION_EMAIL || 'yasinheavenstarhotel@gmail.com',
         subject: 'New Room Booking Notification',
         text: `A new room booking has been made.\n\n` +
           `Name: ${booking.customerInfo.name}\n` +

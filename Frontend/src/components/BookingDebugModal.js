@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { bookingAPI } from '../services/api';
 import { FaArrowRight } from 'react-icons/fa';
 
-const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
+const BookingDebugModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -10,6 +10,9 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
     e.preventDefault();
     setError('');
     setLoading(true);
+    
+    console.log('🔍 DEBUG: Selected Room:', selectedRoom);
+    
     const form = e.target;
     const guestName = form.guestName.value;
     const email = form.email.value;
@@ -19,24 +22,54 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
     const guests = form.guests.value;
     const specialRequests = form.specialRequests.value;
     
+    const bookingData = {
+      id: selectedRoom.id || selectedRoom._id,
+      guestName,
+      email,
+      phone,
+      checkIn,
+      checkOut,
+      guests,
+      specialRequests
+    };
+    
+    console.log('🔍 DEBUG: Booking Data:', bookingData);
+    
+    // Test direct API call
     try {
       const payload = {
-        room: selectedRoom.id || selectedRoom._id,
-        checkIn,
-        checkOut,
-        guests: parseInt(guests, 10) || 1,
+        room: bookingData.id,
+        checkIn: bookingData.checkIn,
+        checkOut: bookingData.checkOut,
+        guests: parseInt(bookingData.guests) || 1,
         customerInfo: {
-          name: guestName,
-          email,
-          phone,
-          specialRequests: specialRequests || ''
+          name: bookingData.guestName,
+          email: bookingData.email,
+          phone: bookingData.phone,
+          specialRequests: bookingData.specialRequests || ''
         }
       };
+      
+      console.log('🔍 DEBUG: API Payload:', payload);
+      
       const response = await bookingAPI.createBooking(payload);
+      console.log('🔍 DEBUG: API Response:', response);
+      
       setLoading(false);
-      onBookingSuccess();
+      
+      if (response.data && response.data.booking) {
+        console.log('✅ DEBUG: Booking successful!', response.data.booking);
+        onClose(); // Close modal
+        alert(`✅ Booking created successfully! ID: ${response.data.booking._id}`);
+      } else {
+        console.error('❌ DEBUG: Invalid response format');
+        setError('Invalid response from server');
+      }
+      
     } catch (err) {
       setLoading(false);
+      console.error('❌ DEBUG: API Error:', err);
+      console.error('❌ DEBUG: Error Response:', err.response?.data);
       setError(err.response?.data?.message || err.message || 'Booking failed. Please try again.');
     }
   };
@@ -69,8 +102,14 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
       <div className="booking-modal-overlay" style={{zIndex: 9998}} onClick={() => !loading && onClose()}>
         <div className="booking-modal" onClick={(e) => e.stopPropagation()}>
           <div className="booking-modal-header">
-            <h3>Book {selectedRoom?.name}</h3>
+            <h3>DEBUG: Book {selectedRoom?.name}</h3>
             <button className="modal-close-btn" onClick={onClose} disabled={loading}>×</button>
+          </div>
+          <div style={{padding: '10px', background: '#f0f0f0', margin: '10px', borderRadius: '5px'}}>
+            <strong>DEBUG INFO:</strong><br/>
+            Room ID: {selectedRoom?.id || selectedRoom?._id || 'NOT FOUND'}<br/>
+            Room Name: {selectedRoom?.name || 'NOT FOUND'}<br/>
+            Room Type: {selectedRoom?.type || 'NOT FOUND'}
           </div>
           <form onSubmit={handleBookingSubmit} className="booking-form">
             <div className="booking-form-group">
@@ -112,11 +151,11 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
                 Cancel
               </button>
               <button type="submit" className="btn btn-primary" disabled={loading}>
-                Confirm Booking
+                DEBUG: Confirm Booking
                 <FaArrowRight className="btn-arrow" />
               </button>
             </div>
-            {error && <div style={{color: 'red', marginTop: 10}}>{error}</div>}
+            {error && <div style={{color: 'red', marginTop: 10, padding: '10px', background: '#ffe6e6'}}>{error}</div>}
           </form>
         </div>
       </div>
@@ -130,4 +169,4 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
   );
 };
 
-export default BookRoomModal; 
+export default BookingDebugModal;

@@ -64,16 +64,7 @@ const Header = () => {
     <header className="header">
       <div className="header-container">
         <div className="header-content">
-          {/* Logo Section */}
-          <Link to="/" className="logo">
-            <img src="/assets/logo.jpg" alt="Yasin Heaven Star Hotel" className="logo-image" />
-            <div className="logo-text">
-              <span className="logo-title">Yasin Heaven Star Hotel</span>
-              <span className="logo-subtitle">Premium Hospitality</span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Left Side */}
           <nav className="desktop-nav">
             <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>
               Home
@@ -88,25 +79,37 @@ const Header = () => {
             <Link to="/gallery" className={`nav-link ${isActive('/gallery') ? 'active' : ''}`}>
               Gallery
             </Link>
-            <Link to="/restaurant" className={`nav-link ${isActive('/restaurant') ? 'active' : ''}`}>
-              Restaurant
-            </Link>
-            <Link to="/facilities" className={`nav-link ${isActive('/facilities') ? 'active' : ''}`}>
-              Facilities
-            </Link>
-            <Link to="/booking" className={`nav-link ${isActive('/booking') ? 'active' : ''}`}>
-              My Bookings
-            </Link>
-            {/* Admin Panel Link - Only visible when admin is logged in */}
-            {user && userType === 'admin' && (
-              <Link to="/admin" className={`nav-link admin-panel-link ${isActive('/admin') ? 'active' : ''}`}>
-                🏨 Admin Panel
-              </Link>
-            )}
           </nav>
 
-          {/* Authentication Section */}
+          {/* Logo Section - Right Aligned */}
+          <Link to="/" className="logo">
+            <div className="logo-text">
+              <span className="logo-title">Yasin Heaven Star Hotel</span>
+              <span className="logo-subtitle">Premium Hospitality</span>
+            </div>
+            <img src="/assets/logo.jpg" alt="Yasin Heaven Star Hotel" className="logo-image" />
+          </Link>
+
+          {/* Authentication Section - Right Side */}
           <div className="auth-section">
+            <nav className="desktop-nav-right">
+              <Link to="/restaurant" className={`nav-link ${isActive('/restaurant') ? 'active' : ''}`}>
+                Restaurant
+              </Link>
+              <Link to="/facilities" className={`nav-link ${isActive('/facilities') ? 'active' : ''}`}>
+                Facilities
+              </Link>
+              <Link to="/booking" className={`nav-link ${isActive('/booking') ? 'active' : ''}`}>
+                My Bookings
+              </Link>
+              {/* Admin Panel Link - Only visible when admin is logged in */}
+              {user && userType === 'admin' && (
+                <Link to="/admin" className={`nav-link admin-panel-link ${isActive('/admin') ? 'active' : ''}`}>
+                  🏨 Admin Panel
+                </Link>
+              )}
+            </nav>
+            
             {user ? (
               <div className="user-menu">
                 <span className="user-info">

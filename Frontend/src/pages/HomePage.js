@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { FaArrowRight, FaBed, FaCalendarAlt, FaCar, FaCheckCircle, FaCoffee, FaConciergeBell, FaMapMarkerAlt, FaRoute, FaSearch, FaShoppingBag, FaShower, FaSpa, FaStar, FaUmbrellaBeach, FaUsers, FaUtensils, FaWifi, FaWineGlass } from 'react-icons/fa';
+import { FaArrowRight, FaBed, FaCalendarAlt, FaCar, FaCheckCircle, FaCoffee, FaConciergeBell, FaMapMarkerAlt, FaRoute, FaSearch, FaShoppingBag, FaShower, FaSpa, FaStar, FaUsers, FaUtensils, FaWifi } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import './HomePage.css';
-import BookRoomModal from '../components/BookRoomModal';
+import BookingDebugModal from '../components/BookingDebugModal';
+import AuthDebug from '../components/AuthDebug';
 import { roomAPI } from '../services/api';
 
 // Move facilities array definition to the top, before any useState calls
@@ -89,11 +90,11 @@ const HomePage = () => {
           type: room.type.toLowerCase().replace(' ', ''),
           price: room.price,
           image: `/assets/Rooms/${room.type} 1.jpg`,
-          features: ['Free WiFi', 'AC', 'TV', 'Private Bathroom'],
+          features: ['Free WiFi', 'TV', 'Private Bathroom'],
           description: room.description,
           maxGuests: room.capacity || 2,
           size: '35 sqm',
-          amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Private Bathroom', 'Room Service', 'Daily Housekeeping'],
+          amenities: ['Free WiFi', 'TV', 'Private Bathroom', 'Room Service', 'Daily Housekeeping'],
           number: room.number,
           status: room.status
         }));
@@ -340,108 +341,7 @@ const HomePage = () => {
                 Discover luxury hotels and unforgettable experiences worldwide. Your perfect stay awaits.
               </p>
               
-              {/* Enhanced Search Card */}
-              <div className="search-card">
-                <div className="search-card-content">
-                  <form className="search-form" onSubmit={handleSearch}>
-                    <div className="search-field">
-                      <label htmlFor="destination" className="search-label">
-                        <FaMapMarkerAlt className="search-icon" />
-                        Destination
-                      </label>
-                      <input
-                        type="text"
-                        id="destination"
-                        name="destination"
-                        placeholder="Where are you going?"
-                        value={searchData.destination}
-                        onChange={handleInputChange}
-                        className="search-input"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="search-field">
-                      <label htmlFor="checkIn" className="search-label">
-                        <FaCalendarAlt className="search-icon" />
-                        Check-in
-                      </label>
-                      <input
-                        type="date"
-                        id="checkIn"
-                        name="checkIn"
-                        value={searchData.checkIn}
-                        onChange={handleInputChange}
-                        className="search-input"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="search-field">
-                      <label htmlFor="checkOut" className="search-label">
-                        <FaCalendarAlt className="search-icon" />
-                        Check-out
-                      </label>
-                      <input
-                        type="date"
-                        id="checkOut"
-                        name="checkOut"
-                        value={searchData.checkOut}
-                        onChange={handleInputChange}
-                        className="search-input"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="search-field">
-                      <label htmlFor="guests" className="search-label">
-                        <FaUsers className="search-icon" />
-                        Guests
-                      </label>
-                      <select
-                        id="guests"
-                        name="guests"
-                        value={searchData.guests}
-                        onChange={handleInputChange}
-                        className="search-select"
-                      >
-                        <option value="1">1 Guest</option>
-                        <option value="2">2 Guests</option>
-                        <option value="3">3 Guests</option>
-                        <option value="4">4 Guests</option>
-                        <option value="5+">5+ Guests</option>
-                      </select>
-                    </div>
-                    
-                    <div className="search-field">
-                      <label htmlFor="roomType" className="search-label">
-                        <FaBed className="search-icon" />
-                        Room Type
-                      </label>
-                      <select
-                        id="roomType"
-                        name="roomType"
-                        value={searchData.roomType}
-                        onChange={handleInputChange}
-                        className="search-select"
-                      >
-                        <option value="single">Single Room</option>
-                        <option value="deluxe">Deluxe Room</option>
-                        <option value="master">Master Suite</option>
-                        <option value="family">Family Room</option>
-                      </select>
-                    </div>
-                    
-                    <div className="search-button-container">
-                      <button type="submit" className="search-button">
-                        <FaSearch className="search-btn-icon" />
-                        Search Hotels
-                        <FaArrowRight className="search-btn-arrow" />
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -595,28 +495,6 @@ const HomePage = () => {
           <div className="destinations-grid">
             <div className="destination-card">
               <div className="destination-image">
-                <img src="/assets/Home 1.jpg" alt="Beach Destinations" />
-                <div className="destination-overlay">
-                  <div className="destination-badge beach">🏖️ Beach</div>
-                </div>
-              </div>
-              <div className="destination-content">
-                <h3 className="destination-title">Beach Destinations</h3>
-                <p className="destination-description">
-                  Discover perfect hotels for your next warm-weather vacation with seaside escapes
-                </p>
-                <button 
-                  className="btn btn-outline destination-btn"
-                  onClick={() => handleExploreDestination('Beach')}
-                >
-                  Explore Beach Hotels
-                  <FaArrowRight className="btn-arrow" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="destination-card">
-              <div className="destination-image">
                 <img src="/assets/Home 2.jpg" alt="City Hotels" />
                 <div className="destination-overlay">
                   <div className="destination-badge city">🏙️ City</div>
@@ -738,9 +616,9 @@ const HomePage = () => {
             <div className="section-badge">
               🍽️ Fine Dining
             </div>
-            <h2 className="section-title">Restaurant & Bar</h2>
+            <h2 className="section-title">Restaurant</h2>
             <p className="section-description">
-              Experience culinary excellence with our award-winning restaurant and premium bar
+              Experience culinary excellence with our award-winning restaurant
             </p>
           </div>
           
@@ -761,10 +639,6 @@ const HomePage = () => {
                     <span className="meal-type">Dinner</span>
                     <span className="time">6:00 PM - 11:00 PM</span>
                   </div>
-                  <div className="hour-item">
-                    <span className="meal-type">Bar</span>
-                    <span className="time">5:00 PM - 1:00 AM</span>
-                  </div>
                 </div>
               </div>
               
@@ -775,14 +649,8 @@ const HomePage = () => {
                     <FaUtensils className="feature-icon" />
                     <span>International Cuisine</span>
                   </div>
-                  <div className="feature-item">
-                    <FaWineGlass className="feature-icon" />
-                    <span>Premium Wine Selection</span>
-                  </div>
-                  <div className="feature-item">
-                    <FaCoffee className="feature-icon" />
-                    <span>Specialty Coffee Bar</span>
-                  </div>
+
+
                   <div className="feature-item">
                     <FaConciergeBell className="feature-icon" />
                     <span>Room Service Available</span>
@@ -812,7 +680,6 @@ const HomePage = () => {
                           <h5 className="item-name">{item.name}</h5>
                           <p className="item-description">{item.description}</p>
                         </div>
-                        <div className="item-price">${item.price}</div>
                       </div>
                     ))}
                   </div>
@@ -892,27 +759,6 @@ const HomePage = () => {
           </div>
           
           <div className="destinations-grid">
-            <div className="destination-card" onClick={() => handleExploreDestination('Beach')}>
-              <div className="destination-image">
-                <img src="/assets/T1.jpg" alt="Beach Destinations" />
-                <div className="destination-overlay">
-                  <div className="destination-content">
-                    <div className="destination-icon">
-                      <FaUmbrellaBeach />
-                    </div>
-                    <h3 className="destination-title">Beach Destinations</h3>
-                    <p className="destination-description">
-                      Relax on pristine beaches with crystal clear waters
-                    </p>
-                    <button className="btn btn-primary destination-btn">
-                      Explore Now
-                      <FaArrowRight className="btn-arrow" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
             <div className="destination-card" onClick={() => handleExploreDestination('City')}>
               <div className="destination-image">
                 <img src="/assets/T2.jpg" alt="City Hotels" />
@@ -980,7 +826,7 @@ const HomePage = () => {
                   <h3 className="deal-title">Summer Special</h3>
                 </div>
                 <p className="deal-description">
-                  Save up to 30% on beach destinations. Book now for your perfect summer getaway with premium amenities included.
+                  Save up to 30% on hotel bookings. Book now for your perfect getaway with premium amenities included.
                 </p>
                 <div className="deal-info">
                   <div className="deal-price">Save up to 30%</div>
@@ -1106,7 +952,7 @@ const HomePage = () => {
 
       {/* Booking Modal */}
       {showBookingModal && selectedRoom && (
-        <BookRoomModal
+        <BookingDebugModal
           selectedRoom={selectedRoom}
           onClose={() => setShowBookingModal(false)}
           onBookingSuccess={handleBookingSubmit}
