@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaArrowRight, FaBed, FaCalendarAlt, FaCar, FaCheckCircle, FaCoffee, FaConciergeBell, FaMapMarkerAlt, FaRoute, FaSearch, FaShoppingBag, FaShower, FaSpa, FaStar, FaUmbrellaBeach, FaUsers, FaUtensils, FaWifi, FaWineGlass } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import MuiAlert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import './HomePage.css';
+import BookRoomModal from '../components/BookRoomModal';
+import { roomAPI } from '../services/api';
 
 // Move facilities array definition to the top, before any useState calls
 const facilities = [
@@ -64,6 +68,46 @@ const HomePage = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [facilityImgIndexes, setFacilityImgIndexes] = useState(() => facilities.map(() => 0));
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [bookingSuccess, setBookingSuccess] = useState(null);
+  const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
+
+  // Fetch rooms from API (like RoomsPage)
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        setLoading(true);
+        const response = await roomAPI.getAllRooms();
+        // Transform API data to match frontend format
+        const transformedRooms = response.data.map(room => ({
+          id: room._id,
+          name: room.type,
+          type: room.type.toLowerCase().replace(' ', ''),
+          price: room.price,
+          image: `/assets/Rooms/${room.type} 1.jpg`,
+          features: ['Free WiFi', 'AC', 'TV', 'Private Bathroom'],
+          description: room.description,
+          maxGuests: room.capacity || 2,
+          size: '35 sqm',
+          amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Private Bathroom', 'Room Service', 'Daily Housekeeping'],
+          number: room.number,
+          status: room.status
+        }));
+        setRooms(transformedRooms);
+        setError('');
+      } catch (err) {
+        setError('Failed to load rooms');
+        setRooms([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRooms();
+  }, []);
 
   const handleInputChange = (e) => {
     setSearchData({
@@ -84,6 +128,7 @@ const HomePage = () => {
   };
 
   const handleBookingSubmit = async (bookingData) => {
+    setBookingLoading(true);
     console.log('Booking submitted:', bookingData);
     
     // Check if user is authenticated
@@ -91,9 +136,16 @@ const HomePage = () => {
     const userType = localStorage.getItem('userType');
     
     if (!token || userType !== 'user') {
-      alert('Please login to make a booking');
+      setSnackbar({ 
+        open: true, 
+        message: '🔐 Please login to make a booking', 
+        severity: 'warning' 
+      });
       localStorage.setItem('redirectAfterLogin', '/');
-      window.location.href = '/login';
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 2000);
+      setBookingLoading(false);
       return;
     }
 
@@ -101,11 +153,11 @@ const HomePage = () => {
       // Import the booking API
       const { bookingAPI } = await import('../services/api');
       
-      // Create the booking
-      const response = await bookingAPI.createBooking({
-        room: bookingData.room._id || bookingData.room.id,
-        checkIn: bookingData.checkInDate,
-        checkOut: bookingData.checkOutDate,
+      // Build booking payload to match backend expectations
+      const payload = {
+        room: bookingData.id || bookingData._id || bookingData, // handle both object and id
+        checkIn: bookingData.checkIn || bookingData.checkInDate,
+        checkOut: bookingData.checkOut || bookingData.checkOutDate,
         guests: parseInt(bookingData.guests) || 1,
         customerInfo: {
           name: bookingData.guestName,
@@ -113,22 +165,59 @@ const HomePage = () => {
           phone: bookingData.phone,
           specialRequests: bookingData.specialRequests || ''
         }
-      });
+      };
+      
+      const response = await bookingAPI.createBooking(payload);
+      setBookingLoading(false);
 
       if (response.data && response.data.booking) {
-        setShowBookingModal(false);
-        alert(`🎉 Booking request submitted successfully!\n\nBooking ID: ${response.data.booking._id}\n\nYour booking is pending admin approval. You will receive confirmation within 24 hours.\n\nCheck "My Bookings" to track status.`);
+        const booking = response.data.booking;
+        const bookingId = booking._id;
         
-        // Redirect to bookings page after 3 seconds
+        // Show success notification
+        setSnackbar({ 
+          open: true, 
+          message: `🎉 Booking request submitted! ID: ${bookingId}`, 
+          severity: 'success' 
+        });
+        
+        // Set booking success data for confirmation display
+        setBookingSuccess({
+          booking: booking,
+          room: selectedRoom,
+          bookingData: bookingData,
+          nextSteps: response.data.nextSteps || [
+            'Admin will review within 24 hours',
+            'You\'ll receive email confirmation',
+            'Check "My Bookings" for updates'
+          ]
+        });
+        
+        // Close modal and show confirmation
+        setShowBookingModal(false);
+        setShowBookingConfirmation(true);
+        
+        // Auto-redirect after 8 seconds
         setTimeout(() => {
-          window.location.href = '/booking';
-        }, 3000);
+          navigate('/booking');
+        }, 8000);
+        
       } else {
+        setSnackbar({ 
+          open: true, 
+          message: '❌ Booking failed. Please try again.', 
+          severity: 'error' 
+        });
         throw new Error('Invalid response from server');
       }
     } catch (error) {
+      setBookingLoading(false);
       console.error('Booking error:', error);
-      alert(`❌ Booking failed: ${error.response?.data?.message || error.message || 'Please try again'}`);
+      setSnackbar({ 
+        open: true, 
+        message: `❌ Booking failed: ${error.response?.data?.message || error.message || 'Please try again'}`, 
+        severity: 'error' 
+      });
     }
   };
 
@@ -169,9 +258,22 @@ const HomePage = () => {
     e.preventDefault();
     const email = e.target.email.value;
     if (email) {
-      alert(`Thank you for subscribing!\n\nEmail: ${email}\n\nYou'll receive exclusive deals and updates from Yasin Heaven Star Hotel.`);
+      setSnackbar({ 
+        open: true, 
+        message: `📧 Thank you for subscribing! You'll receive exclusive deals at ${email}`, 
+        severity: 'success' 
+      });
       e.target.reset();
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
+
+  const handleCloseBookingConfirmation = () => {
+    setShowBookingConfirmation(false);
+    setBookingSuccess(null);
   };
 
   const handlePrevImg = (facilityIdx, totalImgs) => {
@@ -189,53 +291,6 @@ const HomePage = () => {
       return updated;
     });
   };
-
-  const rooms = [
-    {
-      id: 1,
-      name: 'Single Room',
-      type: 'single',
-      price: 8000,
-      image: '/assets/Rooms/Single Room 1.jpg',
-      features: ['Free WiFi', 'AC', 'TV', 'Private Bathroom'],
-      description: 'Perfect for solo travelers with all essential amenities.',
-      maxGuests: 1,
-      size: '20 sqm'
-    },
-    {
-      id: 2,
-      name: 'Deluxe Room',
-      type: 'deluxe',
-      price: 12000,
-      image: '/assets/Rooms/Delux Room 1.jpg',
-      features: ['Bed', 'Chair', 'Mini Fridge', 'Electric Kettle', 'WiFi', 'Hot Water', 'Electric Ceiling Fan', 'Attach Bath'],
-      description: 'Perfect room with all necessary needs, bed, chair, mini fridge, electric kettle, WiFi, hot water, electric ceiling fan and attach bath.',
-      maxGuests: 2,
-      size: '35 sqm'
-    },
-    {
-      id: 3,
-      name: 'Master Bedroom Suite',
-      type: 'master',
-      price: 10000,
-      image: '/assets/Rooms/Master Room 1.jpg',
-      features: ['Free WiFi', 'AC', 'Smart TV', 'Jacuzzi', 'Balcony', 'Room Service'],
-      description: 'Luxurious suite with separate living area and premium facilities.',
-      maxGuests: 2,
-      size: '60 sqm'
-    },
-    {
-      id: 4,
-      name: 'Family Room',
-      type: 'family',
-      price: 11000,
-      image: '/assets/Rooms/Family room 1.jpg',
-      features: ['Bed', 'Chair', 'Mini Fridge', 'Electric Kettle', 'WiFi', 'Ceiling Fan', 'Hot Water', 'Attach Bath'],
-      description: 'Perfect room with all necessary needs, bed chair, mini fridge, electric kettle, WiFi, ceiling fan, hot water and attach bath.',
-      maxGuests: 3,
-      size: '45 sqm'
-    }
-  ];
 
   const restaurantMenu = [
     {
@@ -619,7 +674,15 @@ const HomePage = () => {
               From cozy single rooms to luxurious suites, find the perfect accommodation for your needs
             </p>
           </div>
-          
+          {loading ? (
+            <div className="loading-container" style={{textAlign: 'center', padding: '2rem'}}>
+              <p>Loading rooms...</p>
+            </div>
+          ) : error ? (
+            <div className="error-container" style={{textAlign: 'center', padding: '2rem', color: 'red'}}>
+              <p>{error}</p>
+            </div>
+          ) : (
           <div className="rooms-grid">
             {rooms.map((room) => (
               <div key={room.id} className="room-card">
@@ -637,9 +700,7 @@ const HomePage = () => {
                       <span className="room-guests">Up to {room.maxGuests} guests</span>
                     </div>
                   </div>
-                  
                   <p className="room-description">{room.description}</p>
-                  
                   <div className="room-features">
                     {room.features.map((feature, index) => (
                       <span key={index} className="room-feature">
@@ -647,7 +708,6 @@ const HomePage = () => {
                       </span>
                     ))}
                   </div>
-                  
                   <div className="room-actions">
                     <button 
                       className="btn btn-outline room-details-btn"
@@ -667,6 +727,7 @@ const HomePage = () => {
               </div>
             ))}
           </div>
+          )}
         </div>
       </section>
 
@@ -1045,146 +1106,145 @@ const HomePage = () => {
 
       {/* Booking Modal */}
       {showBookingModal && selectedRoom && (
-        <div className="booking-modal-overlay" onClick={() => setShowBookingModal(false)}>
-          <div className="booking-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Book {selectedRoom.name}</h3>
+        <BookRoomModal
+          selectedRoom={selectedRoom}
+          onClose={() => setShowBookingModal(false)}
+          onBookingSuccess={handleBookingSubmit}
+        />
+      )}
+
+      {/* Booking Confirmation Modal */}
+      {showBookingConfirmation && bookingSuccess && (
+        <div className="booking-confirmation-overlay" onClick={handleCloseBookingConfirmation}>
+          <div className="booking-confirmation-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="booking-confirmation-header">
+              <div className="success-icon">
+                <FaCheckCircle style={{ color: '#28a745', fontSize: '3rem' }} />
+              </div>
+              <h2>🎉 Booking Request Submitted!</h2>
               <button 
-                className="modal-close"
-                onClick={() => setShowBookingModal(false)}
+                className="modal-close-btn" 
+                onClick={handleCloseBookingConfirmation}
+                style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
               >
                 ×
               </button>
             </div>
             
-            <div className="modal-content">
-              <div className="room-summary">
-                <img src={selectedRoom.image} alt={selectedRoom.name} />
-                <div className="summary-details">
-                  <h4>{selectedRoom.name}</h4>
-                  <p className="room-price">PKR {selectedRoom.price}/night</p>
-                  <p className="room-size">{selectedRoom.size} • Up to {selectedRoom.maxGuests} guests</p>
-                </div>
+            <div className="booking-confirmation-content">
+              <div className="status-info" style={{
+                background: '#e3f2fd', 
+                padding: '1rem', 
+                borderRadius: '8px', 
+                margin: '1rem 0',
+                border: '1px solid #2196f3'
+              }}>
+                <h3 style={{ color: '#1976d2', margin: '0 0 0.5rem 0' }}>
+                  📋 What happens next?
+                </h3>
+                <ul style={{ color: '#0d47a1', margin: 0, paddingLeft: '1.2rem' }}>
+                  {bookingSuccess.nextSteps.map((step, index) => (
+                    <li key={index}>✅ {step}</li>
+                  ))}
+                </ul>
               </div>
               
-              <form className="booking-form" onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                const bookingData = {
-                  room: selectedRoom,
-                  guestName: formData.get('guestName'),
-                  email: formData.get('email'),
-                  phone: formData.get('phone'),
-                  checkIn: formData.get('checkIn'),
-                  checkOut: formData.get('checkOut'),
-                  guests: formData.get('guests'),
-                  specialRequests: formData.get('specialRequests')
-                };
-                handleBookingSubmit(bookingData);
+              <div className="booking-id-section" style={{
+                background: '#f8f9fa',
+                padding: '1rem',
+                borderRadius: '8px',
+                margin: '1rem 0',
+                border: '2px dashed #6c757d'
               }}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="guestName">Full Name *</label>
-                    <input 
-                      type="text" 
-                      id="guestName" 
-                      name="guestName" 
-                      required 
-                      placeholder="Enter your full name"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="email">Email *</label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      name="email" 
-                      required 
-                      placeholder="Enter your email"
-                    />
-                  </div>
-                </div>
-                
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="phone">Phone Number *</label>
-                    <input 
-                      type="tel" 
-                      id="phone" 
-                      name="phone" 
-                      required 
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="guests">Number of Guests</label>
-                    <select id="guests" name="guests" defaultValue="1">
-                      {Array.from({length: selectedRoom.maxGuests}, (_, i) => (
-                        <option key={i+1} value={i+1}>{i+1} Guest{i+1 > 1 ? 's' : ''}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="checkIn">Check-in Date *</label>
-                    <input 
-                      type="date" 
-                      id="checkIn" 
-                      name="checkIn" 
-                      required 
-                      min={new Date().toISOString().split('T')[0]}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="checkOut">Check-out Date *</label>
-                    <input 
-                      type="date" 
-                      id="checkOut" 
-                      name="checkOut" 
-                      required 
-                      min={new Date().toISOString().split('T')[0]}
-                    />
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#495057' }}>
+                  📄 Booking Reference
+                </h4>
+                <p style={{ 
+                  fontSize: '1.2rem', 
+                  fontWeight: 'bold', 
+                  color: '#007bff',
+                  fontFamily: 'monospace',
+                  margin: 0
+                }}>
+                  ID: {bookingSuccess.booking._id}
+                </p>
+                <p style={{ fontSize: '0.9rem', color: '#6c757d', margin: '0.5rem 0 0 0' }}>
+                  Please save this reference number for your records
+                </p>
+              </div>
+              
+              <div className="confirmation-details">
+                <h3>📋 Booking Summary</h3>
+                <div className="summary-card" style={{
+                  background: '#ffffff',
+                  border: '1px solid #dee2e6',
+                  borderRadius: '8px',
+                  padding: '1.5rem',
+                  margin: '1rem 0'
+                }}>
+                  <div style={{ display: 'grid', gap: '0.8rem' }}>
+                    <p><strong>🏨 Room:</strong> {bookingSuccess.room.name}</p>
+                    <p><strong>👤 Guest:</strong> {bookingSuccess.bookingData.guestName}</p>
+                    <p><strong>📧 Email:</strong> {bookingSuccess.bookingData.email}</p>
+                    <p><strong>📞 Phone:</strong> {bookingSuccess.bookingData.phone}</p>
+                    <p><strong>📅 Check-in:</strong> {new Date(bookingSuccess.bookingData.checkIn).toLocaleDateString()}</p>
+                    <p><strong>📅 Check-out:</strong> {new Date(bookingSuccess.bookingData.checkOut).toLocaleDateString()}</p>
+                    <p><strong>👥 Guests:</strong> {bookingSuccess.bookingData.guests}</p>
+                    <p><strong>💰 Room Rate:</strong> <span style={{ 
+                      color: '#28a745', 
+                      fontSize: '1.2rem', 
+                      fontWeight: 'bold' 
+                    }}>PKR {bookingSuccess.room.price}/night</span></p>
+                    <p><strong>📊 Status:</strong> <span style={{ 
+                      color: '#ffc107', 
+                      fontWeight: 'bold',
+                      background: '#fff3cd',
+                      padding: '0.2rem 0.5rem',
+                      borderRadius: '4px'
+                    }}>⏳ Pending Approval</span></p>
                   </div>
                 </div>
-                
-                <div className="form-group">
-                  <label htmlFor="specialRequests">Special Requests</label>
-                  <textarea 
-                    id="specialRequests" 
-                    name="specialRequests" 
-                    rows="3"
-                    placeholder="Any special requests or requirements..."
-                  ></textarea>
-                </div>
-                
-                <div className="booking-total">
-                  <div className="total-info">
-                    <span>Total Cost (1 night): </span>
-                    <strong>PKR {selectedRoom.price}</strong>
-                  </div>
-                  <small>* Final price will be calculated based on your stay duration</small>
-                </div>
-                
-                <div className="modal-actions">
-                  <button 
-                    type="button" 
-                    className="btn btn-outline"
-                    onClick={() => setShowBookingModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-primary">
-                    Confirm Booking
-                    <FaArrowRight className="btn-arrow" />
-                  </button>
-                </div>
-              </form>
+              </div>
+
+              <div className="confirmation-actions" style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                <button 
+                  onClick={() => navigate('/booking')}
+                  className="btn btn-primary"
+                >
+                  View My Bookings
+                </button>
+                <button 
+                  onClick={handleCloseBookingConfirmation}
+                  className="btn btn-secondary"
+                >
+                  Continue Browsing
+                </button>
+              </div>
+              
+              <div style={{ 
+                marginTop: '2rem', 
+                padding: '1rem', 
+                background: '#d4edda', 
+                borderRadius: '8px',
+                border: '1px solid #c3e6cb',
+                color: '#155724'
+              }}>
+                <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                  💡 <strong>Tip:</strong> You can track your booking status in real-time on the 
+                  "My Bookings" page. We'll also send you email updates at each step of the process.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Snackbar for notifications */}
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleSnackbarClose}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbar.severity}>
+          {snackbar.message}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 };

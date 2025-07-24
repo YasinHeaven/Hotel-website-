@@ -4,6 +4,7 @@ import { roomAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import { bookingAPI } from '../services/api';
 import './RoomsPage.css';
+import BookRoomModal from '../components/BookRoomModal';
 
 const RoomsPage = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -249,71 +250,18 @@ const RoomsPage = () => {
 
       {/* Booking Modal */}
       {showBookingModal && (
-        <div className="booking-modal-overlay">
-          <div className="booking-modal">
-            <div className="booking-modal-header">
-              <h3>Book {selectedRoom?.name}</h3>
-              <button 
-                className="modal-close-btn"
-                onClick={() => setShowBookingModal(false)}
-              >
-                ×
-              </button>
-            </div>
-            
-            <form onSubmit={handleBookingSubmit} className="booking-form">
-              <div className="booking-form-group">
-                <label>Full Name</label>
-                <input type="text" required placeholder="Enter your full name" />
-              </div>
-              
-              <div className="booking-form-group">
-                <label>Email</label>
-                <input type="email" required placeholder="Enter your email" />
-              </div>
-              
-              <div className="booking-form-group">
-                <label>Phone Number</label>
-                <input type="tel" required placeholder="Enter your phone number" />
-              </div>
-              
-              <div className="booking-form-row">
-                <div className="booking-form-group">
-                  <label>Check-in Date</label>
-                  <input type="date" required />
-                </div>
-                <div className="booking-form-group">
-                  <label>Check-out Date</label>
-                  <input type="date" required />
-                </div>
-              </div>
-              
-              <div className="booking-form-group">
-                <label>Number of Guests</label>
-                <select required>
-                  <option value="">Select guests</option>
-                  {[...Array(selectedRoom?.maxGuests)].map((_, i) => (
-                    <option key={i + 1} value={i + 1}>{i + 1} Guest{i > 0 ? 's' : ''}</option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className="booking-form-group">
-                <label>Special Requests</label>
-                <textarea placeholder="Any special requests or requirements..."></textarea>
-              </div>
-              
-              <div className="booking-form-actions">
-                <button type="button" className="btn btn-outline" onClick={() => setShowBookingModal(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Confirm Booking
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <BookRoomModal
+          selectedRoom={selectedRoom}
+          onClose={() => setShowBookingModal(false)}
+          onBookingSuccess={() => {
+            setShowBookingModal(false);
+            setFeedback({ show: true, message: '🎉 Booking request submitted successfully!\n\nYour booking is pending admin approval. You will receive confirmation within 24 hours.\n\nCheck "My Bookings" to track status.', error: false });
+            setTimeout(() => {
+              setFeedback({ show: false, message: '', error: false });
+              navigate('/booking');
+            }, 3000);
+          }}
+        />
       )}
       {/* Feedback Toast/Modal */}
       {feedback.show && (

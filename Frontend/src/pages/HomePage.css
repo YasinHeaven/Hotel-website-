@@ -2273,3 +2273,101 @@
     font-size: 0.75rem;
   }
 }
+
+/* Booking Confirmation Modal */
+.booking-confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+}
+
+.booking-confirmation-modal {
+  background: white;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.booking-confirmation-header {
+  text-align: center;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+}
+
+.booking-confirmation-header h2 {
+  color: #1f2937;
+  margin: 1rem 0 0 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.booking-confirmation-content {
+  padding: 2rem;
+}
+
+.booking-confirmation-content h3 {
+  color: #374151;
+  margin: 1.5rem 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.booking-confirmation-content p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.booking-confirmation-content strong {
+  color: #1f2937;
+}
+
+/* Responsive design for booking confirmation modal */
+@media (max-width: 768px) {
+  .booking-confirmation-modal {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .booking-confirmation-header,
+  .booking-confirmation-content {
+    padding: 1.5rem;
+  }
+  
+  .booking-confirmation-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .confirmation-actions {
+    flex-direction: column !important;
+  }
+  
+  .confirmation-actions button {
+    width: 100%;
+    margin: 0.5rem 0 !important;
+  }
+}
