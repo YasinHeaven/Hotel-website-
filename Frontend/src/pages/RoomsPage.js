@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { FaArrowRight, FaCheck, FaEnvelope, FaPhone, FaRulerCombined, FaStar, FaUsers } from 'react-icons/fa';
-import { roomAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
-import { bookingAPI } from '../services/api';
-import './RoomsPage.css';
 import BookRoomModal from '../components/BookRoomModal';
+import { bookingAPI, roomAPI } from '../services/api';
+import './RoomsPage.css';
 
 const RoomsPage = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -172,7 +171,7 @@ const RoomsPage = () => {
             </p>
           </div>
         </div>
-      </section>
+      </section>  
 
       {/* Rooms Grid */}
       <section className="rooms-section">

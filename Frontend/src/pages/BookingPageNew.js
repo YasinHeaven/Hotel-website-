@@ -5,10 +5,16 @@ import { bookingAPI, roomAPI } from '../services/api';
 import './BookingPage.css';
 
 const BookingPage = () => {
+  // Use local midnight as base for date pickers
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [checkInDate, setCheckInDate] = useState(new Date());
-  const [checkOutDate, setCheckOutDate] = useState(new Date(Date.now() + 86400000)); // Tomorrow
+  const [checkInDate, setCheckInDate] = useState(today);
+  const [checkOutDate, setCheckOutDate] = useState(tomorrow);
   const [guests, setGuests] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -109,7 +115,7 @@ const BookingPage = () => {
               <DatePicker
                 selected={checkInDate}
                 onChange={setCheckInDate}
-                minDate={new Date()}
+                minDate={today}
                 dateFormat="yyyy-MM-dd"
               />
             </div>

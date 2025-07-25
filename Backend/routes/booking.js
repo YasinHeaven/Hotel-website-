@@ -22,9 +22,13 @@ router.post('/', auth, async (req, res) => {
       });
     }
     
-    // 🔒 SECURITY: Validate dates
+    // SECURITY: Validate dates
+    // Parse incoming date-only strings (YYYY-MM-DD) into local Date at midnight to avoid timezone shifts
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
+    // Normalize to midnight to ignore time-of-day offsets
+    checkInDate.setHours(0, 0, 0, 0);
+    checkOutDate.setHours(0, 0, 0, 0);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     

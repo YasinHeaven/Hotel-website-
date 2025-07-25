@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
-import { FaArrowRight, FaBed, FaCalendarAlt, FaCar, FaCheckCircle, FaCoffee, FaConciergeBell, FaMapMarkerAlt, FaRoute, FaSearch, FaShoppingBag, FaShower, FaSpa, FaStar, FaUsers, FaUtensils, FaWifi, FaRulerCombined, FaCheck } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { useEffect, useState } from 'react';
+import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaRoute, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWifi } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 import './RoomsPage.css';
-import BookRoomModal from '../components/BookRoomModal';
 
 
 import { roomAPI } from '../services/api';
@@ -321,202 +320,83 @@ const HomePage = () => {
       <section className="hero-section">
         <div className="hero-overlay"></div>
         <div className="hero-gradient-overlay"></div>
-        
         {/* Animated background elements */}
         <div className="hero-bg-element hero-bg-1"></div>
         <div className="hero-bg-element hero-bg-2"></div>
-        
         <div className="hero-content">
           <div className="container">
             <div className="hero-text">
               <div className="hero-badge">
                 ⭐ Premium Hotel Experience
               </div>
-              
               <h1 className="hero-title">
                 Welcome to <span className="hero-title-gradient">Yasin Heaven Star Hotel</span>
                 <br />
                 <span className="hero-subtitle">Premium Hospitality Experience</span>
               </h1>
-              
               <p className="hero-description">
                 Discover luxury hotels and unforgettable experiences worldwide. Your perfect stay awaits.
               </p>
-              
-
             </div>
           </div>
         </div>
       </section>
 
-             {/* Rooms Booking Section */}
-       <section className="rooms-section">
-         <div className="container">
-           {loading ? (
-             <div className="loading-container" style={{textAlign: 'center', padding: '2rem'}}>
-               <p>Loading rooms...</p>
-             </div>
-           ) : error ? (
-             <div className="error-container" style={{textAlign: 'center', padding: '2rem', color: 'red'}}>
-               <p>{error}</p>
-             </div>
-           ) : (
-             <div className="rooms-grid">
-               {rooms.map((room) => (
-                 <div key={room.id} className="room-card">
-                   <div className="room-image">
-                     <img src={room.image} alt={room.name} />
-                     <div className="room-price-badge">
-                       <span className="room-price">PKR {room.price}</span>
-                       <span className="room-price-period">/night</span>
-                     </div>
-                   </div>
-                   
-                   <div className="room-content">
-                     <div className="room-header">
-                       <h3 className="room-name">{room.name}</h3>
-                       <div className="room-rating">
-                         <FaStar className="star-icon" />
-                         <span>4.8</span>
-                       </div>
-                     </div>
-                     
-                     <p className="room-description">{room.description}</p>
-                     
-                     <div className="room-details">
-                       <div className="room-detail">
-                         <FaUsers className="detail-icon" />
-                         <span>Up to {room.maxGuests} guests</span>
-                       </div>
-                       <div className="room-detail">
-                         <FaRulerCombined className="detail-icon" />
-                         <span>{room.size}</span>
-                       </div>
-                     </div>
-                     
-                     <div className="room-amenities">
-                       <h4>Amenities:</h4>
-                       <ul className="amenities-list">
-                         {room.amenities.map((amenity, index) => (
-                           <li key={index} className="amenity-item">
-                             <FaCheck className="check-icon" />
-                             <span>{amenity}</span>
-                           </li>
-                         ))}
-                       </ul>
-                     </div>
-                     
-                     <div className="room-actions">
-                       <button 
-                         className="btn btn-primary room-book-btn"
-                         onClick={() => handleRoomBooking(room)}
-                       >
-                         Book Now
-                         <FaArrowRight className="btn-arrow" />
-                       </button>
-                     </div>
-                   </div>
-                 </div>
-               ))}
-             </div>
-           )}
-         </div>
-       </section>
-       
-       {showBookingModal && (
-        <BookRoomModal
-          selectedRoom={selectedRoom}
-          onClose={() => setShowBookingModal(false)}
-          onBookingSuccess={() => {
-            setShowBookingModal(false);
-            setSnackbar({ open: true, message: '🎉 Booking request submitted successfully! Your booking is pending admin approval. Please check "My Bookings" for status updates.', severity: 'success' });
-            setTimeout(() => {
-              setSnackbar({ open: false, message: '', severity: 'success' });
-              navigate('/booking');
-            }, 3000);
-          }}
-        />
-      )}
-
-      {/* Our Rooms Gallery */}
+      {/* Our Rooms Gallery (users can only view, not book from here) */}
       <section className="rooms-gallery-section">
         <div className="container">
-          <h2 className="section-title">Our Rooms</h2>
-          <div className="rooms-gallery">
-            {rooms.map((room) => (
-              <div key={room.id} className="gallery-item" onClick={() => navigate('/rooms')}>
-                <img src={room.image} alt={room.name} className="gallery-img" />
-                <div className="gallery-overlay">
-                  <h3 className="gallery-title">{room.name}</h3>
+          <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '32px' }}>Our Rooms</h2>
+          <div className="rooms-gallery" style={{ display: 'flex', flexDirection: 'row', gap: '24px', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+            {[...new Map(rooms.map(room => [room.name, room])).values()].map((room) => (
+              <div key={room.id} className="gallery-item" onClick={() => navigate('/rooms')} style={{ width: '220px', height: '220px', borderRadius: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                <img 
+                  src={room.image} 
+                  alt={room.name} 
+                  className="gallery-img" 
+                  style={{ 
+                    width: '100%', 
+                    height: '70%', 
+                    objectFit: 'cover', 
+                    borderRadius: '14px 14px 0 0', 
+                    boxShadow: '0 1px 8px rgba(0,0,0,0.07)',
+                    transition: 'transform 0.2s',
+                  }} 
+                />
+                <div 
+                  className="gallery-overlay" 
+                  style={{ 
+                    position: 'absolute', 
+                    bottom: 0, 
+                    left: 0, 
+                    width: '100%', 
+                    background: 'rgba(255,255,255,0.95)', 
+                    borderRadius: '0 0 16px 16px', 
+                    boxShadow: '0 -2px 8px rgba(0,0,0,0.04)', 
+                    padding: '12px 0', 
+                    textAlign: 'center', 
+                    transition: 'background 0.2s',
+                  }}
+                >
+                  <h3 
+                    className="gallery-title" 
+                    style={{ 
+                      margin: 0, 
+                      fontSize: '1.15rem', 
+                      fontWeight: 700, 
+                      color: '#222',
+                      letterSpacing: '0.5px',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.07)',
+                    }}
+                  >
+                    {room.name}
+                  </h3>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* About Section */}
-      <section className="section about-section">
-        <div className="container">
-          <div className="about-content">
-            <div className="section-header">
-              <div className="section-badge">
-                About Us
-              </div>
-              <h2 className="section-title">Yasin Heaven Star Hotel</h2>
-            </div>
-            
-            <div className="about-text">
-              <p className="about-description">
-                Welcome to Yasin Heaven Star Hotel, a peaceful getaway nestled in the scenic Ghizer Yasin district of Gilgit Baltistan. Since opening in June 2022, our cozy hotel has been offering guests a comfortable stay with 10 well-furnished rooms, each with a private bathroom, and top-notch hospitality.<br/>
-                Whether you're here for leisure or business, we’ve got everything to make your visit relaxing and enjoyable from a spacious restaurant serving your favorite meals to a fully equipped conference room for meetings and events. With free high-speed Wi-Fi, 24/7 service, and a serene garden, Yasin Heaven Star Hotel is your home away from home.
-              </p>
-            </div>
-            
-            <div className="about-features">
-              <div className="about-feature">
-                <div className="about-feature-icon">
-                  <FaMapMarkerAlt />
-                </div>
-                <div className="about-feature-content">
-                  <h4>Prime Location</h4>
-                  <p>Center of Yasin Valley</p>
-                </div>
-              </div>
-              
-              <div className="about-feature">
-                <div className="about-feature-icon">
-                  <FaUsers />
-                </div>
-                <div className="about-feature-content">
-                  <h4>For Everyone</h4>
-                  <p>Group or Individual Travel</p>
-                </div>
-              </div>
-              
-              <div className="about-feature">
-                <div className="about-feature-icon">
-                  <FaStar />
-                </div>
-                <div className="about-feature-content">
-                  <h4>All Budgets</h4>
-                  <p>Small to Large Budget Options</p>
-                </div>
-              </div>
-              
-              <div className="about-feature">
-                <div className="about-feature-icon">
-                  <FaSpa />
-                </div>
-                <div className="about-feature-content">
-                  <h4>Peaceful Environment</h4>
-                  <p>Truly Relaxing Experience</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ...other homepage sections (about, location, destinations, etc.) ... */}
 
       {/* Location Section */}
       <section className="section location-section">
@@ -647,76 +527,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
-      {/* Rooms Section */}
-      <section className="section rooms-section">
-        <div className="container">
-          <div className="section-header">
-            <div className="section-badge">
-              🏨 Our Rooms
-            </div>
-            <h2 className="section-title">Choose Your Perfect Stay</h2>
-            <p className="section-description">
-              From cozy single rooms to luxurious suites, find the perfect accommodation for your needs
-            </p>
-          </div>
-          {loading ? (
-            <div className="loading-container" style={{textAlign: 'center', padding: '2rem'}}>
-              <p>Loading rooms...</p>
-            </div>
-          ) : error ? (
-            <div className="error-container" style={{textAlign: 'center', padding: '2rem', color: 'red'}}>
-              <p>{error}</p>
-            </div>
-          ) : (
-          <div className="rooms-grid">
-            {rooms.map((room) => (
-              <div key={room.id} className="room-card">
-                <div className="room-image">
-                  <img src={room.image} alt={room.name} />
-                  <div className="room-price-badge">
-                    PKR {room.price}/night
-                  </div>
-                </div>
-                <div className="room-content">
-                  <div className="room-header">
-                    <h3 className="room-title">{room.name}</h3>
-                    <div className="room-meta">
-                      <span className="room-size">{room.size}</span>
-                      <span className="room-guests">Up to {room.maxGuests} guests</span>
-                    </div>
-                  </div>
-                  <p className="room-description">{room.description}</p>
-                  <div className="room-features">
-                    {room.features.map((feature, index) => (
-                      <span key={index} className="room-feature">
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="room-actions">
-                    <button 
-                      className="btn btn-outline room-details-btn"
-                      onClick={() => handleViewRoomDetails(room)}
-                    >
-                      View Details
-                    </button>
-                    <button 
-                      className="btn btn-primary room-book-btn"
-                      onClick={() => handleRoomBooking(room)}
-                    >
-                      Book Now
-                      <FaArrowRight className="btn-arrow" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          )}
-        </div>
-      </section>
-
+      
       {/* Restaurant Section */}
       <section className="section restaurant-section">
         <div className="container">

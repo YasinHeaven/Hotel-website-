@@ -12,6 +12,18 @@ const BeachHotelsPage = () => {
     guests: '2'
   });
 
+  // Define minimum and maximum selectable dates: from today to end of current month in local time to avoid UTC offset issues
+  const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0');
+const minDate = `${year}-${month}-${day}`; // e.g. "2025-07-25"
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+const lastYear = lastDayOfMonth.getFullYear();
+const lastMonth = String(lastDayOfMonth.getMonth() + 1).padStart(2, '0');
+const lastDay = String(lastDayOfMonth.getDate()).padStart(2, '0');
+const maxDate = `${lastYear}-${lastMonth}-${lastDay}`; // e.g. "2025-07-31"
+
   const beachHotels = [
     {
       id: 1,
@@ -117,7 +129,7 @@ const BeachHotelsPage = () => {
                   <label htmlFor="checkIn">Check-in</label>
                   <input
                     type="date"
-                    id="checkIn"
+                    id="checkIn" min={minDate} max={maxDate}
                     name="checkIn"
                     value={searchData.checkIn}
                     onChange={handleInputChange}
@@ -129,7 +141,7 @@ const BeachHotelsPage = () => {
                   <label htmlFor="checkOut">Check-out</label>
                   <input
                     type="date"
-                    id="checkOut"
+                    id="checkOut" min={minDate} max={maxDate}
                     name="checkOut"
                     value={searchData.checkOut}
                     onChange={handleInputChange}
