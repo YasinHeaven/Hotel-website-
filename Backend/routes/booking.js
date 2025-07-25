@@ -312,4 +312,18 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
+// Get existing bookings for a specific room (for availability checks)
+router.get('/room/:roomId', async (req, res) => {
+  try {
+    const bookings = await Booking.find({
+      room: req.params.roomId,
+      status: { $nin: ['cancelled', 'denied', 'no-show'] }
+    });
+    const ranges = bookings.map(b => ({ checkIn: b.checkIn, checkOut: b.checkOut }));
+    res.json(ranges);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch room bookings', success: false });
+  }
+});
+
 module.exports = router; 

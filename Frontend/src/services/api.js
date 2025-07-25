@@ -61,6 +61,10 @@ export const roomAPI = {
 export const bookingAPI = {
   // Create new booking
   createBooking: (bookingData) => api.post('/bookings', bookingData),
+
+  // Fetch bookings for availability checks
+  getRoomBookings: (roomId) => api.get(`/bookings/room/${roomId}`),
+  createBooking: (bookingData) => api.post('/bookings', bookingData),
   
   // Get user bookings
   getUserBookings: () => api.get('/bookings/my-bookings'),

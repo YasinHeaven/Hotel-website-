@@ -1,10 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { bookingAPI } from '../services/api';
 import { FaArrowRight } from 'react-icons/fa';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
+  const [disabledRanges, setDisabledRanges] = useState([]);
+  const [suggestion, setSuggestion] = useState(null);
+
+  useEffect(() => {
+    if (selectedRoom?.id) {
+      bookingAPI.getRoomBookings(selectedRoom.id)
+        .then(res => {
+          const ranges = res.data.map(b => ({ start: new Date(b.checkIn), end: new Date(b.checkOut) }));
+          setDisabledRanges(ranges);
+        })
+        .catch(err => console.error('Failed to fetch room bookings:', err));
+    }
+  }, [selectedRoom]);
+
+  // Compute next available window for minimum 1-night stay
+  useEffect(() => {
+    if (!disabledRanges.length) return;
+    const sorted = [...disabledRanges].sort((a,b) => a.start - b.start);
+    let freeStart = new Date(); freeStart.setHours(0,0,0,0);
+    let freeEnd;
+    for (let r of sorted) {
+      if (freeStart < r.start) {
+        freeEnd = new Date(r.start); freeEnd.setDate(freeEnd.getDate() + 1);
+        break;
+      }
+      if (freeStart >= r.start && freeStart <= r.end) {
+        freeStart = new Date(r.end); freeStart.setDate(freeStart.getDate() + 1);
+      }
+    }
+    if (!freeEnd) {
+      freeEnd = new Date(freeStart); freeEnd.setDate(freeEnd.getDate() + 1);
+    }
+    setSuggestion({ start: freeStart, end: freeEnd });
+  }, [disabledRanges]);
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
@@ -14,8 +52,8 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
     const guestName = form.guestName.value;
     const email = form.email.value;
     const phone = form.phone.value;
-    const checkIn = form.checkIn.value;
-    const checkOut = form.checkOut.value;
+    const checkIn = checkInDate.toISOString().split('T')[0];
+    const checkOut = checkOutDate.toISOString().split('T')[0];
     const guests = form.guests.value;
     const specialRequests = form.specialRequests.value;
     
@@ -88,11 +126,35 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
             <div className="booking-form-row">
               <div className="booking-form-group">
                 <label>Check-in Date</label>
-                <input name="checkIn" type="date" required />
+                <DatePicker
+                  selected={checkInDate}
+                  onChange={(date) => setCheckInDate(date)}
+                  selectsStart
+                  startDate={checkInDate}
+                  endDate={checkOutDate}
+                  minDate={new Date()}
+                  excludeDateIntervals={disabledRanges}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="Select check-in date"
+                  required
+                  className="booking-date-input"
+                />
               </div>
               <div className="booking-form-group">
                 <label>Check-out Date</label>
-                <input name="checkOut" type="date" required />
+                <DatePicker
+                  selected={checkOutDate}
+                  onChange={(date) => setCheckOutDate(date)}
+                  selectsEnd
+                  startDate={checkInDate}
+                  endDate={checkOutDate}
+                  minDate={checkInDate || new Date()}
+                  excludeDateIntervals={disabledRanges}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="Select check-out date"
+                  required
+                  className="booking-date-input"
+                />
               </div>
             </div>
             <div className="booking-form-group">
@@ -117,6 +179,11 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
               </button>
             </div>
             {error && <div style={{color: 'red', marginTop: 10}}>{error}</div>}
+            {suggestion && (
+              <div style={{ marginTop: '1rem', color: '#555' }}>
+                Next available: {suggestion.start.toISOString().split('T')[0]} to {suggestion.end.toISOString().split('T')[0]}
+              </div>
+            )}
           </form>
         </div>
       </div>

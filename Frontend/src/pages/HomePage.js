@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { FaArrowRight, FaBed, FaCalendarAlt, FaCar, FaCheckCircle, FaCoffee, FaConciergeBell, FaMapMarkerAlt, FaRoute, FaSearch, FaShoppingBag, FaShower, FaSpa, FaStar, FaUsers, FaUtensils, FaWifi } from 'react-icons/fa';
+import { FaArrowRight, FaBed, FaCalendarAlt, FaCar, FaCheckCircle, FaCoffee, FaConciergeBell, FaMapMarkerAlt, FaRoute, FaSearch, FaShoppingBag, FaShower, FaSpa, FaStar, FaUsers, FaUtensils, FaWifi, FaRulerCombined, FaCheck } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import './HomePage.css';
-import BookingDebugModal from '../components/BookingDebugModal';
-import AuthDebug from '../components/AuthDebug';
+import './RoomsPage.css';
+import BookRoomModal from '../components/BookRoomModal';
+
+
 import { roomAPI } from '../services/api';
 
 // Move facilities array definition to the top, before any useState calls
@@ -343,6 +345,112 @@ const HomePage = () => {
               
 
             </div>
+          </div>
+        </div>
+      </section>
+
+             {/* Rooms Booking Section */}
+       <section className="rooms-section">
+         <div className="container">
+           {loading ? (
+             <div className="loading-container" style={{textAlign: 'center', padding: '2rem'}}>
+               <p>Loading rooms...</p>
+             </div>
+           ) : error ? (
+             <div className="error-container" style={{textAlign: 'center', padding: '2rem', color: 'red'}}>
+               <p>{error}</p>
+             </div>
+           ) : (
+             <div className="rooms-grid">
+               {rooms.map((room) => (
+                 <div key={room.id} className="room-card">
+                   <div className="room-image">
+                     <img src={room.image} alt={room.name} />
+                     <div className="room-price-badge">
+                       <span className="room-price">PKR {room.price}</span>
+                       <span className="room-price-period">/night</span>
+                     </div>
+                   </div>
+                   
+                   <div className="room-content">
+                     <div className="room-header">
+                       <h3 className="room-name">{room.name}</h3>
+                       <div className="room-rating">
+                         <FaStar className="star-icon" />
+                         <span>4.8</span>
+                       </div>
+                     </div>
+                     
+                     <p className="room-description">{room.description}</p>
+                     
+                     <div className="room-details">
+                       <div className="room-detail">
+                         <FaUsers className="detail-icon" />
+                         <span>Up to {room.maxGuests} guests</span>
+                       </div>
+                       <div className="room-detail">
+                         <FaRulerCombined className="detail-icon" />
+                         <span>{room.size}</span>
+                       </div>
+                     </div>
+                     
+                     <div className="room-amenities">
+                       <h4>Amenities:</h4>
+                       <ul className="amenities-list">
+                         {room.amenities.map((amenity, index) => (
+                           <li key={index} className="amenity-item">
+                             <FaCheck className="check-icon" />
+                             <span>{amenity}</span>
+                           </li>
+                         ))}
+                       </ul>
+                     </div>
+                     
+                     <div className="room-actions">
+                       <button 
+                         className="btn btn-primary room-book-btn"
+                         onClick={() => handleRoomBooking(room)}
+                       >
+                         Book Now
+                         <FaArrowRight className="btn-arrow" />
+                       </button>
+                     </div>
+                   </div>
+                 </div>
+               ))}
+             </div>
+           )}
+         </div>
+       </section>
+       
+       {showBookingModal && (
+        <BookRoomModal
+          selectedRoom={selectedRoom}
+          onClose={() => setShowBookingModal(false)}
+          onBookingSuccess={() => {
+            setShowBookingModal(false);
+            setSnackbar({ open: true, message: '🎉 Booking request submitted successfully! Your booking is pending admin approval. Please check "My Bookings" for status updates.', severity: 'success' });
+            setTimeout(() => {
+              setSnackbar({ open: false, message: '', severity: 'success' });
+              navigate('/booking');
+            }, 3000);
+          }}
+        />
+      )}
+
+      {/* Our Rooms Gallery */}
+      <section className="rooms-gallery-section">
+        <div className="container">
+          <h2 className="section-title">Our Rooms</h2>
+          <div className="rooms-gallery">
+            {rooms.map((room) => (
+              <div key={room.id} className="gallery-item" onClick={() => navigate('/rooms')}>
+                <img src={room.image} alt={room.name} className="gallery-img" />
+                <div className="gallery-overlay">
+                  <h3 className="gallery-title">{room.name}</h3>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -950,14 +1058,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Booking Modal */}
-      {showBookingModal && selectedRoom && (
-        <BookingDebugModal
-          selectedRoom={selectedRoom}
-          onClose={() => setShowBookingModal(false)}
-          onBookingSuccess={handleBookingSubmit}
-        />
-      )}
 
       {/* Booking Confirmation Modal */}
       {showBookingConfirmation && bookingSuccess && (
