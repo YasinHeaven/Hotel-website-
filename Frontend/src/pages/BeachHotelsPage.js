@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaArrowRight, FaMapMarkerAlt, FaSearch, FaStar, FaSun, FaUmbrellaBeach, FaWater } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './BeachHotelsPage.css';
 
 const BeachHotelsPage = () => {
@@ -31,7 +32,7 @@ const maxDate = `${lastYear}-${lastMonth}-${lastDay}`; // e.g. "2025-07-31"
       location: "Malibu, California",
       rating: 4.9,
       price: 320,
-      image: "/assets/Home 1.jpg",
+      image: getAssetPath("Home 1.jpg", "homepage"),
       amenities: ["Private Beach", "WiFi", "Pool", "Spa", "Water Sports"],
       description: "Luxurious beachfront resort with direct beach access and panoramic ocean views.",
       features: ["Private Beach Access", "Ocean View Rooms", "Beach Volleyball", "Water Sports Center"]
@@ -42,7 +43,7 @@ const maxDate = `${lastYear}-${lastMonth}-${lastDay}`; // e.g. "2025-07-31"
       location: "Miami Beach, Florida",
       rating: 4.7,
       price: 280,
-      image: "/assets/View.jpg",
+      image: getAssetPath("View.jpg", "homepage"),
       amenities: ["Beach Access", "WiFi", "Pool", "Restaurant", "Bar"],
       description: "Modern beach hotel with Art Deco charm and vibrant nightlife nearby.",
       features: ["Art Deco Design", "Rooftop Pool", "Beach Cabanas", "Sunset Terrace"]
@@ -53,7 +54,7 @@ const maxDate = `${lastYear}-${lastMonth}-${lastDay}`; // e.g. "2025-07-31"
       location: "Key West, Florida",
       rating: 4.8,
       price: 350,
-      image: "/assets/Home 2.jpg",
+      image: getAssetPath("Home 2.jpg", "homepage"),
       amenities: ["Private Beach", "WiFi", "Pool", "Spa", "Diving Center"],
       description: "Tropical paradise with crystal-clear waters and exceptional diving opportunities.",
       features: ["Diving Center", "Snorkeling Tours", "Private Pier", "Coral Reef Access"]
@@ -64,7 +65,7 @@ const maxDate = `${lastYear}-${lastMonth}-${lastDay}`; // e.g. "2025-07-31"
       location: "Outer Banks, North Carolina",
       rating: 4.6,
       price: 240,
-      image: "/assets/home 3.jpg",
+      image: getAssetPath("home 3.jpg", "homepage"),
       amenities: ["Beach Access", "WiFi", "Pool", "Fitness Center", "Restaurant"],
       description: "Charming seaside villa with family-friendly amenities and lighthouse views.",
       features: ["Lighthouse Views", "Family Suites", "Kids Club", "Fishing Charters"]
@@ -189,7 +190,11 @@ const maxDate = `${lastYear}-${lastMonth}-${lastDay}`; // e.g. "2025-07-31"
             {beachHotels.map((hotel) => (
               <div key={hotel.id} className="hotel-card">
                 <div className="hotel-image">
-                  <img src={hotel.image} alt={hotel.name} />
+                  <img 
+                    src={hotel.image} 
+                    alt={hotel.name}
+                    onError={createImageErrorHandler('general')}
+                  />
                   <div className="hotel-rating">
                     <FaStar className="star-icon" />
                     {hotel.rating}

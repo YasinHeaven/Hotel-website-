@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaArrowRight, FaConciergeBell, FaHeart, FaMapMarkerAlt, FaParking, FaPhone, FaSearch, FaShare, FaStar, FaSwimmingPool, FaUsers, FaWifi } from 'react-icons/fa';
+import { getAssetPath, createImageErrorHandler } from '../utils/assetUtils';
 import './MountainResortsPage.css';
 
 const MountainResortsPage = () => {
@@ -38,7 +39,7 @@ const MountainResortsPage = () => {
       location: 'Swiss Alps, Switzerland',
       rating: 4.8,
       price: 320,
-      image: '/assets/View.jpg',
+      image: getAssetPath('View.jpg', 'homepage'),
       amenities: ['Ski Access', 'Mountain View', 'Spa', 'Restaurant', 'Free WiFi'],
       description: 'Luxury mountain resort with direct ski access and breathtaking alpine views.'
     },
@@ -48,7 +49,7 @@ const MountainResortsPage = () => {
       location: 'Colorado, USA',
       rating: 4.7,
       price: 280,
-      image: '/assets/Home 1.jpg',
+      image: getAssetPath('Home 1.jpg', 'homepage'),
       amenities: ['Hiking Trails', 'Fireplace', 'Pool', 'Gym', 'Pet Friendly'],
       description: 'Rustic luxury lodge perfect for adventure seekers and nature lovers.'
     },
@@ -58,7 +59,7 @@ const MountainResortsPage = () => {
       location: 'Nepal Himalayas',
       rating: 4.9,
       price: 450,
-      image: '/assets/Home 2.jpg',
+      image: getAssetPath('Home 2.jpg', 'homepage'),
       amenities: ['Mountain Guides', 'Yoga Classes', 'Organic Restaurant', 'Meditation Center'],
       description: 'Exclusive retreat offering spiritual experiences with stunning Himalayan views.'
     },
@@ -68,7 +69,7 @@ const MountainResortsPage = () => {
       location: 'Aspen, Colorado',
       rating: 4.6,
       price: 380,
-      image: '/assets/home 3.jpg',
+      image: getAssetPath('home 3.jpg', 'homepage'),
       amenities: ['Luxury Ski-in/Ski-out', 'Spa', 'Fine Dining', 'Golf Course'],
       description: 'Premier mountain resort with world-class skiing and luxury amenities.'
     },
@@ -78,7 +79,7 @@ const MountainResortsPage = () => {
       location: 'Torres del Paine, Chile',
       rating: 4.5,
       price: 220,
-      image: '/assets/Single Bed Close.jpg',
+      image: getAssetPath('Single Bed Close.jpg', 'room'),
       amenities: ['Guided Tours', 'Wildlife Viewing', 'Camping', 'Restaurant'],
       description: 'Adventure basecamp for exploring the dramatic landscapes of Patagonia.'
     },
@@ -88,7 +89,7 @@ const MountainResortsPage = () => {
       location: 'Mount Fuji, Japan',
       rating: 4.8,
       price: 350,
-      image: '/assets/Master Bed .mp4.jpg',
+      image: getAssetPath('Master Bed .mp4.jpg', 'room'),
       amenities: ['Hot Springs', 'Traditional Rooms', 'Mountain View', 'Japanese Cuisine'],
       description: 'Traditional Japanese resort with natural hot springs and Mount Fuji views.'
     }
@@ -236,7 +237,11 @@ const MountainResortsPage = () => {
             {mountainResorts.map((resort) => (
               <div key={resort.id} className="resort-card">
                 <div className="resort-image">
-                  <img src={resort.image} alt={resort.name} />
+                  <img 
+                    src={resort.image} 
+                    alt={resort.name}
+                    onError={createImageErrorHandler('general')}
+                  />
                   <div className="resort-actions">
                     <button className="action-btn favorite">
                       <FaHeart />

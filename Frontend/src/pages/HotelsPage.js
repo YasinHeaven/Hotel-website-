@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaSearch, FaFilter, FaMapMarkerAlt, FaStar, FaWifi, FaParking, FaSwimmingPool, FaConciergeBell, FaHeart } from 'react-icons/fa';
+import { getAssetPath, createImageErrorHandler } from '../utils/assetUtils';
 import './HotelsPage.css';
 
 const HotelsPage = () => {
@@ -19,7 +20,7 @@ const HotelsPage = () => {
       location: "Miami Beach, FL",
       rating: 4.8,
       price: 299,
-      image: "/assets/Home 1.jpg",
+      image: getAssetPath("Home 1.jpg", "homepage"),
       amenities: ["WiFi", "Pool", "Parking", "Spa", "Restaurant"],
       description: "Beautiful beachfront resort with stunning ocean views"
     },
@@ -29,7 +30,7 @@ const HotelsPage = () => {
       location: "Manhattan, NY",
       rating: 4.5,
       price: 199,
-      image: "/assets/Master .jpg",
+      image: getAssetPath("Master .jpg", "room"),
       amenities: ["WiFi", "Gym", "Business Center", "Restaurant"],
       description: "Modern hotel in the heart of the city"
     },
@@ -39,7 +40,7 @@ const HotelsPage = () => {
       location: "Aspen, CO",
       rating: 4.7,
       price: 349,
-      image: "/assets/View.jpg",
+      image: getAssetPath("View.jpg", "homepage"),
       amenities: ["WiFi", "Spa", "Restaurant", "Ski Access"],
       description: "Cozy mountain lodge with spectacular views"
     },
@@ -49,7 +50,7 @@ const HotelsPage = () => {
       location: "Savannah, GA",
       rating: 4.6,
       price: 229,
-      image: "/assets/Home 2.jpg",
+      image: getAssetPath("Home 2.jpg", "homepage"),
       amenities: ["WiFi", "Pool", "Restaurant", "Concierge"],
       description: "Elegant historic hotel with southern charm"
     },
@@ -59,7 +60,7 @@ const HotelsPage = () => {
       location: "Seattle, WA",
       rating: 4.4,
       price: 179,
-      image: "/assets/Single Bed Pic.jpg",
+      image: getAssetPath("Single Bed Pic.jpg", "room"),
       amenities: ["WiFi", "Gym", "Restaurant", "Pet Friendly"],
       description: "Stylish boutique hotel in trendy neighborhood"
     },
@@ -69,7 +70,7 @@ const HotelsPage = () => {
       location: "Scottsdale, AZ",
       rating: 4.9,
       price: 399,
-      image: "/assets/Washroom Dulex.jpg",
+      image: getAssetPath("Washroom Dulex.jpg", "room"),
       amenities: ["WiFi", "Pool", "Spa", "Golf", "Restaurant"],
       description: "Luxurious desert resort with world-class amenities"
     }
@@ -218,7 +219,11 @@ const HotelsPage = () => {
                 {hotelData.map(hotel => (
                   <div key={hotel.id} className="hotel-card">
                     <div className="hotel-image">
-                      <img src={hotel.image} alt={hotel.name} />
+                      <img 
+                        src={hotel.image} 
+                        alt={hotel.name}
+                        onError={createImageErrorHandler('general')}
+                      />
                       <button className="favorite-btn">
                         <FaHeart />
                       </button>

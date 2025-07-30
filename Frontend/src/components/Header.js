@@ -87,7 +87,15 @@ const Header = () => {
               <span className="logo-title">Yasin Heaven Star Hotel</span>
               <span className="logo-subtitle">Premium Hospitality</span>
             </div>
-            <img src="/assets/logo.jpg" alt="Yasin Heaven Star Hotel" className="logo-image" />
+            <img 
+              src="/assets/Logo/logo.jpg" 
+              alt="Yasin Heaven Star Hotel" 
+              className="logo-image"
+              onError={(e) => {
+                e.target.src = '/assets/Homepage/Home 1.jpg';
+                e.target.onerror = null;
+              }}
+            />
           </Link>
 
           {/* Authentication Section - Right Side */}

@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './GalleryPage.css';
 
 const imagesAndVideos = [
-  '/assets/Gallery/1.jpg',
-  '/assets/Gallery/2.jpg',
-  '/assets/Gallery/3.jpg',
-  '/assets/Gallery/4.jpg',
-  '/assets/Gallery/5.jpg',
-  '/assets/Gallery/6.jpg',
-  '/assets/Gallery/7.jpg',
-  '/assets/Gallery/8.jpg',
-  '/assets/Gallery/9.jpg',
-  '/assets/Gallery/10.jpg',
-  '/assets/Gallery/11.jpg',
+  getAssetPath('1.jpg', 'gallery'),
+  getAssetPath('2.jpg', 'gallery'),
+  getAssetPath('3.jpg', 'gallery'),
+  getAssetPath('4.jpg', 'gallery'),
+  getAssetPath('5.jpg', 'gallery'),
+  getAssetPath('6.jpg', 'gallery'),
+  getAssetPath('7.jpg', 'gallery'),
+  getAssetPath('8.jpg', 'gallery'),
+  getAssetPath('9.jpg', 'gallery'),
+  getAssetPath('10.jpg', 'gallery'),
+  getAssetPath('11.jpg', 'gallery'),
   '/assets/Gallery/IMG-20250718-WA0001.jpg',
   '/assets/Gallery/IMG-20250718-WA0002.jpg',
   '/assets/Gallery/IMG-20250718-WA0003.jpg',
@@ -66,9 +67,23 @@ const GalleryPage = () => {
         {imagesAndVideos.map((src, idx) => (
           <div key={idx} className="gallery-thumb" onClick={() => handleImageClick(idx)}>
             {src.endsWith('.mp4') ? (
-              <video src={src} className="gallery-img" controls />
+              <video
+                src={src}
+                className="gallery-img"
+                controls={false}
+                autoPlay={false}
+                muted
+                poster="/assets/Gallery/video-poster.jpg"
+              >
+                Your browser does not support the video tag.
+              </video>
             ) : (
-              <img src={src} alt={`Gallery ${idx + 1}`} className="gallery-img" />
+              <img 
+                src={src} 
+                alt={`Gallery ${idx + 1}`} 
+                className="gallery-img"
+                onError={createImageErrorHandler('gallery')}
+              />
             )}
           </div>
         ))}
@@ -77,9 +92,22 @@ const GalleryPage = () => {
         <div className="gallery-fullscreen" onClick={closeFullscreen}>
           <button className="gallery-nav prev" onClick={e => { e.stopPropagation(); prevImg(); }}>&lt;</button>
           {imagesAndVideos[currentIdx].endsWith('.mp4') ? (
-            <video src={imagesAndVideos[currentIdx]} className="gallery-fullscreen-img" controls autoPlay />
+            <video
+              src={imagesAndVideos[currentIdx]}
+              className="gallery-fullscreen-img"
+              controls
+              autoPlay
+              poster="/assets/Gallery/video-poster.jpg"
+            >
+              Your browser does not support the video tag.
+            </video>
           ) : (
-            <img src={imagesAndVideos[currentIdx]} alt={`Gallery Fullscreen`} className="gallery-fullscreen-img" />
+            <img 
+              src={imagesAndVideos[currentIdx]} 
+              alt={`Gallery Fullscreen`} 
+              className="gallery-fullscreen-img"
+              onError={createImageErrorHandler('gallery')}
+            />
           )}
           <button className="gallery-nav next" onClick={e => { e.stopPropagation(); nextImg(); }}>&gt;</button>
           <button className="gallery-close" onClick={e => { e.stopPropagation(); closeFullscreen(); }}>×</button>

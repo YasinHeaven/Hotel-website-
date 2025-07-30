@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaArrowRight, FaClock, FaFire, FaHeart, FaLeaf, FaMapMarkerAlt, FaPhone, FaShare, FaSnowflake, FaStar, FaUsers, FaUtensils, FaWineGlass } from 'react-icons/fa';
+import { FaClock, FaCoffee, FaFire, FaLeaf, FaMugHot, FaSnowflake, FaUsers, FaUtensils } from 'react-icons/fa';
 import './RestaurantPage.css';
 
 const RestaurantPage = () => {
@@ -29,112 +29,66 @@ const RestaurantPage = () => {
 
   const categories = [
     { id: 'all', name: 'All Items', icon: <FaUtensils /> },
-    { id: 'appetizers', name: 'Appetizers', icon: <FaLeaf /> },
-    { id: 'mains', name: 'Main Courses', icon: <FaFire /> },
-    { id: 'desserts', name: 'Desserts', icon: <FaSnowflake /> },
-    { id: 'beverages', name: 'Beverages', icon: <FaWineGlass /> }
+    { id: 'breakfast', name: 'Breakfast', icon: <FaCoffee /> },
+    { id: 'soup', name: 'Soup', icon: <FaMugHot /> },
+    { id: 'desi', name: 'Desi Food', icon: <FaLeaf /> },
+    { id: 'chinese', name: 'Chinese', icon: <FaSnowflake /> },
+    { id: 'fried', name: 'Fried Items', icon: <FaFire /> },
+    { id: 'lunch', name: 'Lunch & Dinner', icon: <FaClock /> }
   ];
 
   const menuItems = [
-    // Appetizers
-    {
-      id: 1,
-      name: 'Truffle Arancini',
-      description: 'Crispy risotto balls with truffle oil, parmesan, and wild mushrooms',
-      category: 'appetizers',
-      image: '/assets/T1.jpg',
-      rating: 4.8,
-      popular: true,
-      dietary: ['vegetarian']
-    },
-    {
-      id: 2,
-      name: 'Seared Scallops',
-      description: 'Pan-seared scallops with cauliflower purée and pancetta crisps',
-      category: 'appetizers',
-      image: '/assets/T2.jpg',
-      rating: 4.9,
-      popular: true,
-      dietary: ['gluten-free']
-    },
-    {
-      id: 3,
-      name: 'Burrata Caprese',
-      description: 'Fresh burrata with heirloom tomatoes, basil, and aged balsamic',
-      category: 'appetizers',
-      image: '/assets/Master .jpg',
-      rating: 4.7,
-      dietary: ['vegetarian', 'gluten-free']
-    },
-    // Main Courses
-    {
-      id: 4,
-      name: 'Wagyu Beef Tenderloin',
-      description: 'Grade A5 wagyu with roasted vegetables and red wine reduction',
-      category: 'mains',
-      image: '/assets/Home 1.jpg',
-      rating: 4.9,
-      popular: true,
-      dietary: ['gluten-free']
-    },
-    {
-      id: 5,
-      name: 'Chilean Sea Bass',
-      description: 'Miso-glazed sea bass with forbidden rice and bok choy',
-      category: 'mains',
-      image: '/assets/Home 2.jpg',
-      rating: 4.8,
-      dietary: ['gluten-free']
-    },
-    {
-      id: 6,
-      name: 'Lobster Ravioli',
-      description: 'House-made pasta with lobster, ricotta, and saffron cream sauce',
-      category: 'mains',
-      image: '/assets/home 3.jpg',
-      rating: 4.7,
-      popular: true,
-      dietary: []
-    },
-    // Desserts
-    {
-      id: 7,
-      name: 'Chocolate Lava Cake',
-      description: 'Warm chocolate cake with molten center and vanilla ice cream',
-      category: 'desserts',
-      image: '/assets/View.jpg',
-      rating: 4.9,
-      popular: true,
-      dietary: ['vegetarian']
-    },
-    {
-      id: 8,
-      name: 'Crème Brûlée',
-      description: 'Classic vanilla custard with caramelized sugar and fresh berries',
-      category: 'desserts',
-      image: '/assets/Single Bed Pic.jpg',
-      rating: 4.8,
-      dietary: ['vegetarian', 'gluten-free']
-    },
-    // Beverages
-    {
-      id: 9,
-      name: 'Sommelier\'s Selection',
-      description: 'Curated wine pairing for your meal',
-      category: 'beverages',
-      image: '/assets/Single Bed Close.jpg',
-      rating: 4.9,
-      dietary: []
-    },
-    {
-      id: 10,
-      name: 'Craft Cocktails',
-      description: 'House-crafted cocktails with premium spirits',
-      category: 'beverages',
-      image: '/assets/Washroom Dulex.jpg',
-      rating: 4.8,
-      dietary: []
-    }
+    // Breakfast Menu
+    { id: 1, name: 'Special Tea', category: 'breakfast', image: 'assets/resturant/Breakfast/tea.jpg', description: 'Traditional Pakistani tea brewed with milk and spices.' },
+    { id: 2, name: 'Pratha + Single Omelet + Tea', category: 'breakfast', image: 'assets/resturant/Breakfast/andapratha.jpg', description: 'Crispy paratha served with a fluffy omelet and hot tea.' },
+    { id: 3, name: 'Slice + Butter + Jam + Tea', category: 'breakfast', image: 'assets/resturant/Breakfast/toastbread.jpg', description: 'Fresh bread slices with creamy butter, sweet jam, and tea.' },
+    { id: 4, name: '3 Giyalching + Desi Butter + Tea', category: 'breakfast', image: 'assets/resturant/Breakfast/Giyalching.jpg', description: 'Local specialty bread served with homemade butter and tea.' },
+    { id: 5, name: 'Tikki (Desi Bread) + Desi Egg + Tea', category: 'breakfast', image: 'assets/resturant/Breakfast/Tikki.jpg', description: 'Desi bread paired with farm-fresh eggs and tea.' },
+    { id: 6, name: 'Desi Butter + Desi Naan + Tea', category: 'breakfast', image: 'assets/resturant/Breakfast/desibutter.jpg', description: 'Soft naan with homemade butter and a cup of tea.' },
+    // Soup
+    { id: 7, name: 'Chicken Soup', category: 'soup', image: 'assets/resturant/Soup/ChickenSoup.jpg', description: 'Classic chicken soup with tender pieces and rich broth.' },
+    { id: 8, name: 'Mix Veg Soup', category: 'soup', image: 'assets/resturant/Soup/VegSoup.jpg', description: 'A blend of fresh vegetables simmered in savory broth.' },
+    { id: 9, name: 'Hot And Sour Soup', category: 'soup', image: 'assets/resturant/Soup/HotSoup.jpg', description: 'Spicy and tangy soup with chicken and vegetables.' },
+    { id: 10, name: 'Desi Dowdow', category: 'soup', image: 'assets/resturant/Soup/Daodaosoup.jpg', description: 'Traditional local soup made with seasonal ingredients.' },
+    // Desi Food
+    { id: 11, name: 'Desi Mulda + Milk + Desi Butter', category: 'desi', image: 'assets/resturant/DesiFood/Mulda.jpg', description: 'Mulda bread served with fresh milk and homemade butter.' },
+    { id: 12, name: 'Desi Lajek with Mutton', category: 'desi', image: 'assets/resturant/DesiFood/LajekMutton.jpg', description: 'Traditional Lajek bread served with spicy mutton curry.' },
+    { id: 13, name: 'Desi Lajek with Chicken', category: 'desi', image: 'assets/resturant/DesiFood/LajekChicken.jpg', description: 'Lajek bread paired with flavorful chicken curry.' },
+    // Chinese
+    { id: 14, name: 'Chicken Chawmin', category: 'chinese', image: 'assets/resturant/Chinese/ChickenChowMen.jpg', description: 'Stir-fried noodles with chicken and vegetables.' },
+    { id: 15, name: 'Chicken Manchurian', category: 'chinese', image: 'assets/resturant/Chinese/ChickenManchurian.jpg', description: 'Crispy chicken balls tossed in tangy Manchurian sauce.' },
+    { id: 16, name: 'Veg Chawmin', category: 'chinese', image: 'assets/resturant/Chinese/VegChawmin.jpg', description: 'Vegetarian noodles stir-fried with fresh veggies.' },
+    { id: 17, name: 'Chicken Mecrony', category: 'chinese', image: 'assets/resturant/Chinese/ChickenMacaroni.jpg', description: 'Macaroni pasta cooked with chicken in Chinese spices.' },
+    // Fried Items
+    { id: 18, name: 'Fried Fish', category: 'fried', image: 'assets/resturant/FriedItems/FriedFish.jpg', description: 'Golden fried fish fillets with crispy coating.' },
+    { id: 19, name: 'Masala Fish', category: 'fried', image: 'assets/resturant/FriedItems/MasalaFish.jpg', description: 'Fish fillets marinated in spicy masala and fried.' },
+    { id: 20, name: 'French Fries Large', category: 'fried', image: 'assets/resturant/FriedItems/FrenchFries.jpg', description: 'Large portion of crispy golden fries.' },
+    { id: 21, name: 'Chicken Roast', category: 'fried', image: 'assets/resturant/FriedItems/ChickenRoast.jpg', description: 'Juicy roasted chicken with aromatic spices.' },
+    // Lunch and Dinner
+    { id: 22, name: 'Chicken Karahi', category: 'lunch', image: 'img/lunch1.jpg', description: 'Traditional chicken karahi cooked in tomato gravy.' },
+    { id: 23, name: 'Chicken White Karahi', category: 'lunch', image: 'img/lunch2.jpg', description: 'Chicken karahi in a creamy white sauce.' },
+    { id: 24, name: 'Chicken Handi', category: 'lunch', image: 'img/lunch3.jpg', description: 'Chicken cooked in a traditional handi with spices.' },
+    { id: 25, name: 'Chicken Haleem', category: 'lunch', image: 'img/lunch4.jpg', description: 'Slow-cooked chicken haleem with lentils and wheat.' },
+    { id: 26, name: 'Chicken Nihari Per Head', category: 'lunch', image: 'img/lunch5.jpg', description: 'Rich and spicy chicken nihari served per head.' },
+    { id: 27, name: 'Chicken Qorma Per Head', category: 'lunch', image: 'img/lunch6.jpg', description: 'Chicken cooked in creamy qorma gravy.' },
+    { id: 28, name: 'Mutton Karahi', category: 'lunch', image: 'img/lunch7.jpg', description: 'Spicy mutton karahi with tomatoes and green chilies.' },
+    { id: 29, name: 'Mutton Handi', category: 'lunch', image: 'img/lunch8.jpg', description: 'Mutton cooked in handi with aromatic spices.' },
+    { id: 30, name: 'Mutton White Handi', category: 'lunch', image: 'img/lunch9.jpg', description: 'Creamy mutton handi with mild spices.' },
+    { id: 31, name: 'Mutton Namkeen', category: 'lunch', image: 'img/lunch10.jpg', description: 'Salted mutton cooked in traditional style.' },
+    { id: 32, name: 'Nehari', category: 'lunch', image: 'img/lunch11.jpg', description: 'Slow-cooked beef stew with spices.' },
+    { id: 33, name: 'Chicken Polao', category: 'lunch', image: 'img/lunch12.jpg', description: 'Aromatic rice cooked with chicken and spices.' },
+    { id: 34, name: 'Chicken Biryani', category: 'lunch', image: 'img/lunch13.jpg', description: 'Classic biryani with chicken and fragrant rice.' },
+    { id: 35, name: 'Mutton Biryani', category: 'lunch', image: 'img/lunch14.jpg', description: 'Biryani rice layered with spicy mutton.' },
+    { id: 36, name: 'Beef Biryani', category: 'lunch', image: 'img/lunch15.jpg', description: 'Biryani rice layered with tender beef.' },
+    { id: 37, name: 'White Rice', category: 'lunch', image: 'img/lunch16.jpg', description: 'Steamed white rice, perfect as a side.' },
+    { id: 38, name: 'Brown Rice', category: 'lunch', image: 'img/lunch17.jpg', description: 'Nutritious brown rice, healthy and filling.' },
+    { id: 39, name: 'Fried Rice', category: 'lunch', image: 'img/lunch18.jpg', description: 'Rice stir-fried with vegetables and spices.' },
+    { id: 40, name: 'Veg Rice', category: 'lunch', image: 'img/lunch19.jpg', description: 'Rice cooked with assorted vegetables.' },
+    { id: 41, name: 'Mix Vegetable (Large Bowl)', category: 'lunch', image: 'img/lunch20.jpg', description: 'A mix of seasonal vegetables cooked in spices.' },
+    { id: 42, name: 'Desi Vegetable (Large Bowl)', category: 'lunch', image: 'img/lunch21.jpg', description: 'Traditional desi vegetables cooked in local style.' },
+    { id: 43, name: 'Daal Mash (Large Bowl)', category: 'lunch', image: 'img/lunch22.jpg', description: 'Mash daal cooked with spices and herbs.' },
+    { id: 44, name: 'Anda Chola (Large Bowl)', category: 'lunch', image: 'img/lunch23.jpg', description: 'Eggs and chickpeas cooked in spicy gravy.' },
+    { id: 45, name: 'Daal Channa (Large Bowl)', category: 'lunch', image: 'img/lunch24.jpg', description: 'Channa daal cooked with traditional spices.' }
   ];
 
   const filteredItems = selectedCategory === 'all' 
@@ -145,7 +99,7 @@ const RestaurantPage = () => {
     {
       icon: <FaUtensils />,
       title: 'Fine Dining',
-      description: 'Michelin-starred chef with international cuisine'
+      description: 'Starred chef with international cuisine'
     },
     {
       icon: <FaClock />,
@@ -176,18 +130,9 @@ const RestaurantPage = () => {
                 Culinary Excellence at <span className="hero-highlight">Yasin Heaven Star Hotel</span>
               </h1>
               <p className="hero-description">
-                Experience world-class cuisine crafted by our Michelin-starred chef, featuring locally sourced ingredients and innovative techniques.
+                Experience world-class cuisine crafted by our starred chef, featuring locally sourced ingredients and innovative techniques.
               </p>
-              <div className="hero-stats">
-                <div className="stat">
-                  <div className="stat-number">⭐ 4.9</div>
-                  <div className="stat-label">Customer Rating</div>
-                </div>
-                <div className="stat">
-                  <div className="stat-number">🏆 Michelin</div>
-                  <div className="stat-label">Starred Chef</div>
-                </div>
-              </div>
+             
             </div>
           </div>
         </div>
@@ -235,205 +180,34 @@ const RestaurantPage = () => {
 
           {/* Menu Items Grid */}
           <div className="menu-grid">
-            {filteredItems.map((item) => (
-              <div key={item.id} className="menu-item">
-                <div className="menu-item-image">
-                  <img src={item.image} alt={item.name} />
-                  {item.popular && (
-                    <div className="popular-badge">
-                      <FaStar className="star-icon" />
-                      Popular
+            {/* Render menu items grouped by category with headings */}
+            {categories.filter(cat => cat.id !== 'all').map(cat => {
+              const items = filteredItems.filter(item => item.category === cat.id);
+              if (items.length === 0) return null;
+              return (
+                <div key={cat.id} className="menu-category">
+                  <h4 className="category-title">{cat.name}</h4>
+                  <div className="menu-items">
+                    {items.map(item => (
+                    <div key={item.id} className="menu-item">
+                      <div className="menu-item-content">
+                        <div className="menu-item-image-container">
+                          <img src={item.image} alt={item.name} className="menu-item-image" />
+                        </div>
+                        <h3 className="menu-item-name">{item.name}</h3>
+                        <p className="menu-item-description">{item.description}</p>
+                      </div>
                     </div>
-                  )}
-                  <div className="menu-item-actions">
-                    <button className="action-btn favorite">
-                      <FaHeart />
-                    </button>
-                    <button className="action-btn share">
-                      <FaShare />
-                    </button>
+                    ))}
                   </div>
                 </div>
-                <div className="menu-item-content">
-                  <div className="menu-item-header">
-                    <h3 className="menu-item-name">{item.name}</h3>
-                    <div className="menu-item-rating">
-                      <FaStar className="star-icon" />
-                      {item.rating}
-                    </div>
-                  </div>
-                  <p className="menu-item-description">{item.description}</p>
-                  {item.dietary.length > 0 && (
-                    <div className="dietary-tags">
-                      {item.dietary.map((diet, index) => (
-                        <span key={index} className="dietary-tag">
-                          {diet}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <div className="menu-item-footer">
-                    <button className="btn btn-primary">
-                      View Details
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Reservation Section */}
-      <section className="reservation-section">
-        <div className="container">
-          <div className="reservation-content">
-            <div className="reservation-info">
-              <h2 className="reservation-title">Make a Reservation</h2>
-              <p className="reservation-description">
-                Reserve your table for an unforgettable dining experience. Our team will ensure every detail is perfect.
-              </p>
-              <div className="contact-info">
-                <div className="contact-item">
-                  <FaPhone className="contact-icon" />
-                  <div>
-                    <h4>Phone</h4>
-                    <p>(800) 123-4567</p>
-                  </div>
-                </div>
-                <div className="contact-item">
-                  <FaMapMarkerAlt className="contact-icon" />
-                  <div>
-                    <h4>Location</h4>
-                    <p>Yasin Heaven Star Hotel</p>
-                  </div>
-                </div>
-                <div className="contact-item">
-                  <FaClock className="contact-icon" />
-                  <div>
-                    <h4>Hours</h4>
-                    <p>Daily 6:00 AM - 12:00 AM</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <form className="reservation-form" onSubmit={handleReservation}>
-              <div className="form-group">
-                <label htmlFor="name">Full Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={reservationData.name}
-                  onChange={handleInputChange}
-                  required
-                  className="form-input"
-                />
-              </div>
-              
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={reservationData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="form-input"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="phone">Phone</label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={reservationData.phone}
-                    onChange={handleInputChange}
-                    required
-                    className="form-input"
-                  />
-                </div>
-              </div>
-              
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="date">Date</label>
-                  <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={reservationData.date}
-                    onChange={handleInputChange}
-                    required
-                    className="form-input"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="time">Time</label>
-                  <select
-                    id="time"
-                    name="time"
-                    value={reservationData.time}
-                    onChange={handleInputChange}
-                    required
-                    className="form-select"
-                  >
-                    <option value="">Select Time</option>
-                    <option value="18:00">6:00 PM</option>
-                    <option value="18:30">6:30 PM</option>
-                    <option value="19:00">7:00 PM</option>
-                    <option value="19:30">7:30 PM</option>
-                    <option value="20:00">8:00 PM</option>
-                    <option value="20:30">8:30 PM</option>
-                    <option value="21:00">9:00 PM</option>
-                    <option value="21:30">9:30 PM</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="guests">Guests</label>
-                  <select
-                    id="guests"
-                    name="guests"
-                    value={reservationData.guests}
-                    onChange={handleInputChange}
-                    className="form-select"
-                  >
-                    <option value="1">1 Guest</option>
-                    <option value="2">2 Guests</option>
-                    <option value="3">3 Guests</option>
-                    <option value="4">4 Guests</option>
-                    <option value="5">5 Guests</option>
-                    <option value="6">6 Guests</option>
-                    <option value="7+">7+ Guests</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="specialRequests">Special Requests</label>
-                <textarea
-                  id="specialRequests"
-                  name="specialRequests"
-                  value={reservationData.specialRequests}
-                  onChange={handleInputChange}
-                  rows="3"
-                  placeholder="Any dietary restrictions, allergies, or special occasions?"
-                  className="form-textarea"
-                />
-              </div>
-              
-              <button type="submit" className="btn btn-primary btn-large">
-                Make Reservation
-                <FaArrowRight />
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
+      {/* Reservation Section Removed as requested. All tags closed properly. */}
     </div>
   );
 };

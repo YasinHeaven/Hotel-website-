@@ -1,99 +1,41 @@
 import { useState } from 'react';
-import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaStar, FaTag } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaTag } from 'react-icons/fa';
 import './DealsPage.css';
 
 const DealsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
 
+  // Only the two requested food deals
   const deals = [
     {
       id: 1,
-      title: "Summer Beach Getaway",
-      description: "Save up to 40% on beachfront hotels. Perfect for your summer vacation with family and friends.",
-      discount: "40% OFF",
-      category: "seasonal",
-      validUntil: "2025-08-31",
-      image: "/assets/Home 1.jpg",
-      destinations: ["Miami", "Cancun", "Hawaii", "Bahamas"],
-      originalPrice: 299,
-      discountedPrice: 179,
+      title: "Long Stay Food Discount",
+      description: "For long stays, enjoy a discount of 10% to 15% on all food orders during your stay.",
+      discount: "10-15% OFF Food",
+      category: "food",
+      validUntil: "2025-12-31",
+      destinations: ["Hotel Restaurant"],
+      originalPrice: null,
+      discountedPrice: null,
       featured: true
     },
     {
       id: 2,
-      title: "Extended Stay Special",
-      description: "Book 7+ nights and get 25% off your entire stay. Perfect for business travelers and extended vacations.",
-      discount: "25% OFF",
-      category: "extended",
+      title: "Group Food Discount",
+      description: "For groups, get a 10% discount on all food orders. Perfect for family, friends, or business groups!",
+      discount: "10% OFF Food",
+      category: "food",
       validUntil: "2025-12-31",
-      image: "/assets/Master .jpg",
-      destinations: ["New York", "Los Angeles", "Chicago", "Boston"],
-      originalPrice: 199,
-      discountedPrice: 149,
-      featured: false
-    },
-    {
-      id: 3,
-      title: "Weekend City Break",
-      description: "Explore vibrant cities with our weekend packages. Includes hotel stay and city tour.",
-      discount: "30% OFF",
-      category: "weekend",
-      validUntil: "2025-07-15",
-      image: "/assets/View.jpg",
-      destinations: ["Paris", "London", "Rome", "Barcelona"],
-      originalPrice: 249,
-      discountedPrice: 174,
+      destinations: ["Hotel Restaurant"],
+      originalPrice: null,
+      discountedPrice: null,
       featured: true
-    },
-    {
-      id: 4,
-      title: "Last Minute Deals",
-      description: "Book within 24 hours and save big on available rooms. Limited time offer!",
-      discount: "50% OFF",
-      category: "lastminute",
-      validUntil: "2025-07-10",
-      image: "/assets/Home 2.jpg",
-      destinations: ["Las Vegas", "Orlando", "San Francisco", "Seattle"],
-      originalPrice: 399,
-      discountedPrice: 199,
-      featured: false
-    },
-    {
-      id: 5,
-      title: "Luxury Resort Package",
-      description: "Experience ultimate luxury with our premium resort package. Includes spa treatments and fine dining.",
-      discount: "35% OFF",
-      category: "luxury",
-      validUntil: "2025-09-30",
-      image: "/assets/home 3.jpg",
-      destinations: ["Maldives", "Bali", "Santorini", "Dubai"],
-      originalPrice: 599,
-      discountedPrice: 389,
-      featured: true
-    },
-    {
-      id: 6,
-      title: "Family Fun Package",
-      description: "Perfect for families! Includes kids' activities, family rooms, and complimentary breakfast.",
-      discount: "20% OFF",
-      category: "family",
-      validUntil: "2025-08-15",
-      image: "/assets/Single Bed Pic.jpg",
-      destinations: ["Disney World", "Universal Studios", "Great Wolf Lodge", "Atlantis"],
-      originalPrice: 329,
-      discountedPrice: 263,
-      featured: false
     }
   ];
 
   const categories = [
     { id: 'all', name: 'All Deals', icon: <FaTag /> },
-    { id: 'seasonal', name: 'Seasonal', icon: <FaCalendarAlt /> },
-    { id: 'extended', name: 'Extended Stay', icon: <FaClock /> },
-    { id: 'weekend', name: 'Weekend', icon: <FaCalendarAlt /> },
-    { id: 'lastminute', name: 'Last Minute', icon: <FaClock /> },
-    { id: 'luxury', name: 'Luxury', icon: <FaStar /> },
-    { id: 'family', name: 'Family', icon: <FaMapMarkerAlt /> }
+    { id: 'food', name: 'Food Discounts', icon: <FaTag /> }
   ];
 
   const filteredDeals = selectedCategory === 'all' 
@@ -122,32 +64,18 @@ const DealsPage = () => {
       {/* Featured Deals */}
       <section className="featured-deals-section">
         <div className="container">
-          <h2>Featured Deals</h2>
+          <h2>Food Discount Deals</h2>
           <div className="featured-deals-grid">
             {featuredDeals.map(deal => (
               <div key={deal.id} className="featured-deal-card">
-                <div className="deal-image">
-                  <img src={deal.image} alt={deal.title} />
-                  <div className="deal-badge">{deal.discount}</div>
-                  <div className="deal-timer">
-                    <FaClock />
-                    {calculateDaysLeft(deal.validUntil)} days left
-                  </div>
-                </div>
+                <div className="deal-badge">{deal.discount}</div>
                 <div className="deal-content">
-                  <h3>{deal.title}</h3>
-                  <p>{deal.description}</p>
-                  <div className="deal-destinations">
+                  <h3 style={{color: '#222', fontWeight: 'bold'}}>{deal.title}</h3>
+                  <p style={{color: '#222', fontSize: '1.1em'}}>{deal.description}</p>
+                  <div className="deal-destinations" style={{color: '#222'}}>
                     <FaMapMarkerAlt />
-                    {deal.destinations.slice(0, 2).join(', ')}
-                    {deal.destinations.length > 2 && ` +${deal.destinations.length - 2} more`}
+                    {deal.destinations.join(', ')}
                   </div>
-                  <div className="deal-pricing">
-                    <span className="original-price">${deal.originalPrice}</span>
-                    <span className="discounted-price">${deal.discountedPrice}</span>
-                    <span className="price-unit">per night</span>
-                  </div>
-                  <button className="btn btn-primary">Book Now</button>
                 </div>
               </div>
             ))}
@@ -177,30 +105,16 @@ const DealsPage = () => {
           <div className="deals-grid">
             {filteredDeals.map(deal => (
               <div key={deal.id} className="deal-card">
-                <div className="deal-image">
-                  <img src={deal.image} alt={deal.title} />
-                  <div className="deal-badge">{deal.discount}</div>
-                </div>
+                <div className="deal-badge">{deal.discount}</div>
                 <div className="deal-content">
-                  <h3>{deal.title}</h3>
-                  <p>{deal.description}</p>
+                  <h3 style={{color: '#222', fontWeight: 'bold'}}>{deal.title}</h3>
+                  <p style={{color: '#222', fontSize: '1.1em'}}>{deal.description}</p>
                   <div className="deal-details">
-                    <div className="deal-destinations">
+                    <div className="deal-destinations" style={{color: '#222'}}>
                       <FaMapMarkerAlt />
-                      {deal.destinations.slice(0, 2).join(', ')}
-                      {deal.destinations.length > 2 && ` +${deal.destinations.length - 2} more`}
-                    </div>
-                    <div className="deal-validity">
-                      <FaClock />
-                      Valid until {new Date(deal.validUntil).toLocaleDateString()}
+                      {deal.destinations.join(', ')}
                     </div>
                   </div>
-                  <div className="deal-pricing">
-                    <span className="original-price">${deal.originalPrice}</span>
-                    <span className="discounted-price">${deal.discountedPrice}</span>
-                    <span className="price-unit">per night</span>
-                  </div>
-                  <button className="btn btn-primary">Book Now</button>
                 </div>
               </div>
             ))}

@@ -1,3 +1,52 @@
+/* Menu Highlights Card Styling Fixes */
+.menu-category {
+  margin-bottom: 32px;
+}
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.menu-item {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  padding: 16px 24px;
+  margin-bottom: 0;
+  overflow: visible;
+  width: 100%;
+  min-width: 0;
+  word-break: break-word;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-name {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  color: #222;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.item-description {
+  font-size: 0.98rem;
+  color: #555;
+  margin: 0;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+@media (max-width: 600px) {
+  .menu-item {
+    padding: 12px 10px;
+  }
+}
 /* HomePage Styles */
 .home-page {
   padding-top: 80px;

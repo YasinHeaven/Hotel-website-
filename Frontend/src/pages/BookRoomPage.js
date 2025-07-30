@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { FaBed, FaCalendarAlt, FaCheckCircle, FaCreditCard, FaUser, FaUsers, FaWifi } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { authUtils, bookingAPI, roomAPI } from '../services/api';
+import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './BookRoomPage.css';
 
 const BookRoomPage = () => {
@@ -251,11 +252,9 @@ const BookRoomPage = () => {
                 <div key={room._id} className="room-card">
                   <div className="room-image">
                     <img 
-                      src={`/assets/Rooms/${room.type.replace(' ', '%20')}%201.jpg`} 
+                      src={getAssetPath(`${room.type.replace(/ /g, '_')}_1.jpg`, 'room')} 
                       alt={room.type}
-                      onError={(e) => {
-                        e.target.src = '/assets/Home%201.jpg';
-                      }}
+                      onError={createImageErrorHandler('room')}
                     />
                   </div>
                   

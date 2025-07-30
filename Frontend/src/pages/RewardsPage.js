@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaArrowRight, FaAward, FaChartLine, FaCheckCircle, FaCrown, FaEnvelope, FaGift, FaHeart, FaPhone, FaStar } from 'react-icons/fa';
+import { getAssetPath, createImageErrorHandler } from '../utils/assetUtils';
 import './RewardsPage.css';
 
 const RewardsPage = () => {
@@ -78,37 +79,37 @@ const RewardsPage = () => {
     {
       category: 'Hotel Stays',
       items: [
-        { name: 'Free Night (Standard Room)', points: 15000, image: '/assets/Single Bed Pic.jpg' },
-        { name: 'Free Night (Deluxe Room)', points: 20000, image: '/assets/Washroom Dulex.jpg' },
-        { name: 'Free Night (Suite)', points: 35000, image: '/assets/Master .jpg' },
-        { name: 'Weekend Getaway Package', points: 45000, image: '/assets/View.jpg' }
+        { name: 'Free Night (Standard Room)', points: 15000, image: getAssetPath('Single Bed Pic.jpg', 'room') },
+        { name: 'Free Night (Deluxe Room)', points: 20000, image: getAssetPath('Washroom Dulex.jpg', 'room') },
+        { name: 'Free Night (Suite)', points: 35000, image: getAssetPath('Master .jpg', 'room') },
+        { name: 'Weekend Getaway Package', points: 45000, image: getAssetPath('View.jpg', 'homepage') }
       ]
     },
     {
       category: 'Dining',
       items: [
-        { name: 'Restaurant Dining Credit ($50)', points: 5000, image: '/assets/T1.jpg' },
-        { name: 'Restaurant Dining Credit ($100)', points: 9000, image: '/assets/T2.jpg' },
-        { name: 'Chef\'s Table Experience', points: 15000, image: '/assets/Home 1.jpg' },
-        { name: 'Wine Tasting Experience', points: 8000, image: '/assets/Home 2.jpg' }
+        { name: 'Restaurant Dining Credit ($50)', points: 5000, image: getAssetPath('T1.jpg', 'restaurant') },
+        { name: 'Restaurant Dining Credit ($100)', points: 9000, image: getAssetPath('T2.jpg', 'restaurant') },
+        { name: 'Chef\'s Table Experience', points: 15000, image: getAssetPath('Home 1.jpg', 'homepage') },
+        { name: 'Wine Tasting Experience', points: 8000, image: getAssetPath('Home 2.jpg', 'homepage') }
       ]
     },
     {
       category: 'Spa & Wellness',
       items: [
-        { name: 'Spa Treatment ($75)', points: 7500, image: '/assets/home 3.jpg' },
-        { name: 'Spa Treatment ($150)', points: 14000, image: '/assets/Single Bed Close.jpg' },
-        { name: 'Spa Day Package', points: 25000, image: '/assets/Washroom Dulex close.jpg' },
-        { name: 'Wellness Weekend', points: 40000, image: '/assets/Master Bed .mp4.jpg' }
+        { name: 'Spa Treatment ($75)', points: 7500, image: getAssetPath('home 3.jpg', 'homepage') },
+        { name: 'Spa Treatment ($150)', points: 14000, image: getAssetPath('Single Bed Close.jpg', 'room') },
+        { name: 'Spa Day Package', points: 25000, image: getAssetPath('Washroom Dulex close.jpg', 'room') },
+        { name: 'Wellness Weekend', points: 40000, image: getAssetPath('Master Bed .mp4.jpg', 'room') }
       ]
     },
     {
       category: 'Travel',
       items: [
-        { name: 'Airport Transfer', points: 3000, image: '/assets/Home 1.jpg' },
-        { name: 'Car Rental Discount', points: 2000, image: '/assets/Home 2.jpg' },
-        { name: 'Flight Discount ($200)', points: 18000, image: '/assets/home 3.jpg' },
-        { name: 'Travel Insurance', points: 5000, image: '/assets/View.jpg' }
+        { name: 'Airport Transfer', points: 3000, image: getAssetPath('Home 1.jpg', 'homepage') },
+        { name: 'Car Rental Discount', points: 2000, image: getAssetPath('Home 2.jpg', 'homepage') },
+        { name: 'Flight Discount ($200)', points: 18000, image: getAssetPath('home 3.jpg', 'homepage') },
+        { name: 'Travel Insurance', points: 5000, image: getAssetPath('View.jpg', 'homepage') }
       ]
     }
   ];
@@ -262,7 +263,11 @@ const RewardsPage = () => {
               ?.items.map((item, index) => (
                 <div key={index} className="reward-card">
                   <div className="reward-image">
-                    <img src={item.image} alt={item.name} />
+                    <img 
+                      src={item.image} 
+                      alt={item.name}
+                      onError={createImageErrorHandler('general')}
+                    />
                     <div className="reward-points">
                       {item.points.toLocaleString()} pts
                     </div>

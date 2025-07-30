@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { bookingAPI, roomAPI } from '../services/api';
+import { getAssetPath, createImageErrorHandler } from '../utils/assetUtils';
 import './BookingPage.css';
 
 const BookingPage = () => {
@@ -167,9 +168,7 @@ const BookingPage = () => {
                     <img 
                       src={`/assets/${room.type.replace(' ', '%20')}%201.jpg`} 
                       alt={room.type}
-                      onError={(e) => {
-                        e.target.src = '/assets/Home 1.jpg'; // Fallback image
-                      }}
+                      onError={createImageErrorHandler('room')}
                     />
                   </div>
                   

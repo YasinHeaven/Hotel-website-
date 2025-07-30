@@ -1,11 +1,45 @@
 import MuiAlert from '@mui/material/Alert';
+import Modal from '@mui/material/Modal';
 import Snackbar from '@mui/material/Snackbar';
 import { useEffect, useState } from 'react';
-import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaRoute, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWifi } from 'react-icons/fa';
+import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWifi } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './HomePage.css';
 import './RoomsPage.css';
-
+// GallerySliderModal component (must be outside HomePage)
+function GallerySliderModal({ images, title, onClose }) {
+  const [current, setCurrent] = useState(0);
+  if (!images || images.length === 0) return null;
+  const prevImg = () => setCurrent((current - 1 + images.length) % images.length);
+  const nextImg = () => setCurrent((current + 1) % images.length);
+  return (
+    <div style={{
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      background: '#fff',
+      borderRadius: '16px',
+      boxShadow: '0 4px 32px rgba(0,0,0,0.18)',
+      padding: '32px',
+      maxWidth: '700px',
+      width: '90%',
+      zIndex: 9999
+    }}>
+      <button onClick={onClose} style={{ position: 'absolute', top: 16, right: 16, fontSize: 24, background: 'none', border: 'none', cursor: 'pointer' }}>×</button>
+      <h2 style={{ textAlign: 'center', marginBottom: '24px' }}>{title} Gallery</h2>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '24px' }}>
+        <button onClick={prevImg} style={{ fontSize: 32, background: 'none', border: 'none', cursor: 'pointer', color: '#333' }} disabled={images.length <= 1}>&lt;</button>
+        <img src={images[current]} alt={`Gallery ${current+1}`} style={{ width: '400px', height: '260px', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
+        <button onClick={nextImg} style={{ fontSize: 32, background: 'none', border: 'none', cursor: 'pointer', color: '#333' }} disabled={images.length <= 1}>&gt;</button>
+      </div>
+      <div style={{ textAlign: 'center', marginTop: '16px', color: '#555' }}>
+        {current + 1} / {images.length}
+      </div>
+    </div>
+  );
+}
 
 import { roomAPI } from '../services/api';
 
@@ -16,46 +50,45 @@ const facilities = [
     name: 'Safe & Secure Parking',
     description: 'We offer dedicated parking space for up to 50 vehicles so you never have to worry about finding a spot. Our main parking area is conveniently located right next to the hotel’s front gate, while space for larger vehicles is just a short walk away. Whether you\'re arriving by car, van, or tour bus, your ride is safe with us.',
     images: [
-      '/assets/facilities/Parking/Parking 1.jpg',
-      '/assets/facilities/Parking/Parking 2.jpg',
-      '/assets/facilities/Parking/Parking 3.jpg',
+      '/assets/Facilities/Parking/Parking.jpg',
     ],
-  },
-  {
+    },
+    {
     icon: <FaWifi />, // Wi-Fi
     name: 'Fast & Reliable Wi-Fi',
     description: 'Stay connected with our high-speed internet available 24/7 throughout the hotel. Whether you\'re working, video calling loved ones, or streaming your favorite shows we’ve got you covered with smooth, uninterrupted access.',
-    images: [],
+    images: ['/assets/Facilities/wifi/wifi.jpg'],
   },
   {
     icon: <FaShoppingBag />, // Gift Shop
     name: 'Charming Gift Shop',
     description: 'Take a piece of Yasin home with you! Our gift shop offers a delightful selection of local crafts, souvenirs, and travel essentials. Whether you\'re picking up a keepsake or finding the perfect gift, you’ll discover something unique to remember your stay by. And for a touch of color, visit our Bouquet Corner.',
     images: [
-      '/assets/Home 1.jpg', // Placeholder until gift shop image is available
+      getAssetPath('Home 1.jpg', 'homepage'), // Placeholder until gift shop image is available
     ],
   },
   {
     icon: <FaStar />, // Power Supply
     name: 'Uninterrupted Power Supply',
     description: 'Enjoy round-the-clock electricity during your stay! Due to the location of main powerhouse in Yasin Ghizer, our hotel provides reliable 24/7 lighting so you\'re never left in the dark, whether it’s for work, relaxation, or planning your next adventure.',
-    images: [],
+    images: ['/assets/Facilities/elecriticity/electric.jpg'],
   },
   {
     icon: <FaShower />, // Water/Showers
     name: 'Refreshing Glacier Water & Soothing Hot Showers',
     description: 'At Yasin Heaven Star Hotel, every room is equipped with both hot and cold water, perfect for unwinding after a day of adventure. Our cold water flows fresh from nearby glacier-fed sources, offering a crisp and rejuvenating experience, while our hot water is always ready to warm you up in comfort.',
-    images: [],
+    images: ['/assets/Facilities/showers/hotshowers.jpg'],
   },
   {
     icon: <FaCheckCircle />, // Security
     name: '24/7 Security',
-    description: 'Your Safety Comes First.  At Yasin Heaven Star Hotel, we prioritize your peace of mind. Our premises are safe and secure, with attentive staff and protective measures in place 24/7 so you can relax, explore, and enjoy your stay without worry.',
+    description: 'Your Safety Comes Firs.  At Yasin Heaven Star Hotel, we prioritize your peace of mind. Our premises are safe and secure, with attentive staff and protective measures in place 24/7 so you can relax, explore, and enjoy your stay without worry.',
     images: [
-      '/assets/Home 2.jpg', // Placeholder until security image is available
-    ],
+  '/assets/Facilities/security/security.jpg',
+],
   },
 ];
+
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -85,20 +118,45 @@ const HomePage = () => {
         setLoading(true);
         const response = await roomAPI.getAllRooms();
         // Transform API data to match frontend format
-        const transformedRooms = response.data.map(room => ({
-          id: room._id,
-          name: room.type,
-          type: room.type.toLowerCase().replace(' ', ''),
-          price: room.price,
-          image: `/assets/Rooms/${room.type} 1.jpg`,
-          features: ['Free WiFi', 'TV', 'Private Bathroom'],
-          description: room.description,
-          maxGuests: room.capacity || 2,
-          size: '35 sqm',
-          amenities: ['Free WiFi', 'TV', 'Private Bathroom', 'Room Service', 'Daily Housekeeping'],
-          number: room.number,
-          status: room.status
-        }));
+        const transformedRooms = response.data.map(room => {
+          let imageName = '';
+          switch (room.type.toLowerCase()) {
+            case 'single room':
+            case 'single':
+              imageName = 'Single_Room_1.jpg';
+              break;
+            case 'delux room':
+            case 'deluxe room':
+            case 'delux':
+            case 'deluxe':
+              imageName = 'Delux_Room_1.jpg';
+              break;
+            case 'family room':
+            case 'family':
+              imageName = 'Family_room_1.jpg';
+              break;
+            case 'master room':
+            case 'master':
+              imageName = 'Master_Room_1.jpg';
+              break;
+            default:
+              imageName = `${room.type.replace(/ /g, '_')}_1.jpg`;
+          }
+          return {
+            id: room._id,
+            name: room.type,
+            type: room.type.toLowerCase().replace(' ', ''),
+            price: room.price,
+            image: getAssetPath(imageName, 'room'),
+            features: ['Free WiFi', 'TV', 'Private Bathroom'],
+            description: room.description,
+            maxGuests: room.capacity || 2,
+            size: '35 sqm',
+            amenities: ['Free WiFi', 'TV', 'Private Bathroom', 'Room Service', 'Daily Housekeeping'],
+            number: room.number,
+            status: room.status
+          };
+        });
         setRooms(transformedRooms);
         setError('');
       } catch (err) {
@@ -224,20 +282,46 @@ const HomePage = () => {
   };
 
   // Updated functions for button interactions using React Router
-  const handleExploreDestination = (destinationType) => {
-    switch (destinationType) {
-      case 'Beach':
-        navigate('/destinations/beach');
-        break;
-      case 'City':
-        navigate('/destinations/city');
-        break;
-      case 'Mountain':
-        navigate('/destinations/mountain');
-        break;
-      default:
-        navigate('/rooms');
+  // Gallery modal state for Popular Destinations
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryImages, setGalleryImages] = useState([]);
+  const [galleryTitle, setGalleryTitle] = useState('');
+
+  const handleOpenGallery = (type) => {
+    let images = [];
+    let title = '';
+    if (type === 'CityHotels') {
+      images = [
+        '/assets/PopularDestinations/CityHotels/1.jpg',
+        '/assets/PopularDestinations/CityHotels/2.jpg',
+        '/assets/PopularDestinations/CityHotels/3.jpg',
+        '/assets/PopularDestinations/CityHotels/4.jpg',
+        '/assets/PopularDestinations/CityHotels/5.jpg',
+        '/assets/PopularDestinations/CityHotels/homepage.jpg',
+      ].map(img => process.env.PUBLIC_URL + img);
+      title = 'City Hotels';
+    } else if (type === 'MountainResort') {
+      images = [
+        '/assets/PopularDestinations/MountainResort/1.jpg',
+        '/assets/PopularDestinations/MountainResort/2.jpg',
+        '/assets/PopularDestinations/MountainResort/3.jpg',
+        '/assets/PopularDestinations/MountainResort/4.jpg',
+        '/assets/PopularDestinations/MountainResort/5.jpg',
+        '/assets/PopularDestinations/MountainResort/6.jpg',
+        '/assets/PopularDestinations/MountainResort/7.jpg',
+        '/assets/PopularDestinations/MountainResort/homepage.jpg',
+      ].map(img => process.env.PUBLIC_URL + img);
+      title = 'Mountain Resort';
     }
+    setGalleryImages(images);
+    setGalleryTitle(title);
+    setGalleryOpen(true);
+  };
+
+  const handleCloseGallery = () => {
+    setGalleryOpen(false);
+    setGalleryImages([]);
+    setGalleryTitle('');
   };
 
   const handleViewRoomDetails = (room) => {
@@ -361,6 +445,7 @@ const HomePage = () => {
                     boxShadow: '0 1px 8px rgba(0,0,0,0.07)',
                     transition: 'transform 0.2s',
                   }} 
+                  onError={createImageErrorHandler('room')}
                 />
                 <div 
                   className="gallery-overlay" 
@@ -418,7 +503,7 @@ const HomePage = () => {
               </div>
               
               <div className="location-map">
-                <img src="/assets/location.jpg" alt="Yasin Heaven Star Hotel Location" className="map-image" />
+               <img src="/assets/Homepage/Home1.jpg" alt="Home1" />
               </div>
               
               <div className="location-details">
@@ -467,65 +552,53 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Destinations Section */}
+      {/* Popular Destinations Section (moved to top) */}
       <section className="section destinations-section">
         <div className="container">
           <div className="section-header">
             <div className="section-badge">
-              Explore Destinations
+              🌍 Explore
             </div>
             <h2 className="section-title">Popular Destinations</h2>
             <p className="section-description">
-              From bustling cities to serene beaches, discover your perfect getaway
+              Discover amazing places and create unforgettable memories
             </p>
           </div>
-          
-          <div className="destinations-grid">
-            <div className="destination-card">
-              <div className="destination-image">
-                <img src="/assets/Home 2.jpg" alt="City Hotels" />
-                <div className="destination-overlay">
-                  <div className="destination-badge city">🏙️ City</div>
-                </div>
-              </div>
-              <div className="destination-content">
-                <h3 className="destination-title">City Hotels</h3>
-                <p className="destination-description">
-                  Experience urban luxury with our premium city hotels in major metropolitan areas
-                </p>
-                <button 
-                  className="btn btn-outline destination-btn"
-                  onClick={() => handleExploreDestination('City')}
-                >
-                  Explore City Hotels
-                  <FaArrowRight className="btn-arrow" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="destination-card">
-              <div className="destination-image">
-                <img src="/assets/home 3.jpg" alt="Mountain Resorts" />
-                <div className="destination-overlay">
-                  <div className="destination-badge mountain">🏔️ Mountain</div>
-                </div>
-              </div>
-              <div className="destination-content">
-                <h3 className="destination-title">Mountain Resorts</h3>
-                <p className="destination-description">
-                  Retreat to serene mountain resorts for the perfect blend of adventure and relaxation
-                </p>
-                <button 
-                  className="btn btn-outline destination-btn"
-                  onClick={() => handleExploreDestination('Mountain')}
-                >
-                  Explore Mountain Resorts
-                  <FaArrowRight className="btn-arrow" />
-                </button>
-              </div>
+      <div className="destinations-grid">
+        <div className="destination-card" onClick={() => handleOpenGallery('CityHotels')}>
+          <div className="destination-image">
+            <img 
+              src="/assets/PopularDestinations/CityHotels/homepage.jpg" 
+              alt="City Hotels"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px' }}
+            />
+            <div className="destination-overlay">
+              <div className="destination-badge city">🏙️ City</div>
             </div>
           </div>
         </div>
+        <div className="destination-card" onClick={() => handleOpenGallery('MountainResort')}>
+          <div className="destination-image">
+            <img 
+              src="/assets/PopularDestinations/MountainResort/homepage.jpg" 
+              alt="Mountain Resorts"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px' }}
+            />
+            <div className="destination-overlay">
+              <div className="destination-badge mountain">🏔️ Mountain</div>
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+        {/* Gallery Modal */}
+        <Modal open={galleryOpen} onClose={handleCloseGallery}>
+          <GallerySliderModal 
+            images={galleryImages} 
+            title={galleryTitle} 
+            onClose={handleCloseGallery} 
+          />
+        </Modal>
       </section>
       
       {/* Restaurant Section */}
@@ -576,14 +649,6 @@ const HomePage = () => {
                   </div>
                 </div>
                 
-                <button 
-                  className="btn btn-primary restaurant-reservation-btn"
-                  onClick={handleRestaurantReservation}
-                  style={{marginTop: '24px', width: '100%'}}
-                >
-                  Make Reservation
-                  <FaArrowRight className="btn-arrow" />
-                </button>
               </div>
             </div>
             
@@ -639,7 +704,12 @@ const HomePage = () => {
                     {facility.images && facility.images.length > 0 && (
                       <div className="facility-carousel">
                         <button onClick={() => handlePrevImg(index, totalImgs)} disabled={totalImgs <= 1}>&lt;</button>
-                        <img src={facility.images[currentImg]} alt={facility.name + ' ' + (currentImg + 1)} className="facility-gallery-img" />
+                        <img 
+                          src={facility.images[currentImg]} 
+                          alt={facility.name + ' ' + (currentImg + 1)} 
+                          className="facility-gallery-img"
+                          onError={createImageErrorHandler('facility')}
+                        />
                         <button onClick={() => handleNextImg(index, totalImgs)} disabled={totalImgs <= 1}>&gt;</button>
                       </div>
                     )}
@@ -665,63 +735,7 @@ const HomePage = () => {
       </section>
 
       {/* Popular Destinations Section */}
-      <section className="section destinations-section">
-        <div className="container">
-          <div className="section-header">
-            <div className="section-badge">
-              🌍 Explore
-            </div>
-            <h2 className="section-title">Popular Destinations</h2>
-            <p className="section-description">
-              Discover amazing places and create unforgettable memories
-            </p>
-          </div>
-          
-          <div className="destinations-grid">
-            <div className="destination-card" onClick={() => handleExploreDestination('City')}>
-              <div className="destination-image">
-                <img src="/assets/T2.jpg" alt="City Hotels" />
-                <div className="destination-overlay">
-                  <div className="destination-content">
-                    <div className="destination-icon">
-                      <FaCar />
-                    </div>
-                    <h3 className="destination-title">City Hotels</h3>
-                    <p className="destination-description">
-                      Experience luxury in the heart of vibrant cities
-                    </p>
-                    <button className="btn btn-primary destination-btn">
-                      Explore Now
-                      <FaArrowRight className="btn-arrow" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="destination-card" onClick={() => handleExploreDestination('Mountain')}>
-              <div className="destination-image">
-                <img src="/assets/View.jpg" alt="Mountain Resorts" />
-                <div className="destination-overlay">
-                  <div className="destination-content">
-                    <div className="destination-icon">
-                      <FaRoute />
-                    </div>
-                    <h3 className="destination-title">Mountain Resorts</h3>
-                    <p className="destination-description">
-                      Escape to serene mountain retreats and fresh air
-                    </p>
-                    <button className="btn btn-primary destination-btn">
-                      Explore Now
-                      <FaArrowRight className="btn-arrow" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Deals Section */}
       <section className="section deals-section">

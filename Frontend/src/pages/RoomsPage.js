@@ -3,6 +3,7 @@ import { FaArrowRight, FaCheck, FaEnvelope, FaPhone, FaRulerCombined, FaStar, Fa
 import { useNavigate } from 'react-router-dom';
 import BookRoomModal from '../components/BookRoomModal';
 import { bookingAPI, roomAPI } from '../services/api';
+import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './RoomsPage.css';
 
 const RoomsPage = () => {
@@ -25,20 +26,45 @@ const RoomsPage = () => {
       const response = await roomAPI.getAllRooms();
       
       // Transform API data to match your frontend format
-      const transformedRooms = response.data.map(room => ({
-        id: room._id,
-        name: room.type,
-        type: room.type.toLowerCase().replace(' ', ''),
-        price: room.price,
-        image: `/assets/Rooms/${room.type} 1.jpg`,
-        features: ['Free WiFi', 'AC', 'TV', 'Private Bathroom'],
-        description: room.description,
-        maxGuests: 2,
-        size: '35 sqm',
-        amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Private Bathroom', 'Room Service', 'Daily Housekeeping'],
-        number: room.number,
-        status: room.status
-      }));
+      const transformedRooms = response.data.map(room => {
+        let imageName = '';
+        switch (room.type.toLowerCase()) {
+          case 'single room':
+          case 'single':
+            imageName = 'Single_Room_1.jpg';
+            break;
+          case 'delux room':
+          case 'deluxe room':
+          case 'delux':
+          case 'deluxe':
+            imageName = 'Delux_Room_1.jpg';
+            break;
+          case 'family room':
+          case 'family':
+            imageName = 'Family_room_1.jpg';
+            break;
+          case 'master room':
+          case 'master':
+            imageName = 'Master_Room_1.jpg';
+            break;
+          default:
+            imageName = `${room.type.replace(/ /g, '_')}_1.jpg`;
+        }
+        return {
+          id: room._id,
+          name: room.type,
+          type: room.type.toLowerCase().replace(' ', ''),
+          price: room.price,
+          image: getAssetPath(imageName, 'room'),
+          features: ['Free WiFi', 'AC', 'TV', 'Private Bathroom'],
+          description: room.description,
+          maxGuests: 2,
+          size: '35 sqm',
+          amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Private Bathroom', 'Room Service', 'Daily Housekeeping'],
+          number: room.number,
+          status: room.status
+        };
+      });
       
       setRooms(transformedRooms);
     } catch (err) {
@@ -52,7 +78,7 @@ const RoomsPage = () => {
           name: 'Single Room',
           type: 'single',
           price: 8000,
-          image: '/assets/Rooms/Single Room 1.jpg',
+          image: getAssetPath('Single_Room_1.jpg', 'room'),
           features: ['Free WiFi', 'AC', 'TV', 'Private Bathroom'],
           description: 'Perfect for solo travelers with all essential amenities.',
           maxGuests: 1,
@@ -64,7 +90,7 @@ const RoomsPage = () => {
           name: 'Deluxe Room',
           type: 'deluxe',
           price: 12000,
-          image: '/assets/Rooms/Delux Room 1.jpg',
+          image: getAssetPath('Delux_Room_1.jpg', 'room'),
           features: ['Bed', 'Chair', 'Mini Fridge', 'Electric Kettle', 'WiFi', 'Hot Water', 'Electric Ceiling Fan', 'Attach Bath'],
           description: 'Perfect room with all necessary needs, bed, chair, mini fridge, electric kettle, WiFi, hot water, electric ceiling fan and attach bath.',
           maxGuests: 2,
@@ -76,7 +102,7 @@ const RoomsPage = () => {
           name: 'Master Bedroom Suite',
           type: 'master',
           price: 10000,
-          image: '/assets/Rooms/Master Room 1.jpg',
+          image: getAssetPath('Master_Room_1.jpg', 'room'),
           features: ['Free WiFi', 'AC', 'Smart TV', 'Jacuzzi', 'Balcony', 'Room Service'],
           description: 'Luxurious suite with separate living area and premium facilities.',
           maxGuests: 2,
@@ -88,7 +114,7 @@ const RoomsPage = () => {
           name: 'Family Room',
           type: 'family',
           price: 11000,
-          image: '/assets/Rooms/Family room 1.jpg',
+          image: getAssetPath('Family_room_1.jpg', 'room'),
           features: ['Bed', 'Chair', 'Mini Fridge', 'Electric Kettle', 'WiFi', 'Ceiling Fan', 'Hot Water', 'Attach Bath'],
           description: 'Perfect room with all necessary needs, bed chair, mini fridge, electric kettle, WiFi, ceiling fan, hot water and attach bath.',
           maxGuests: 3,
@@ -189,7 +215,11 @@ const RoomsPage = () => {
               {rooms.map((room) => (
               <div key={room.id} className="room-card">
                 <div className="room-image">
-                  <img src={room.image} alt={room.name} />
+                  <img 
+                    src={room.image} 
+                    alt={room.name}
+                    onError={createImageErrorHandler('room')}
+                  />
                   <div className="room-price-badge">
                     <span className="room-price">PKR {room.price}</span>
                     <span className="room-price-period">/night</span>
