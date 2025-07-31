@@ -1,3 +1,196 @@
+/* Admin Users Page Styles */
+.admin-users-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 32px 24px;
+  margin: 32px auto;
+  max-width: 900px;
+}
+.admin-users-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #334155;
+}
+.admin-users-form {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.admin-users-form input {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  min-width: 120px;
+  background: #f8fafc;
+  transition: border 0.2s;
+}
+.admin-users-form input:focus {
+  border-color: #e6cb58;
+  outline: none;
+}
+.admin-users-btn {
+  background: #e6cb58;
+  color: #222;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.admin-users-btn:hover {
+  background: #d4b84c;
+}
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  background: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+}
+.admin-users-table th, .admin-users-table td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+.admin-users-table th {
+  background: #e6cb58;
+  color: #222;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.admin-users-table tr:last-child td {
+  border-bottom: none;
+}
+.admin-users-action-btn {
+  background: #334155;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 14px;
+  margin-right: 6px;
+  font-size: 0.98rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.admin-users-action-btn:hover {
+  background: #e6cb58;
+  color: #222;
+}
+.admin-users-action-btn.delete {
+  background: #dc2626;
+}
+.admin-users-action-btn.delete:hover {
+  background: #b91c1c;
+  color: #fff;
+}
+/* Admin Rooms Page Styles */
+.admin-rooms-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 32px 24px;
+  margin: 32px auto;
+  max-width: 1100px;
+}
+.admin-rooms-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #334155;
+}
+.admin-rooms-form {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.admin-rooms-form input,
+.admin-rooms-form select {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  min-width: 120px;
+  background: #f8fafc;
+  transition: border 0.2s;
+}
+.admin-rooms-form input:focus,
+.admin-rooms-form select:focus {
+  border-color: #e6cb58;
+  outline: none;
+}
+.admin-rooms-btn {
+  background: #e6cb58;
+  color: #222;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.admin-rooms-btn:hover {
+  background: #d4b84c;
+}
+.admin-rooms-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  background: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+}
+.admin-rooms-table th, .admin-rooms-table td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+.admin-rooms-table th {
+  background: #e6cb58;
+  color: #222;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.admin-rooms-table tr:last-child td {
+  border-bottom: none;
+}
+.admin-rooms-action-btn {
+  background: #334155;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 14px;
+  margin-right: 6px;
+  font-size: 0.98rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.admin-rooms-action-btn:hover {
+  background: #e6cb58;
+  color: #222;
+}
+.admin-rooms-action-btn.delete {
+  background: #dc2626;
+}
+.admin-rooms-action-btn.delete:hover {
+  background: #b91c1c;
+  color: #fff;
+}
+/* Admin header adjustment for sidebar */
+.header.admin-header {
+  margin-left: 280px; /* Match .admin-sidebar width */
+  width: calc(100% - 280px);
+  box-sizing: border-box;
+  z-index: 900;
+}
 /* Admin Layout Styles */
 .admin-layout {
   display: flex;

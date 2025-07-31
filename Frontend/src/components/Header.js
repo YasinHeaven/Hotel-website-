@@ -61,28 +61,36 @@ const Header = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <header className="header">
+    <header className={`header${user && userType === 'admin' ? ' admin-header' : ''}`}> 
       <div className="header-container">
         <div className="header-content">
           {/* Desktop Navigation - Left Side */}
-          <nav className="desktop-nav">
-            <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>
-              Home
-            </Link>
-            <Link to="/rooms" className={`nav-link ${isActive('/rooms') ? 'active' : ''}`}>
-              Rooms
-            </Link>
-            <Link to="/deals" className={`nav-link deals-link ${isActive('/deals') ? 'active' : ''}`}>
-              Deals
-              <span className="hot-badge">Hot</span>
-            </Link>
-            <Link to="/gallery" className={`nav-link ${isActive('/gallery') ? 'active' : ''}`}>
-              Gallery
-            </Link>
-          </nav>
+          {user && userType === 'admin' ? (
+            <nav className="desktop-nav">
+              <Link to="/admin" className={`nav-link admin-panel-link ${isActive('/admin') ? 'active' : ''}`}> 
+                🏨 Admin Panel
+              </Link>
+            </nav>
+          ) : (
+            <nav className="desktop-nav">
+              <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}> 
+                Home
+              </Link>
+              <Link to="/rooms" className={`nav-link ${isActive('/rooms') ? 'active' : ''}`}> 
+                Rooms
+              </Link>
+              <Link to="/deals" className={`nav-link deals-link ${isActive('/deals') ? 'active' : ''}`}> 
+                Deals
+                <span className="hot-badge">Hot</span>
+              </Link>
+              <Link to="/gallery" className={`nav-link ${isActive('/gallery') ? 'active' : ''}`}> 
+                Gallery
+              </Link>
+            </nav>
+          )}
 
-          {/* Logo Section - Right Aligned */}
-          <Link to="/" className="logo">
+          {/* Logo Section - Center for users, right for admin */}
+          <Link to="/" className={`logo${user && userType === 'admin' ? ' logo-admin' : ''}`}> 
             <div className="logo-text">
               <span className="logo-title">Yasin Heaven Star Hotel</span>
               <span className="logo-subtitle">Premium Hospitality</span>
@@ -100,29 +108,23 @@ const Header = () => {
 
           {/* Authentication Section - Right Side */}
           <div className="auth-section">
-            <nav className="desktop-nav-right">
-              <Link to="/restaurant" className={`nav-link ${isActive('/restaurant') ? 'active' : ''}`}>
-                Restaurant
-              </Link>
-              <Link to="/facilities" className={`nav-link ${isActive('/facilities') ? 'active' : ''}`}>
-                Facilities
-              </Link>
-              <Link to="/booking" className={`nav-link ${isActive('/booking') ? 'active' : ''}`}>
-                My Bookings
-              </Link>
-              {/* Admin Panel Link - Only visible when admin is logged in */}
-              {user && userType === 'admin' && (
-                <Link to="/admin" className={`nav-link admin-panel-link ${isActive('/admin') ? 'active' : ''}`}>
-                  🏨 Admin Panel
+            {user && userType === 'admin' ? null : (
+              <nav className="desktop-nav-right">
+                <Link to="/restaurant" className={`nav-link ${isActive('/restaurant') ? 'active' : ''}`}> 
+                  Restaurant
                 </Link>
-              )}
-            </nav>
-            
+                <Link to="/facilities" className={`nav-link ${isActive('/facilities') ? 'active' : ''}`}> 
+                  Facilities
+                </Link>
+                <Link to="/booking" className={`nav-link ${isActive('/booking') ? 'active' : ''}`}> 
+                  My Bookings
+                </Link>
+              </nav>
+            )}
             {user ? (
               <div className="user-menu">
                 <span className="user-info">
                   {user.name || user.email}
-                  {userType === 'admin' && <span className="admin-badge">HOTEL ADMIN</span>}
                 </span>
                 <button onClick={handleLogout} className="logout-btn">
                   <FaSignOutAlt />

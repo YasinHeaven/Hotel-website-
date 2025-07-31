@@ -362,21 +362,29 @@
 }
 
 .btn-approve {
-  background: #10b981;
+  background: linear-gradient(90deg, #10b981 60%, #34d399 100%);
   color: white;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(16,185,129,0.15);
 }
 
 .btn-approve:hover {
-  background: #059669;
+  background: linear-gradient(90deg, #059669 60%, #10b981 100%);
+  box-shadow: 0 4px 12px rgba(16,185,129,0.25);
 }
 
 .btn-deny {
-  background: #ef4444;
+  background: linear-gradient(90deg, #ef4444 60%, #f87171 100%);
   color: white;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.15);
 }
 
 .btn-deny:hover {
-  background: #dc2626;
+  background: linear-gradient(90deg, #dc2626 60%, #ef4444 100%);
+  box-shadow: 0 4px 12px rgba(239,68,68,0.25);
 }
 
 .btn-confirm {

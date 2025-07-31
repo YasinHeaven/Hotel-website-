@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 
 const AdminUsers = () => {
@@ -57,16 +57,16 @@ const AdminUsers = () => {
 
   return (
     <AdminLayout>
-      <div>
-        <h3>Manage Users</h3>
-        <form onSubmit={handleSubmit}>
+      <div className="admin-users-container">
+        <h3 className="admin-users-title">Manage Users</h3>
+        <form className="admin-users-form" onSubmit={handleSubmit}>
           <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
           <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
           <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required={!editingId} />
-          <button type="submit">{editingId ? 'Update' : 'Add'} User</button>
+          <button className="admin-users-btn" type="submit">{editingId ? 'Update' : 'Add'} User</button>
           {error && <span className="error">{error}</span>}
         </form>
-        <table>
+        <table className="admin-users-table">
           <thead>
             <tr>
               <th>Name</th><th>Email</th><th>Actions</th>
@@ -78,8 +78,8 @@ const AdminUsers = () => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>
-                  <button onClick={() => handleEdit(user)}>Edit</button>
-                  <button onClick={() => handleDelete(user._id)}>Delete</button>
+                  <button className="admin-users-action-btn" onClick={() => handleEdit(user)}>Edit</button>
+                  <button className="admin-users-action-btn delete" onClick={() => handleDelete(user._id)}>Delete</button>
                 </td>
               </tr>
             ))}

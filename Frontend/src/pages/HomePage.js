@@ -246,6 +246,7 @@ const HomePage = () => {
           booking: booking,
           room: selectedRoom,
           bookingData: bookingData,
+          bookingTime: new Date().toISOString(),
           nextSteps: response.data.nextSteps || [
             'Admin will review within 24 hours',
             'You\'ll receive email confirmation',
@@ -431,7 +432,29 @@ const HomePage = () => {
         <div className="container">
           <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '32px' }}>Our Rooms</h2>
           <div className="rooms-gallery" style={{ display: 'flex', flexDirection: 'row', gap: '24px', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-            {[...new Map(rooms.map(room => [room.name, room])).values()].map((room) => (
+            {/* Static room cards for homepage only */}
+            {[
+              {
+                id: 'static-single',
+                name: 'Single Room',
+                image: getAssetPath('Single_Room_1.jpg', 'room'),
+              },
+              {
+                id: 'static-deluxe',
+                name: 'Deluxe Room',
+                image: getAssetPath('Delux_Room_1.jpg', 'room'),
+              },
+              {
+                id: 'static-family',
+                name: 'Family Room',
+                image: getAssetPath('Family_room_1.jpg', 'room'),
+              },
+              {
+                id: 'static-master',
+                name: 'Master Room',
+                image: getAssetPath('Master_Room_1.jpg', 'room'),
+              },
+            ].map((room) => (
               <div key={room.id} className="gallery-item" onClick={() => navigate('/rooms')} style={{ width: '220px', height: '220px', borderRadius: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                 <img 
                   src={room.image} 
@@ -736,65 +759,7 @@ const HomePage = () => {
 
       {/* Popular Destinations Section */}
       
-
-      {/* Deals Section */}
-      <section className="section deals-section">
-        <div className="container">
-          <div className="section-header">
-            <div className="section-badge hot">
-              🔥 Hot Deals
-            </div>
-            <h2 className="section-title">Exclusive Deals & Offers</h2>
-            <p className="section-description">
-              Limited-time offers you won't find anywhere else
-            </p>
-          </div>
-          
-          <div className="deals-grid">
-            <div className="deal-card summer">
-              <div className="deal-badge limited">Limited Time</div>
-              <div className="deal-content">
-                <div className="deal-header">
-                  <div className="deal-icon">🏖️</div>
-                  <h3 className="deal-title">Summer Special</h3>
-                </div>
-                <p className="deal-description">
-                  Save up to 30% on hotel bookings. Book now for your perfect getaway with premium amenities included.
-                </p>
-                <div className="deal-info">
-                  <div className="deal-price">Save up to 30%</div>
-                  <div className="deal-validity">Valid until Aug 31</div>
-                </div>
-                <button className="btn btn-primary deal-btn">
-                  Book Now
-                  <FaArrowRight className="btn-arrow" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="deal-card extended">
-              <div className="deal-badge popular">Popular</div>
-              <div className="deal-content">
-                <div className="deal-header">
-                  <div className="deal-icon">🏨</div>
-                  <h3 className="deal-title">Extended Stay Discount</h3>
-                </div>
-                <p className="deal-description">
-                  Stay 3 nights or more and get 20% off your total booking at participating hotels with free breakfast included.
-                </p>
-                <div className="deal-info">
-                  <div className="deal-price">20% Off</div>
-                  <div className="deal-validity">3+ nights minimum</div>
-                </div>
-                <button className="btn btn-outline deal-btn">
-                  Learn More
-                  <FaArrowRight className="btn-arrow" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Features Section */}
       <section className="section features-section">
@@ -961,6 +926,7 @@ const HomePage = () => {
                     <p><strong>📅 Check-in:</strong> {new Date(bookingSuccess.bookingData.checkIn).toLocaleDateString()}</p>
                     <p><strong>📅 Check-out:</strong> {new Date(bookingSuccess.bookingData.checkOut).toLocaleDateString()}</p>
                     <p><strong>👥 Guests:</strong> {bookingSuccess.bookingData.guests}</p>
+                    <p><strong>⏰ Booked At:</strong> {bookingSuccess.bookingTime ? new Date(bookingSuccess.bookingTime).toLocaleString() : ''}</p>
                     <p><strong>💰 Room Rate:</strong> <span style={{ 
                       color: '#28a745', 
                       fontSize: '1.2rem', 

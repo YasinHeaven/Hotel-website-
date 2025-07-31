@@ -9,8 +9,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
 import AdminRooms from './pages/AdminRooms';
 import AdminUsers from './pages/AdminUsers';
-import BeachHotelsPage from './pages/BeachHotelsPage';
-import BookRoomPage from './pages/BookRoomPage';
+// import BeachHotelsPage from './pages/BeachHotelsPage';
 import CityHotelsPage from './pages/CityHotelsPage';
 import DealsPage from './pages/DealsPage';
 import FacilitiesPage from './pages/FacilitiesPage';
@@ -18,8 +17,8 @@ import GalleryPage from './pages/GalleryPage';
 import HomePage from './pages/HomePage';
 import MountainResortsPage from './pages/MountainResortsPage';
 import RestaurantPage from './pages/RestaurantPage';
-import RewardsPage from './pages/RewardsPage';
 import RoomsPage from './pages/RoomsPage';
+// import RewardsPage from './pages/RewardsPage';
 import UserBookingsPage from './pages/UserBookingsPage';
 import UserLogin from './pages/UserLogin';
 import UserSignup from './pages/UserSignup';
@@ -35,13 +34,13 @@ function App() {
             <Route path="/rooms" element={<RoomsPage />} />
             <Route path="/deals" element={<DealsPage />} />
             <Route path="/booking" element={<UserBookingsPage />} />
-            <Route path="/book-room" element={<BookRoomPage />} />
-            <Route path="/destinations/beach" element={<BeachHotelsPage />} />
+            <Route path="/book-room" element={<RoomsPage />} />
+            {/* <Route path="/destinations/beach" element={<BeachHotelsPage />} /> */}
             <Route path="/destinations/city" element={<CityHotelsPage />} />
             <Route path="/destinations/mountain" element={<MountainResortsPage />} />
             <Route path="/restaurant" element={<RestaurantPage />} />
             <Route path="/facilities" element={<FacilitiesPage />} />
-            <Route path="/rewards" element={<RewardsPage />} />
+            {/* <Route path="/rewards" element={<RewardsPage />} /> */}
             <Route path="/gallery" element={<GalleryPage />} />
             
             {/* User Authentication Routes - Redirect to home if already logged in */}

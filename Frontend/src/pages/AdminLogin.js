@@ -66,17 +66,7 @@ const AdminLogin = ({ onLogin }) => {
         </p>
       </div>
       
-      <div className="login-info" style={{
-        backgroundColor: '#e7f3ff',
-        padding: '1rem',
-        borderRadius: '4px',
-        marginBottom: '1rem',
-        fontSize: '0.9rem'
-      }}>
-        <p><strong>Default Admin Credentials:</strong></p>
-        <p>Email: admin@yasinheavenstar.com</p>
-        <p>Password: admin123</p>
-      </div>
+      {/* Secure: Do not display admin credentials here. */}
       
       <form onSubmit={handleSubmit}>
         <input

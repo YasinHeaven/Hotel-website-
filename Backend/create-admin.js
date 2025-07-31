@@ -8,30 +8,25 @@ async function createAdmin() {
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/yasin_heaven_star_hotel');
     console.log('✅ Connected to MongoDB');
     
-    // Check if admin already exists
-    const existingAdmin = await Admin.findOne({ email: 'admin@yasinheavenstar.com' });
-    
-    if (existingAdmin) {
-      console.log('ℹ️ Admin already exists');
-      console.log('Email: admin@yasinheavenstar.com');
-      console.log('Password: admin123 (default)');
-      process.exit(0);
-    }
-    
+    // Remove all existing admins
+    await Admin.deleteMany({});
+    console.log('🗑️ All existing admins deleted.');
+
     // Create new admin
+    const adminEmail = 'yasinheavenstarhotel@gmail.com';
+    const adminPassword = 'YHSHotel@2025!'; // Secure password, change as needed
     const admin = new Admin({
-      email: 'admin@yasinheavenstar.com',
-      password: 'admin123', // Will be hashed by the model's pre-save hook
+      email: adminEmail,
+      password: adminPassword, // Will be hashed by the model's pre-save hook
       name: 'Hotel Administrator',
       role: 'admin',
       isActive: true
     });
-    
+
     await admin.save();
-    
+
     console.log('✅ Admin created successfully!');
-    console.log('Email: admin@yasinheavenstar.com');
-    console.log('Password: admin123');
+    console.log('Email:', adminEmail);
     
   } catch (error) {
     console.error('❌ Error creating admin:', error);

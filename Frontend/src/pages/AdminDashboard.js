@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { FaBed, FaCalendarCheck, FaDollarSign, FaEdit, FaEye, FaPlus, FaUsers } from 'react-icons/fa';
+import { FaBed, FaCalendarCheck, FaDollarSign, FaUsers } from 'react-icons/fa';
 import AdminLayout from '../components/AdminLayout';
-import { useAdmin } from '../contexts/AdminContext';
 import { apiRequest } from '../config/api';
+import { useAdmin } from '../contexts/AdminContext';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -133,25 +133,30 @@ const AdminDashboard = () => {
   // Function to approve/update booking status
   const updateBookingStatus = async (bookingId, newStatus) => {
     try {
+      let denialReason = '';
+      if (newStatus === 'cancelled') {
+        denialReason = window.prompt('Please provide a reason for denying this booking:');
+        if (!denialReason) {
+          alert('Denial reason is required.');
+          return;
+        }
+      }
       console.log(`🔄 Updating booking ${bookingId} to status: ${newStatus}`);
-      
       const token = localStorage.getItem('adminToken');
       if (!token) {
         alert('Admin token missing. Please refresh the page.');
         return;
       }
-
+      const body = newStatus === 'cancelled' ? { status: newStatus, deniedReason: denialReason } : { status: newStatus };
       const response = await apiRequest(`/admin/bookings/${bookingId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify(body)
       });
-
       console.log(`📡 Response status: ${response.status}`);
-
       if (response.ok) {
         const result = await response.json();
         console.log('✅ Booking updated successfully:', result);
@@ -160,7 +165,6 @@ const AdminDashboard = () => {
       } else {
         const errorText = await response.text();
         console.error('❌ API Error Response:', errorText);
-        
         let errorMessage;
         try {
           const errorJson = JSON.parse(errorText);
@@ -168,7 +172,6 @@ const AdminDashboard = () => {
         } catch {
           errorMessage = errorText;
         }
-        
         alert('Failed to update booking: ' + errorMessage);
       }
     } catch (error) {
@@ -323,28 +326,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="quick-actions">
-          <h2>Quick Actions</h2>
-          <div className="action-buttons">
-            <button className="action-btn primary" onClick={() => window.location.href = '/admin/bookings'}>
-              <FaPlus />
-              <span>New Booking</span>
-            </button>
-            <button className="action-btn success" onClick={() => window.location.href = '/admin/rooms'}>
-              <FaPlus />
-              <span>Add Room</span>
-            </button>
-            <button className="action-btn info" onClick={() => window.location.href = '/admin/users'}>
-              <FaEye />
-              <span>View Users</span>
-            </button>
-            <button className="action-btn warning" onClick={() => window.location.href = '/admin/bookings'}>
-              <FaEdit />
-              <span>Manage Bookings</span>
-            </button>
-          </div>
-        </div>
 
         {/* Recent Data */}
         <div className="recent-data">
@@ -353,7 +334,7 @@ const AdminDashboard = () => {
             <div className="recent-list">
               {recentBookings.length > 0 ? (
                 recentBookings.map((booking) => (
-                  <div key={booking._id} className={`recent-item ${booking.status === 'pending' ? 'pending-booking' : ''}`}>
+                  <div key={booking._id} className={`recent-item ${booking.status === 'pending' ? 'pending-booking' : ''}`}> 
                     <div className="item-info">
                       <h4>{booking.user?.name || booking.customerInfo?.name || 'Unknown Guest'}</h4>
                       <p>{booking.room?.type} - Room #{booking.room?.number}</p>
@@ -367,36 +348,32 @@ const AdminDashboard = () => {
                         {booking.status.toUpperCase()}
                       </span>
                       <span className="item-amount">{formatCurrency(booking.totalAmount)}</span>
-                      
-                      {/* Action buttons for pending bookings */}
                       {booking.status === 'pending' && (
-                        <div className="booking-actions">
+                        <div className="booking-actions dashboard-actions">
                           <button 
-                            className="action-btn approve-btn"
+                            className="dashboard-approve-btn"
                             onClick={() => updateBookingStatus(booking._id, 'approved')}
                             title="Approve Booking"
                           >
-                            ✅ Approve
+                            <span className="dashboard-btn-icon">✔</span>
                           </button>
                           <button 
-                            className="action-btn reject-btn"
+                            className="dashboard-deny-btn"
                             onClick={() => updateBookingStatus(booking._id, 'cancelled')}
                             title="Reject Booking"
                           >
-                            ❌ Reject
+                            <span className="dashboard-btn-icon">✖</span>
                           </button>
                         </div>
                       )}
-                      
-                      {/* Show actions for other statuses */}
                       {booking.status === 'approved' && (
-                        <div className="booking-actions">
+                        <div className="booking-actions dashboard-actions">
                           <button 
-                            className="action-btn checkin-btn"
+                            className="dashboard-checkin-btn"
                             onClick={() => updateBookingStatus(booking._id, 'checked-in')}
                             title="Check In Guest"
                           >
-                            🏨 Check In
+                            <span className="dashboard-btn-icon">🏨</span>
                           </button>
                         </div>
                       )}

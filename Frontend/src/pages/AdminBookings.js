@@ -335,7 +335,7 @@ const AdminBookings = () => {
                         {booking.room?.type || 'N/A'}
                       </div>
                       <div className="room-price">
-                        ${booking.room?.price || 0}/night
+                        {booking.room?.price || 0} PKR/night
                       </div>
                     </td>
 
@@ -345,6 +345,9 @@ const AdminBookings = () => {
                       <div className="booking-date">
                         {Math.ceil((new Date(booking.checkOut) - new Date(booking.checkIn)) / (1000 * 60 * 60 * 24))} nights
                       </div>
+                      <div className="booking-created">
+                        <strong>Booked At:</strong> <span style={{ color: '#2563eb', fontWeight: 600 }}>{formatDateTime(booking.createdAt)}</span>
+                      </div>
                     </td>
 
                     <td className="guests-count">
@@ -352,7 +355,7 @@ const AdminBookings = () => {
                     </td>
 
                     <td className="amount">
-                      ${booking.totalAmount || 0}
+                      {booking.totalAmount || 0} PKR
                     </td>
 
                     <td>
@@ -470,7 +473,7 @@ const AdminBookings = () => {
                   <p><strong>Room:</strong> {selectedBooking.room?.type}</p>
                   <p><strong>Dates:</strong> {formatDate(selectedBooking.checkIn)} - {formatDate(selectedBooking.checkOut)}</p>
                   <p><strong>Current Status:</strong> <span className={getStatusBadgeClass(selectedBooking.status)}>{selectedBooking.status}</span></p>
-                  <p><strong>Amount:</strong> ${selectedBooking.totalAmount}</p>
+                  <p><strong>Amount:</strong> Rs {selectedBooking.totalAmount}</p>
                 </div>
 
                 <div className="status-form">
@@ -489,14 +492,6 @@ const AdminBookings = () => {
                     <option value="denied">Denied</option>
                     <option value="no-show">No Show</option>
                   </select>
-
-                  <label>Admin Notes:</label>
-                  <textarea
-                    value={statusUpdate.adminNotes}
-                    onChange={(e) => setStatusUpdate(prev => ({ ...prev, adminNotes: e.target.value }))}
-                    placeholder="Add notes about this status change..."
-                    rows="3"
-                  />
 
                   {statusUpdate.status === 'denied' && (
                     <>
@@ -671,7 +666,7 @@ const AdminBookings = () => {
                     </div>
                     <div className="detail-row">
                       <label>Total Amount:</label>
-                      <span>${selectedBooking.totalAmount || 0}</span>
+                      <span>Rs {selectedBooking.totalAmount || 0}</span>
                     </div>
                     <div className="detail-row">
                       <label>Status:</label>

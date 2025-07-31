@@ -369,7 +369,15 @@ const UserBookingsPage = () => {
                   <div className="booking-header">
                     <div className="booking-status">
                       {getStatusIcon(booking.status)}
-                      <span className={`status-text ${booking.status}`} style={{color: getStatusColor(booking.status)}}>
+                      <span className={`status-text ${booking.status}`} style={{
+                        color: '#fff',
+                        background: 'rgba(0,0,0,0.18)',
+                        padding: '2px 10px',
+                        borderRadius: '6px',
+                        fontWeight: 600,
+                        letterSpacing: '0.5px',
+                        textShadow: '0 1px 4px rgba(0,0,0,0.25)'
+                      }}>
                         {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
                       </span>
                     </div>
@@ -445,8 +453,15 @@ const UserBookingsPage = () => {
                     )}
 
                     <div className="booking-total">
-                      <strong>Total: ${booking.totalAmount || (booking.room?.price * calculateNights(booking.checkIn, booking.checkOut))}</strong>
+                      <strong>Total: Rs {booking.totalAmount || (booking.room?.price * calculateNights(booking.checkIn, booking.checkOut))}</strong>
                     </div>
+
+                    {/* Show denial reason for cancelled/denied bookings */}
+                    {(booking.status === 'cancelled' || booking.status === 'denied') && booking.denialReason && (
+                      <div className="booking-denial-reason" style={{ background: '#fee2e2', color: '#b91c1c', padding: '10px', borderRadius: '6px', marginTop: '10px', border: '1px solid #fca5a5' }}>
+                        <strong>Reason for Denial:</strong> {booking.denialReason}
+                      </div>
+                    )}
                   </div>
 
                   <div className="booking-actions">
@@ -460,9 +475,7 @@ const UserBookingsPage = () => {
                         </button>
                       </>
                     )}
-                    <button className="btn btn-primary">
-                      View Details
-                    </button>
+                    {/* View Details button removed for user side */}
                   </div>
                 </div>
               ))}

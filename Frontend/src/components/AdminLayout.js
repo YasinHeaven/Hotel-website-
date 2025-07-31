@@ -26,9 +26,8 @@ const AdminLayout = ({ children }) => {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="sidebar-header">
-          <h2>🏨 Hotel Admin</h2>
+          <h2>Admin Dashboard</h2>
         </div>
-        
         <nav className="sidebar-nav">
           <Link to="/admin" className="nav-item">
             <FaTachometerAlt />
@@ -46,34 +45,8 @@ const AdminLayout = ({ children }) => {
             <FaUsers />
             <span>Users</span>
           </Link>
-          <Link to="/admin/gallery" className="nav-item">
-            <FaImages />
-            <span>Gallery</span>
-          </Link>
-          <Link to="/admin/settings" className="nav-item">
-            <FaCog />
-            <span>Settings</span>
-          </Link>
         </nav>
-
-        <div className="sidebar-footer">
-          {adminInfo && (
-            <div className="admin-profile">
-              <div className="admin-avatar">
-                <FaUser />
-              </div>
-              <div className="admin-details">
-                <span className="admin-name">{adminInfo.name || 'Admin'}</span>
-                <span className="admin-email">{adminInfo.email}</span>
-                <span className="admin-role">Hotel Administrator</span>
-              </div>
-            </div>
-          )}
-          <button onClick={handleLogout} className="logout-btn">
-            <FaSignOutAlt />
-            <span>Logout</span>
-          </button>
-        </div>
+        {/* Sidebar footer removed for clean UI */}
       </aside>
 
       {/* Main Content */}
@@ -90,7 +63,6 @@ const AdminLayout = ({ children }) => {
             </div>
           </div>
         </header>
-        
         <main className="admin-content">
           {children}
         </main>

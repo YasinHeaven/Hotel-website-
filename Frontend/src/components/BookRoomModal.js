@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { bookingAPI } from '../services/api';
-import { FaArrowRight } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { FaArrowRight } from 'react-icons/fa';
+import { bookingAPI } from '../services/api';
 
 const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
   const [loading, setLoading] = useState(false);
@@ -47,21 +47,45 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Validation: require both dates
+    if (!checkInDate || !checkOutDate) {
+      setError('Please select both check-in and check-out dates.');
+      return;
+    }
+
+    // Set both dates to midnight for comparison
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const checkIn = new Date(checkInDate);
+    checkIn.setHours(0,0,0,0);
+    const checkOut = new Date(checkOutDate);
+    checkOut.setHours(0,0,0,0);
+
+    if (checkIn.getTime() < today.getTime()) {
+      setError('Check-in date cannot be in the past. Please select today or a future date.');
+      return;
+    }
+    if (checkOut.getTime() <= checkIn.getTime()) {
+      setError('Check-out date must be after check-in date.');
+      return;
+    }
+
     setLoading(true);
     const form = e.target;
     const guestName = form.guestName.value;
     const email = form.email.value;
     const phone = form.phone.value;
-    const checkIn = checkInDate.toISOString().split('T')[0];
-    const checkOut = checkOutDate.toISOString().split('T')[0];
+    const checkInStr = checkInDate.toISOString().split('T')[0];
+    const checkOutStr = checkOutDate.toISOString().split('T')[0];
     const guests = form.guests.value;
     const specialRequests = form.specialRequests.value;
-    
+
     try {
       const payload = {
         room: selectedRoom.id || selectedRoom._id,
-        checkIn,
-        checkOut,
+        checkIn: checkInStr,
+        checkOut: checkOutStr,
         guests: parseInt(guests, 10) || 1,
         customerInfo: {
           name: guestName,

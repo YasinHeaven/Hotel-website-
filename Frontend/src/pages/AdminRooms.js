@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 
 const AdminRooms = () => {
   const [rooms, setRooms] = useState([]);
-  const [form, setForm] = useState({ number: '', type: '', price: '', status: 'available', description: '' });
+  const [form, setForm] = useState({ number: '', type: '', price: '', status: 'available', description: '', image: '' });
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState('');
 
@@ -16,7 +16,19 @@ const AdminRooms = () => {
 
   useEffect(() => { fetchRooms(); }, []);
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = e => {
+    const { name, value } = e.target;
+    let image = form.image;
+    if (name === 'type') {
+      // Set image path based on type
+      if (value === 'Delux Room') image = '/assets/Delux Room 1.jpg';
+      else if (value === 'Master Room') image = '/assets/Master Room.jpg';
+      else if (value === 'Family Room') image = '/assets/Family room 1.jpg';
+      else if (value === 'Single Room') image = '/assets/Single Room.jpg';
+      else image = '';
+    }
+    setForm({ ...form, [name]: value, image });
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -33,7 +45,7 @@ const AdminRooms = () => {
         body: JSON.stringify(form)
       });
       if (!res.ok) throw new Error('Error saving room');
-      setForm({ number: '', type: '', price: '', status: 'available', description: '' });
+      setForm({ number: '', type: '', price: '', status: 'available', description: '', image: '' });
       setEditingId(null);
       fetchRooms();
     } catch (err) {
@@ -42,7 +54,14 @@ const AdminRooms = () => {
   };
 
   const handleEdit = room => {
-    setForm(room);
+    setForm({
+      number: room.number,
+      type: room.type,
+      price: room.price,
+      status: room.status,
+      description: room.description,
+      image: room.image || ''
+    });
     setEditingId(room._id);
   };
 
@@ -57,11 +76,17 @@ const AdminRooms = () => {
 
   return (
     <AdminLayout>
-      <div>
-        <h3>Manage Rooms</h3>
-        <form onSubmit={handleSubmit}>
+      <div className="admin-rooms-container">
+        <h3 className="admin-rooms-title">Manage Rooms</h3>
+        <form className="admin-rooms-form" onSubmit={handleSubmit}>
           <input name="number" placeholder="Number" value={form.number} onChange={handleChange} required />
-          <input name="type" placeholder="Type" value={form.type} onChange={handleChange} required />
+          <select name="type" value={form.type} onChange={handleChange} required>
+            <option value="">Select Type</option>
+            <option value="Delux Room">Delux Room</option>
+            <option value="Master Room">Master Room</option>
+            <option value="Family Room">Family Room</option>
+            <option value="Single Room">Single Room</option>
+          </select>
           <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleChange} required />
           <select name="status" value={form.status} onChange={handleChange}>
             <option value="available">Available</option>
@@ -69,26 +94,33 @@ const AdminRooms = () => {
             <option value="maintenance">Maintenance</option>
           </select>
           <input name="description" placeholder="Description" value={form.description} onChange={handleChange} />
-          <button type="submit">{editingId ? 'Update' : 'Add'} Room</button>
+          <button className="admin-rooms-btn" type="submit">{editingId ? 'Update' : 'Add'} Room</button>
           {error && <span className="error">{error}</span>}
         </form>
-        <table>
+        <table className="admin-rooms-table">
           <thead>
             <tr>
-              <th>Number</th><th>Type</th><th>Price</th><th>Status</th><th>Description</th><th>Actions</th>
+              <th>Image</th><th>Number</th><th>Type</th><th>Price</th><th>Status</th><th>Description</th><th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {rooms.map(room => (
               <tr key={room._id}>
+                <td>
+                  {room.image ? (
+                    <img src={room.image} alt={room.type} style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />
+                  ) : (
+                    <span style={{ color: '#ccc' }}>No Image</span>
+                  )}
+                </td>
                 <td>{room.number}</td>
                 <td>{room.type}</td>
-                <td>{room.price}</td>
+                <td>{room.price} PKR</td>
                 <td>{room.status}</td>
                 <td>{room.description}</td>
                 <td>
-                  <button onClick={() => handleEdit(room)}>Edit</button>
-                  <button onClick={() => handleDelete(room._id)}>Delete</button>
+                  <button className="admin-rooms-action-btn" onClick={() => handleEdit(room)}>Edit</button>
+                  <button className="admin-rooms-action-btn delete" onClick={() => handleDelete(room._id)}>Delete</button>
                 </td>
               </tr>
             ))}
