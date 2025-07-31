@@ -1,7 +1,7 @@
 // API Configuration
 const API_CONFIG = {
     // Base URL for API requests
-    BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+    BASE_URL: process.env.REACT_APP_API_URL || 'https://your-backend.up.railway.app/api',
 
     // Timeout for requests
     TIMEOUT: 10000,
