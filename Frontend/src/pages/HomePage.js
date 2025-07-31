@@ -2,7 +2,7 @@ import MuiAlert from '@mui/material/Alert';
 import Modal from '@mui/material/Modal';
 import Snackbar from '@mui/material/Snackbar';
 import { useEffect, useState } from 'react';
-import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWifi } from 'react-icons/fa';
+import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWhatsapp, FaWifi } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './HomePage.css';
@@ -400,7 +400,31 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="home-page">
+    <div className="home-page" style={{ position: 'relative' }}>
+      {/* Floating WhatsApp Chat Button */}
+      <a
+        href="https://wa.me/923554650686"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          zIndex: 9999,
+          background: '#25d366',
+          borderRadius: '50%',
+          width: '56px',
+          height: '56px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
+          transition: 'background 0.2s',
+        }}
+        aria-label="Chat on WhatsApp"
+      >
+        <FaWhatsapp style={{ color: '#fff', fontSize: '2rem' }} />
+      </a>
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-overlay"></div>
@@ -677,21 +701,24 @@ const HomePage = () => {
             
             <div className="menu-preview">
               <h3>Menu Highlights</h3>
-              {restaurantMenu.map((category, categoryIndex) => (
-                <div key={categoryIndex} className="menu-category">
-                  <h4 className="category-title">{category.category}</h4>
-                  <div className="menu-items">
-                    {category.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="menu-item">
-                        <div className="item-info">
-                          <h5 className="item-name">{item.name}</h5>
-                          <p className="item-description">{item.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+              {/* Updated menu highlights to match restaurant screen */}
+              <div className="menu-category">
+                <h4 className="category-title">Breakfast</h4>
+                <div className="menu-items">
+                  <div className="menu-item"><div className="item-info"><h5 className="item-name">Special Tea</h5><p className="item-description">Fresh pastries, fruits, coffee, and juice</p></div></div>
+                  <div className="menu-item"><div className="item-info"><h5 className="item-name">Tikki (Desi Bread) + Desi Egg + Tea</h5><p className="item-description">Eggs, bacon, sausages, beans, toast, and coffee</p></div></div>
+                  <div className="menu-item"><div className="item-info"><h5 className="item-name">Slice + Butter + Jam + Tea</h5><p className="item-description">Granola, yogurt, fresh berries, and honey</p></div></div>
                 </div>
-              ))}
+              </div>
+              <div className="menu-category">
+                <h4 className="category-title">Lunch & Dinner</h4>
+                <div className="menu-items">
+                  <div className="menu-item"><div className="item-info"><h5 className="item-name">Chicken Karahi</h5><p className="item-description">Fresh Atlantic salmon with vegetables</p></div></div>
+                  <div className="menu-item"><div className="item-info"><h5 className="item-name">Chicken Qorma</h5><p className="item-description">Premium cut with truffle sauce</p></div></div>
+                  <div className="menu-item"><div className="item-info"><h5 className="item-name">Vegetarian Rice</h5><p className="item-description">Fresh pasta with seasonal vegetables</p></div></div>
+                  <div className="menu-item"><div className="item-info"><h5 className="item-name">Anda Chola (Large Bowl)</h5><p className="item-description">Daily special created by our head chef</p></div></div>
+                </div>
+              </div>
               <button 
                 className="btn btn-primary menu-btn"
                 onClick={handleViewFullMenu}

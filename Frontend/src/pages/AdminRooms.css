@@ -1,0 +1,109 @@
+/* Admin Rooms Styles */
+.admin-rooms-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-rooms-title {
+  color: #1f2937;
+  font-size: 1.6rem;
+  margin-bottom: 18px;
+}
+
+.admin-rooms-form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.admin-rooms-form input,
+.admin-rooms-form select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.admin-rooms-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.admin-rooms-btn:hover {
+  background: #2563eb;
+}
+
+.error {
+  color: #991b1b;
+  background: #fef2f2;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-left: 8px;
+}
+
+.admin-rooms-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.admin-rooms-table th,
+.admin-rooms-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #f3f4f6;
+  text-align: left;
+  font-size: 14px;
+}
+
+.admin-rooms-action-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+.admin-rooms-action-btn.delete {
+  background: #dc2626;
+}
+
+@media (max-width: 1200px) {
+  .admin-rooms-table {
+    min-width: 900px;
+  }
+  .admin-rooms-container {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-rooms-container {
+    padding: 10px;
+  }
+  .admin-rooms-form {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .admin-rooms-btn {
+    width: 100%;
+  }
+  .error {
+    margin-left: 0;
+    margin-top: 8px;
+  }
+  .admin-rooms-table {
+    min-width: 600px;
+  }
+}
