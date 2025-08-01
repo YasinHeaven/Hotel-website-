@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { bookingAPI, roomAPI } from '../services/api';
-import { getAssetPath, createImageErrorHandler } from '../utils/assetUtils';
+import { createImageErrorHandler } from '../utils/assetUtils';
 import './BookingPage.css';
 
 const BookingPage = () => {

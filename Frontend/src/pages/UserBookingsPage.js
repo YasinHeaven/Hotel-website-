@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react';
 import { FaCalendarAlt, FaCheckCircle, FaClock, FaEdit, FaMapMarkerAlt, FaSignInAlt, FaTimesCircle, FaTrash, FaUserPlus, FaUsers } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { authUtils, bookingAPI } from '../services/api';
 import './BookingPage.css';
 
 const UserBookingsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   useEffect(() => {
     checkAuthentication();
@@ -36,10 +34,6 @@ const UserBookingsPage = () => {
     
     if (token && userType === 'user') {
       setIsAuthenticated(true);
-      const userInfo = localStorage.getItem('userInfo');
-      if (userInfo) {
-        setUser(JSON.parse(userInfo));
-      }
     } else {
       setIsAuthenticated(false);
       setLoading(false);

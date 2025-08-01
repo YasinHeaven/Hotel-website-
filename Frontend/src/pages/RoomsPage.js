@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaArrowRight, FaCheck, FaEnvelope, FaPhone, FaRulerCombined, FaStar, FaUsers } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import BookRoomModal from '../components/BookRoomModal';
-import { bookingAPI, roomAPI } from '../services/api';
+import { roomAPI } from '../services/api';
 import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './RoomsPage.css';
 
@@ -130,59 +130,6 @@ const RoomsPage = () => {
   const handleBookRoom = (room) => {
     setSelectedRoom(room);
     setShowBookingModal(true);
-  };
-
-  const handleBookingSubmit = async (e) => {
-    e.preventDefault();
-    // Get form data
-    const form = e.target;
-    const guestName = form[0].value;
-    const email = form[1].value;
-    const phone = form[2].value;
-    const checkIn = form[3].value;
-    const checkOut = form[4].value;
-    const guests = form[5].value;
-    const specialRequests = form[6].value;
-    // Check if user is authenticated
-    const token = localStorage.getItem('token');
-    const userType = localStorage.getItem('userType');
-    if (!token || userType !== 'user') {
-      setShowBookingModal(false);
-      setFeedback({ show: true, message: 'Please login to make a booking.', error: true });
-      setTimeout(() => {
-        localStorage.setItem('redirectAfterLogin', '/rooms');
-        window.location.href = '/login';
-      }, 1500);
-      return;
-    }
-    try {
-      const response = await bookingAPI.createBooking({
-        room: selectedRoom.id,
-        checkIn,
-        checkOut,
-        guests: parseInt(guests) || 1,
-        customerInfo: {
-          name: guestName,
-          email,
-          phone,
-          specialRequests: specialRequests || ''
-        }
-      });
-      if (response.data && response.data.booking) {
-        setShowBookingModal(false);
-        setFeedback({ show: true, message: `🎉 Booking request submitted successfully!\n\nBooking ID: ${response.data.booking._id}\n\nYour booking is pending admin approval. You will receive confirmation within 24 hours.\n\nCheck "My Bookings" to track status.`, error: false });
-        setTimeout(() => {
-          setFeedback({ show: false, message: '', error: false });
-          navigate('/booking');
-        }, 3000);
-      } else {
-        throw new Error('Invalid response from server');
-      }
-    } catch (error) {
-      setShowBookingModal(false);
-      setFeedback({ show: true, message: `❌ Booking failed: ${error.response?.data?.message || error.message || 'Please try again'}`, error: true });
-      setTimeout(() => setFeedback({ show: false, message: '', error: false }), 3000);
-    }
   };
 
   return (

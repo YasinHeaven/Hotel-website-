@@ -4,10 +4,10 @@ import Snackbar from '@mui/material/Snackbar';
 import { useEffect, useState } from 'react';
 import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWhatsapp, FaWifi } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { roomAPI } from '../services/api';
 import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './HomePage.css';
 import './RoomsPage.css';
-import { roomAPI } from '../services/api';
 // GallerySliderModal component (must be outside HomePage)
 function GallerySliderModal({ images, title, onClose }) {
   const [current, setCurrent] = useState(0);
@@ -93,21 +93,7 @@ const facilities = [
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [searchData, setSearchData] = useState({
-    destination: '',
-    checkIn: '',
-    checkOut: '',
-    guests: '2',
-    roomType: 'standard'
-  });
-
-  const [selectedRoom, setSelectedRoom] = useState(null);
-  const [showBookingModal, setShowBookingModal] = useState(false);
   const [facilityImgIndexes, setFacilityImgIndexes] = useState(() => facilities.map(() => 0));
-  const [bookingLoading, setBookingLoading] = useState(false);
-  const [rooms, setRooms] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [bookingSuccess, setBookingSuccess] = useState(null);
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
@@ -116,7 +102,6 @@ const HomePage = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        setLoading(true);
         const response = await roomAPI.getAllRooms();
         // Transform API data to match frontend format
         const transformedRooms = response.data.map(room => {
@@ -170,117 +155,29 @@ const HomePage = () => {
     fetchRooms();
   }, []);
 
-  const handleInputChange = (e) => {
-    setSearchData({
-      ...searchData,
-      [e.target.name]: e.target.value
+  const handleSnackbarClose = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
+
+  const handleCloseBookingConfirmation = () => {
+    setShowBookingConfirmation(false);
+    setBookingSuccess(null);
+  };
+
+  const handlePrevImg = (facilityIdx, totalImgs) => {
+    setFacilityImgIndexes(prev => {
+      const updated = [...prev];
+      updated[facilityIdx] = (updated[facilityIdx] - 1 + totalImgs) % totalImgs;
+      return updated;
     });
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log('Search data:', searchData);
-    // Implement search logic here
-  };
-
-  const handleRoomBooking = (room) => {
-    setSelectedRoom(room);
-    setShowBookingModal(true);
-  };
-
-  const handleBookingSubmit = async (bookingData) => {
-    setBookingLoading(true);
-    console.log('Booking submitted:', bookingData);
-    
-    // Check if user is authenticated
-    const token = localStorage.getItem('token');
-    const userType = localStorage.getItem('userType');
-    
-    if (!token || userType !== 'user') {
-      setSnackbar({ 
-        open: true, 
-        message: '🔐 Please login to make a booking', 
-        severity: 'warning' 
-      });
-      localStorage.setItem('redirectAfterLogin', '/');
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 2000);
-      setBookingLoading(false);
-      return;
-    }
-
-    try {
-      // Import the booking API
-      const { bookingAPI } = await import('../services/api');
-      
-      // Build booking payload to match backend expectations
-      const payload = {
-        room: bookingData.id || bookingData._id || bookingData, // handle both object and id
-        checkIn: bookingData.checkIn || bookingData.checkInDate,
-        checkOut: bookingData.checkOut || bookingData.checkOutDate,
-        guests: parseInt(bookingData.guests) || 1,
-        customerInfo: {
-          name: bookingData.guestName,
-          email: bookingData.email,
-          phone: bookingData.phone,
-          specialRequests: bookingData.specialRequests || ''
-        }
-      };
-      
-      const response = await bookingAPI.createBooking(payload);
-      setBookingLoading(false);
-
-      if (response.data && response.data.booking) {
-        const booking = response.data.booking;
-        const bookingId = booking._id;
-        
-        // Show success notification
-        setSnackbar({ 
-          open: true, 
-          message: `🎉 Booking request submitted! ID: ${bookingId}`, 
-          severity: 'success' 
-        });
-        
-        // Set booking success data for confirmation display
-        setBookingSuccess({
-          booking: booking,
-          room: selectedRoom,
-          bookingData: bookingData,
-          bookingTime: new Date().toISOString(),
-          nextSteps: response.data.nextSteps || [
-            'Admin will review within 24 hours',
-            'You\'ll receive email confirmation',
-            'Check "My Bookings" for updates'
-          ]
-        });
-        
-        // Close modal and show confirmation
-        setShowBookingModal(false);
-        setShowBookingConfirmation(true);
-        
-        // Auto-redirect after 8 seconds
-        setTimeout(() => {
-          navigate('/booking');
-        }, 8000);
-        
-      } else {
-        setSnackbar({ 
-          open: true, 
-          message: '❌ Booking failed. Please try again.', 
-          severity: 'error' 
-        });
-        throw new Error('Invalid response from server');
-      }
-    } catch (error) {
-      setBookingLoading(false);
-      console.error('Booking error:', error);
-      setSnackbar({ 
-        open: true, 
-        message: `❌ Booking failed: ${error.response?.data?.message || error.message || 'Please try again'}`, 
-        severity: 'error' 
-      });
-    }
+  const handleNextImg = (facilityIdx, totalImgs) => {
+    setFacilityImgIndexes(prev => {
+      const updated = [...prev];
+      updated[facilityIdx] = (updated[facilityIdx] + 1) % totalImgs;
+      return updated;
+    });
   };
 
   // Updated functions for button interactions using React Router
@@ -326,18 +223,6 @@ const HomePage = () => {
     setGalleryTitle('');
   };
 
-  const handleViewRoomDetails = (room) => {
-    alert(`${room.name} Details:\n\nSize: ${room.size}\nCapacity: Up to ${room.maxGuests} guests\nPrice: PKR ${room.price}/night\n\nFeatures:\n${room.features.join(', ')}\n\n${room.description}`);
-  };
-
-  const handleRestaurantReservation = () => {
-    navigate('/restaurant');
-  };
-
-  const handleViewFullMenu = () => {
-    navigate('/restaurant');
-  };
-
   const handleExploreFacilities = () => {
     navigate('/facilities');
   };
@@ -355,50 +240,9 @@ const HomePage = () => {
     }
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbar(prev => ({ ...prev, open: false }));
+  const handleViewFullMenu = () => {
+    // implementation here or remove its usage if not needed
   };
-
-  const handleCloseBookingConfirmation = () => {
-    setShowBookingConfirmation(false);
-    setBookingSuccess(null);
-  };
-
-  const handlePrevImg = (facilityIdx, totalImgs) => {
-    setFacilityImgIndexes(prev => {
-      const updated = [...prev];
-      updated[facilityIdx] = (updated[facilityIdx] - 1 + totalImgs) % totalImgs;
-      return updated;
-    });
-  };
-
-  const handleNextImg = (facilityIdx, totalImgs) => {
-    setFacilityImgIndexes(prev => {
-      const updated = [...prev];
-      updated[facilityIdx] = (updated[facilityIdx] + 1) % totalImgs;
-      return updated;
-    });
-  };
-
-  const restaurantMenu = [
-    {
-      category: 'Breakfast',
-      items: [
-        { name: 'Continental Breakfast', price: 25, description: 'Fresh pastries, fruits, coffee, and juice' },
-        { name: 'Full English Breakfast', price: 35, description: 'Eggs, bacon, sausages, beans, toast, and coffee' },
-        { name: 'Healthy Bowl', price: 28, description: 'Granola, yogurt, fresh berries, and honey' }
-      ]
-    },
-    {
-      category: 'Lunch & Dinner',
-      items: [
-        { name: 'Grilled Salmon', price: 45, description: 'Fresh Atlantic salmon with vegetables' },
-        { name: 'Beef Tenderloin', price: 55, description: 'Premium cut with truffle sauce' },
-        { name: 'Vegetarian Pasta', price: 32, description: 'Fresh pasta with seasonal vegetables' },
-        { name: 'Chef\'s Special', price: 48, description: 'Daily special created by our head chef' }
-      ]
-    }
-  ];
 
   return (
     <div className="home-page" style={{ position: 'relative' }}>

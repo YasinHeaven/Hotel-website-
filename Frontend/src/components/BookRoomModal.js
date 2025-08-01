@@ -94,7 +94,7 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
           specialRequests: specialRequests || ''
         }
       };
-      const response = await bookingAPI.createBooking(payload);
+      await bookingAPI.createBooking(payload);
       setLoading(false);
       onBookingSuccess();
     } catch (err) {
@@ -221,4 +221,4 @@ const BookRoomModal = ({ selectedRoom, onClose, onBookingSuccess }) => {
   );
 };
 
-export default BookRoomModal; 
+export default BookRoomModal;

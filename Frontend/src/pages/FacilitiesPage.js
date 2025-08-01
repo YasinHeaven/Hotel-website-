@@ -4,36 +4,6 @@ import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './FacilitiesPage.css';
 
 const FacilitiesPage = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [selectedFacility, setSelectedFacility] = useState(null);
-  const [bookingData, setBookingData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    date: '',
-    time: '',
-    service: '',
-    guests: '1',
-    specialRequests: ''
-  });
-
-  const handleInputChange = (e) => {
-    setBookingData({
-      ...bookingData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleBooking = (e) => {
-    e.preventDefault();
-    console.log('Facility booking submitted:', bookingData);
-    alert(`Thank you ${bookingData.name}!\n\nYour ${bookingData.service} booking has been submitted:\n• Date: ${bookingData.date}\n• Time: ${bookingData.time}\n• Guests: ${bookingData.guests}\n\nWe'll contact you shortly to confirm your booking.`);
-  };
-
-  const handleFacilityDetail = (facility) => {
-    setSelectedFacility(facility);
-  };
-
   const facilities = [
     {
       id: 1,

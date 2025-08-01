@@ -44,14 +44,6 @@ const DealsPage = () => {
 
   const featuredDeals = deals.filter(deal => deal.featured);
 
-  const calculateDaysLeft = (validUntil) => {
-    const today = new Date();
-    const endDate = new Date(validUntil);
-    const diffTime = endDate - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
-
   return (
     <div className="deals-page">
       <div className="deals-header">

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { FaSearch, FaFilter, FaMapMarkerAlt, FaStar, FaWifi, FaParking, FaSwimmingPool, FaConciergeBell, FaHeart } from 'react-icons/fa';
-import { getAssetPath, createImageErrorHandler } from '../utils/assetUtils';
+import { useState } from 'react';
+import { FaConciergeBell, FaFilter, FaHeart, FaMapMarkerAlt, FaParking, FaStar, FaSwimmingPool, FaWifi } from 'react-icons/fa';
+import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './HotelsPage.css';
 
 const HotelsPage = () => {

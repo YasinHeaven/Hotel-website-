@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FaBed, FaCalendarCheck, FaDollarSign, FaUsers } from 'react-icons/fa';
 import AdminLayout from '../components/AdminLayout';
 import { apiRequest } from '../config/api';
-import { useAdmin } from '../contexts/AdminContext';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
-  const { loginAdmin, isAdminLoggedIn } = useAdmin();
   const [stats, setStats] = useState({
     users: 0,
     rooms: 0,
@@ -23,12 +21,7 @@ const AdminDashboard = () => {
   const [error, setError] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    initializeAdmin();
-  }, []);
-
-  // Auto-login function - tries to authenticate admin automatically
-  const initializeAdmin = async () => {
+  const initializeAdmin = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -83,9 +76,11 @@ const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };  useEffect(() => {
-    initializeAdmin();
   }, []);
+
+  useEffect(() => {
+    initializeAdmin();
+  }, [initializeAdmin]);
 
   const fetchDashboardData = async () => {
     try {

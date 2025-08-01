@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FaCheck, FaEnvelope, FaEye, FaSync, FaTimes, FaUser } from 'react-icons/fa';
 import AdminLayout from '../components/AdminLayout';
 import { apiRequest } from '../config/api';
@@ -30,20 +30,7 @@ const AdminBookings = () => {
     contactMethod: 'email'
   });
 
-  useEffect(() => {
-    fetchBookings();
-
-    // Set up auto-refresh every 30 seconds
-    const interval = setInterval(() => {
-      fetchBookings();
-    }, 30000);
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [searchTerm, statusFilter, sortBy, sortOrder, currentPage]);
-
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
@@ -76,7 +63,11 @@ const AdminBookings = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm, statusFilter, sortBy, sortOrder, currentPage]);
+
+  useEffect(() => {
+    fetchBookings();
+  }, [fetchBookings]);
 
   const handleStatusUpdate = async () => {
     if (!selectedBooking || !statusUpdate.status) {
@@ -104,7 +95,6 @@ const AdminBookings = () => {
 
       if (response.ok) {
         const data = await response.json();
-
         // Update the booking in the list
         setBookings(prevBookings =>
           prevBookings.map(booking =>
@@ -154,7 +144,6 @@ const AdminBookings = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         alert(`✅ ${contactForm.contactMethod} sent successfully!`);
         setShowContactModal(false);
         setContactForm({

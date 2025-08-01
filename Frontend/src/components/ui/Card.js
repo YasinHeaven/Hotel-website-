@@ -55,4 +55,21 @@ const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
+
+// Example of using the Card component with a title
+// <Card>
+//   <CardHeader>
+//     <CardTitle>Card Title</CardTitle>
+//     <CardDescription>Card Description</CardDescription>
+//   </CardHeader>
+//   <CardContent>
+//     {/* Your content here */}
+//   </CardContent>
+//   <CardFooter>
+//     {/* Your footer here */}
+//   </CardFooter>
+// </Card>
+
+// Replace any empty heading like <h2></h2> with:
+// <h2>Card Title</h2>

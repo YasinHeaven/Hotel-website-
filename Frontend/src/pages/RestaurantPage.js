@@ -4,28 +4,6 @@ import './RestaurantPage.css';
 
 const RestaurantPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [reservationData, setReservationData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    date: '',
-    time: '',
-    guests: '2',
-    specialRequests: ''
-  });
-
-  const handleInputChange = (e) => {
-    setReservationData({
-      ...reservationData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleReservation = (e) => {
-    e.preventDefault();
-    console.log('Reservation submitted:', reservationData);
-    alert(`Thank you ${reservationData.name}!\n\nYour reservation has been submitted:\n• Date: ${reservationData.date}\n• Time: ${reservationData.time}\n• Guests: ${reservationData.guests}\n\nWe'll contact you shortly to confirm your reservation.`);
-  };
 
   const categories = [
     { id: 'all', name: 'All Items', icon: <FaUtensils /> },

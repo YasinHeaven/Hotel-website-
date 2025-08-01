@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { FaBars, FaPhone, FaTimes, FaUser } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
-import { FaBars, FaTimes, FaUser, FaPhone, FaStar } from 'react-icons/fa';
 import './Header.css';
 
 const Header = () => {
