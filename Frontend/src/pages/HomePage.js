@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './HomePage.css';
 import './RoomsPage.css';
+import { roomAPI } from '../services/api';
 // GallerySliderModal component (must be outside HomePage)
 function GallerySliderModal({ images, title, onClose }) {
   const [current, setCurrent] = useState(0);
@@ -41,7 +42,7 @@ function GallerySliderModal({ images, title, onClose }) {
   );
 }
 
-import { roomAPI } from '../services/api';
+
 
 // Move facilities array definition to the top, before any useState calls
 const facilities = [
