@@ -1,10 +1,9 @@
 import MuiAlert from '@mui/material/Alert';
 import Modal from '@mui/material/Modal';
 import Snackbar from '@mui/material/Snackbar';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWhatsapp, FaWifi } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { roomAPI } from '../services/api';
 import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './HomePage.css';
 import './RoomsPage.css';
@@ -97,66 +96,6 @@ const HomePage = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [bookingSuccess, setBookingSuccess] = useState(null);
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
-  const [rooms, setRooms] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  // Fetch rooms from API (like RoomsPage)
-  useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const response = await roomAPI.getAllRooms();
-        // Transform API data to match frontend format
-        const transformedRooms = response.data.map(room => {
-          let imageName = '';
-          switch (room.type.toLowerCase()) {
-            case 'single room':
-            case 'single':
-              imageName = 'Single_Room_1.jpg';
-              break;
-            case 'delux room':
-            case 'deluxe room':
-            case 'delux':
-            case 'deluxe':
-              imageName = 'Delux_Room_1.jpg';
-              break;
-            case 'family room':
-            case 'family':
-              imageName = 'Family_room_1.jpg';
-              break;
-            case 'master room':
-            case 'master':
-              imageName = 'Master_Room_1.jpg';
-              break;
-            default:
-              imageName = `${room.type.replace(/ /g, '_')}_1.jpg`;
-          }
-          return {
-            id: room._id,
-            name: room.type,
-            type: room.type.toLowerCase().replace(' ', ''),
-            price: room.price,
-            image: getAssetPath(imageName, 'room'),
-            features: ['Free WiFi', 'TV', 'Private Bathroom'],
-            description: room.description,
-            maxGuests: room.capacity || 2,
-            size: '35 sqm',
-            amenities: ['Free WiFi', 'TV', 'Private Bathroom', 'Room Service', 'Daily Housekeeping'],
-            number: room.number,
-            status: room.status
-          };
-        });
-        setRooms(transformedRooms);
-        setError('');
-      } catch (err) {
-        setError('Failed to load rooms');
-        setRooms([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchRooms();
-  }, []);
 
   const handleSnackbarClose = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
@@ -244,7 +183,7 @@ const HomePage = () => {
   };
 
   const handleViewFullMenu = () => {
-    // implementation here or remove its usage if not needed
+    navigate('/restaurant');
   };
 
   return (
