@@ -1,7 +1,7 @@
 import MuiAlert from '@mui/material/Alert';
 import Modal from '@mui/material/Modal';
 import Snackbar from '@mui/material/Snackbar';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWhatsapp, FaWifi } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { roomAPI } from '../services/api';
@@ -97,6 +97,9 @@ const HomePage = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [bookingSuccess, setBookingSuccess] = useState(null);
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Fetch rooms from API (like RoomsPage)
   useEffect(() => {
