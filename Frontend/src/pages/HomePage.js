@@ -97,9 +97,6 @@ const HomePage = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [bookingSuccess, setBookingSuccess] = useState(null);
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
-  const [rooms, setRooms] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
   // Fetch rooms from API (like RoomsPage)
   useEffect(() => {
