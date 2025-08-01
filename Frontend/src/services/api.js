@@ -143,5 +143,3 @@ export const authUtils = {
     return !!token; // Convert to boolean
   }
 };
-
-export default api;
