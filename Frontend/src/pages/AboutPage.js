@@ -51,7 +51,7 @@ const AboutPage = () => {
               <div className="director-card">
                 <div className="director-image">
                   <img 
-                    src="/assets/Homepage/Home 2.jpg" 
+                    src="/assets/members/Shamsherali.jpg" 
                     alt="Shamsher Ali" 
                     className="director-photo"
                   />
@@ -65,7 +65,7 @@ const AboutPage = () => {
               <div className="director-card">
                 <div className="director-image">
                   <img 
-                    src="/assets/Homepage/home 3.jpg" 
+                    src="/assets/members/Qurbanali.jpg" 
                     alt="Qurban Ali" 
                     className="director-photo"
                   />
@@ -79,7 +79,7 @@ const AboutPage = () => {
               <div className="director-card">
                 <div className="director-image">
                   <img 
-                    src="/assets/Homepage/View.jpg" 
+                    src="/assets/members/Mehrbanali.jpg" 
                     alt="Meharban Ali" 
                     className="director-photo"
                   />
@@ -93,7 +93,7 @@ const AboutPage = () => {
               <div className="director-card">
                 <div className="director-image">
                   <img 
-                    src="/assets/Homepage/Home1.jpg" 
+                    src="/assets/members/Shabanali.jpg" 
                     alt="Shaban Ali" 
                     className="director-photo"
                   />

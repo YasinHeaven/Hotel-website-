@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import ReviewForm from './ReviewForm';
 import './ReviewsSection.css';
 
@@ -12,6 +13,20 @@ const ReviewsSection = () => {
   useEffect(() => {
     fetchReviews();
   }, []);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (showForm) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    // Cleanup function to restore scroll when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showForm]);
 
   const fetchReviews = async () => {
     try {
@@ -153,11 +168,12 @@ const ReviewsSection = () => {
           </div>
         )}
 
-        {showForm && (
+        {showForm && createPortal(
           <ReviewForm 
             onClose={handleFormClose}
             onSubmitSuccess={handleSubmitSuccess}
-          />
+          />,
+          document.body
         )}
       </div>
     </section>
