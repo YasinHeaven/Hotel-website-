@@ -153,24 +153,30 @@
 .error-message {
   background: #ffe6e6;
   color: #d32f2f;
-  padding: 12px 15px;
-  border-radius: 8px;
+  padding: 15px 20px;
+  border-radius: 10px;
   margin-bottom: 20px;
-  border: 1px solid #ffcdd2;
-  font-size: 0.9rem;
+  border: 2px solid #ffcdd2;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.1);
+  animation: slideIn 0.3s ease-out;
+  text-align: center;
 }
 
 /* Success Message */
 .success-message {
   background: #e8f5e8;
   color: #2e7d32;
-  padding: 12px 15px;
-  border-radius: 8px;
+  padding: 15px 20px;
+  border-radius: 10px;
   margin-bottom: 20px;
-  border: 1px solid #c8e6c9;
-  font-size: 0.9rem;
+  border: 2px solid #c8e6c9;
+  font-size: 0.95rem;
   text-align: center;
   font-weight: 500;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.1);
+  animation: slideIn 0.3s ease-out;
 }
 
 /* Form Actions */
@@ -310,5 +316,17 @@
   
   .star-btn {
     font-size: 1.5rem;
+  }
+}
+
+/* Animation for error and success messages */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

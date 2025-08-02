@@ -56,27 +56,29 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    console.log('🚀🚀🚀 HANDLESUBMIT CALLED! 🚀🚀🚀');
-    alert('HandleSubmit function was called!'); // Temporary alert for testing
+    console.log('🚀 Form submitted!');
     console.log('📊 Form data:', formData);
     console.log('🌐 API URL:', process.env.REACT_APP_API_URL);
+    
+    // Clear previous messages
+    setError('');
+    setSuccess('');
     
     // Basic validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.title.trim() || !formData.comment.trim()) {
       console.log('❌ Validation failed: Missing required fields');
-      setError('Please fill in all required fields');
+      setError('❌ Please fill in all required fields (Name, Email, Title, and Review)');
       return;
     }
 
     if (formData.comment.trim().length < 10) {
       console.log('❌ Validation failed: Comment too short');
-      setError('Please write a more detailed review (at least 10 characters)');
+      setError('❌ Please write a more detailed review (at least 10 characters)');
       return;
     }
 
     console.log('✅ Validation passed, submitting...');
     setIsSubmitting(true);
-    setError('');
 
     try {
       const token = localStorage.getItem('token');
@@ -128,7 +130,21 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
         }, 3000);
       } else {
         console.log('❌ Review submission failed:', data.message);
-        setError(data.message || 'Failed to submit review. Please try again.');
+        // Format error message for better user experience
+        let errorMessage = data.message || 'Failed to submit review. Please try again.';
+        
+        // Add appropriate emojis and formatting for common errors
+        if (errorMessage.includes('one review per day')) {
+          errorMessage = '⏰ ' + errorMessage;
+        } else if (errorMessage.includes('required')) {
+          errorMessage = '📝 ' + errorMessage;
+        } else if (errorMessage.includes('validation')) {
+          errorMessage = '❌ ' + errorMessage;
+        } else if (!errorMessage.startsWith('❌') && !errorMessage.startsWith('⏰') && !errorMessage.startsWith('📝')) {
+          errorMessage = '❌ ' + errorMessage;
+        }
+        
+        setError(errorMessage);
         setSuccess('');
       }
     } catch (error) {
@@ -139,14 +155,17 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
         stack: error.stack
       });
       
+      // Clear success message on error
+      setSuccess('');
+      
       if (error.message.includes('404')) {
         setError('⚠️ Service temporarily unavailable. Please try again later.');
       } else if (error.message.includes('401')) {
-        setError('🔒 Please login first to submit a review.');
+        setError('🔒 Authentication required. Please refresh the page and try again.');
       } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
         setError('🌐 Network error. Please check your internet connection and try again.');
       } else {
-        setError('❌ Failed to submit review. Please check your connection and try again.');
+        setError('❌ Something went wrong. Please check your connection and try again.');
       }
       setSuccess('');
     } finally {
@@ -306,7 +325,6 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
               disabled={isSubmitting}
               onClick={(e) => {
                 console.log('🖱️ Submit button clicked!');
-                alert('Submit button was clicked!'); // Temporary alert for testing
                 console.log('🔄 Is submitting:', isSubmitting);
                 console.log('📝 Form data at click:', formData);
                 // Don't prevent default here, let the form handle it
