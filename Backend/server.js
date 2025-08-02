@@ -27,8 +27,29 @@ if (process.env.NODE_ENV === 'production' && process.env.SERVE_STATIC === 'true'
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hotel')
-.then(() => console.log('MongoDB connected'))
-.catch((err) => console.error('MongoDB connection error:', err));
+.then(() => {
+  console.log('✅ MongoDB connected successfully');
+  console.log('📍 Database:', mongoose.connection.db.databaseName);
+  console.log('🌐 Host:', mongoose.connection.host);
+  console.log('🔌 Port:', mongoose.connection.port);
+})
+.catch((err) => {
+  console.error('❌ MongoDB connection error:', err.message);
+  console.error('🔗 Connection URI:', process.env.MONGODB_URI ? 'URI Set' : 'URI Missing');
+});
+
+// Monitor connection events
+mongoose.connection.on('connected', () => {
+  console.log('🟢 Mongoose connected to MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('🔴 Mongoose connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('🟡 Mongoose disconnected from MongoDB');
+});
 
 const adminAuthRoutes = require('./routes/adminAuth');
 const roomRoutes = require('./routes/room');
@@ -47,6 +68,66 @@ app.use('/api/users', userRoutes);
 // Test Route for API
 app.get('/api', (req, res) => {
   res.send('Yasin Heaven Star Hotel Backend API Running');
+});
+
+// MongoDB Connection Test Endpoint
+app.get('/api/mongodb-test', async (req, res) => {
+  try {
+    // Import models (they should be available)
+    const Room = require('./models/Room');
+    const User = require('./models/User');
+    const Booking = require('./models/Booking');
+    
+    // Test database connection
+    const db = mongoose.connection.db;
+    const admin = db.admin();
+    
+    // Get basic server info
+    const serverStatus = await admin.serverStatus();
+    const dbStats = await db.stats();
+    
+    // Count documents in collections
+    const roomsCount = await Room.countDocuments();
+    const usersCount = await User.countDocuments();
+    const bookingsCount = await Booking.countDocuments();
+    
+    res.json({
+      status: 'Connected to MongoDB Atlas',
+      connectionState: mongoose.connection.readyState, // 1 = connected
+      database: db.databaseName,
+      host: mongoose.connection.host,
+      collections: {
+        rooms: roomsCount,
+        users: usersCount,
+        bookings: bookingsCount
+      },
+      serverInfo: {
+        version: serverStatus.version,
+        uptime: Math.floor(serverStatus.uptime / 60) + ' minutes',
+        host: serverStatus.host
+      },
+      dbStats: {
+        collections: dbStats.collections,
+        dataSize: Math.round(dbStats.dataSize / 1024) + ' KB',
+        indexSize: Math.round(dbStats.indexSize / 1024) + ' KB'
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('MongoDB test error:', error);
+    res.status(500).json({
+      status: 'MongoDB connection failed',
+      error: error.message,
+      connectionState: mongoose.connection.readyState,
+      connectionStates: {
+        0: 'disconnected',
+        1: 'connected',
+        2: 'connecting',
+        3: 'disconnecting'
+      },
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 // Serve React app for all non-API routes in production (only if serving static files)
