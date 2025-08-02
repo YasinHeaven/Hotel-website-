@@ -160,6 +160,19 @@
   font-size: 0.9rem;
 }
 
+/* Success Message */
+.success-message {
+  background: #e8f5e8;
+  color: #2e7d32;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #c8e6c9;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+}
+
 /* Form Actions */
 .form-actions {
   display: flex;

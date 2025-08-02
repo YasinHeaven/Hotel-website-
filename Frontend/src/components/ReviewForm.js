@@ -12,6 +12,7 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,8 +20,9 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
+    // Clear messages when user starts typing
     if (error) setError('');
+    if (success) setSuccess('');
   };
 
   const handleRatingChange = (rating) => {
@@ -59,14 +61,22 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
       const data = await response.json();
 
       if (data.success) {
+        setSuccess(data.message);
+        setError('');
         onSubmitSuccess && onSubmitSuccess(data.message);
-        onClose();
+        
+        // Close form after showing success message for 2 seconds
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       } else {
         setError(data.message || 'Failed to submit review');
+        setSuccess('');
       }
     } catch (error) {
       console.error('Error submitting review:', error);
-      setError('Failed to submit review. Please try again.');
+      setError('Failed to submit review. Please check your connection and try again.');
+      setSuccess('');
     } finally {
       setIsSubmitting(false);
     }
@@ -84,6 +94,12 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
           {error && (
             <div className="error-message">
               {error}
+            </div>
+          )}
+          
+          {success && (
+            <div className="success-message">
+              {success}
             </div>
           )}
 

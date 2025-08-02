@@ -6,10 +6,31 @@ const AdminReviews = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // all, pending, approved
   const [message, setMessage] = useState('');
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newReview, setNewReview] = useState({
+    name: '',
+    email: '',
+    rating: 5,
+    title: '',
+    comment: '',
+    location: '',
+    isApproved: true
+  });
 
   const fetchReviews = useCallback(async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('adminToken');
+      
+      console.log('Fetching reviews with token:', token ? 'Present' : 'Missing');
+      console.log('API URL:', process.env.REACT_APP_API_URL);
+      
+      if (!token) {
+        setMessage('Admin authentication required. Please login again.');
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/admin?status=${filter}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -17,15 +38,25 @@ const AdminReviews = () => {
         }
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
+      console.log('Received data:', data);
+
       if (data.success) {
-        setReviews(data.reviews);
+        setReviews(data.reviews || []);
+        setMessage('');
       } else {
-        setMessage('Failed to fetch reviews');
+        setMessage(data.message || 'Failed to fetch reviews');
       }
     } catch (error) {
       console.error('Error fetching reviews:', error);
-      setMessage('Error fetching reviews');
+      setMessage(`Error fetching reviews: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -132,6 +163,63 @@ const AdminReviews = () => {
     });
   };
 
+  const handleAddReview = async (e) => {
+    e.preventDefault();
+    
+    if (!newReview.name.trim() || !newReview.email.trim() || !newReview.title.trim() || !newReview.comment.trim()) {
+      setMessage('Please fill in all required fields');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newReview)
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setMessage('Review added successfully!');
+        setShowAddForm(false);
+        setNewReview({
+          name: '',
+          email: '',
+          rating: 5,
+          title: '',
+          comment: '',
+          location: '',
+          isApproved: true
+        });
+        
+        // If the new review is approved, approve it immediately
+        if (newReview.isApproved) {
+          // Find the review ID from the response and approve it
+          setTimeout(() => fetchReviews(), 500);
+        } else {
+          fetchReviews();
+        }
+      } else {
+        setMessage(data.message || 'Failed to add review');
+      }
+    } catch (error) {
+      console.error('Error adding review:', error);
+      setMessage('Error adding review');
+    }
+  };
+
+  const handleNewReviewChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNewReview(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
   const getStatusBadge = (review) => {
     if (!review.isApproved && review.isVisible) {
       return <span className="status-badge pending">Pending</span>;
@@ -153,13 +241,135 @@ const AdminReviews = () => {
   return (
     <div className="admin-reviews">
       <div className="admin-reviews-header">
-        <h1>Manage Reviews</h1>
-        <p>Approve, reject, or delete guest reviews</p>
+        <div>
+          <h1>Manage Reviews</h1>
+          <p>Approve, reject, or delete guest reviews</p>
+        </div>
+        <button 
+          className="btn add-review-btn"
+          onClick={() => setShowAddForm(true)}
+        >
+          Add Review
+        </button>
       </div>
 
       {message && (
         <div className="alert-message">
           {message}
+        </div>
+      )}
+
+      {showAddForm && (
+        <div className="add-review-modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>Add New Review</h2>
+              <button 
+                className="close-btn"
+                onClick={() => setShowAddForm(false)}
+              >
+                ×
+              </button>
+            </div>
+            
+            <form onSubmit={handleAddReview} className="add-review-form">
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Name *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={newReview.name}
+                    onChange={handleNewReviewChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Email *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={newReview.email}
+                    onChange={handleNewReviewChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Rating *</label>
+                  <select
+                    name="rating"
+                    value={newReview.rating}
+                    onChange={handleNewReviewChange}
+                    required
+                  >
+                    <option value={5}>5 Stars - Excellent</option>
+                    <option value={4}>4 Stars - Very Good</option>
+                    <option value={3}>3 Stars - Good</option>
+                    <option value={2}>2 Stars - Fair</option>
+                    <option value={1}>1 Star - Poor</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={newReview.location}
+                    onChange={handleNewReviewChange}
+                    placeholder="e.g., New York, USA"
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Review Title *</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={newReview.title}
+                  onChange={handleNewReviewChange}
+                  required
+                  placeholder="Brief title for the review"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Review Comment *</label>
+                <textarea
+                  name="comment"
+                  value={newReview.comment}
+                  onChange={handleNewReviewChange}
+                  required
+                  rows="4"
+                  placeholder="Detailed review comment"
+                />
+              </div>
+
+              <div className="form-group checkbox-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    name="isApproved"
+                    checked={newReview.isApproved}
+                    onChange={handleNewReviewChange}
+                  />
+                  Auto-approve this review
+                </label>
+              </div>
+
+              <div className="form-actions">
+                <button type="button" onClick={() => setShowAddForm(false)} className="btn cancel-btn">
+                  Cancel
+                </button>
+                <button type="submit" className="btn submit-btn">
+                  Add Review
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
