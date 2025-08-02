@@ -78,6 +78,7 @@ const userRoutes = require('./routes/user');
 const dashboardRoutes = require('./routes/dashboard');
 const adminRoomsRoutes = require('./routes/adminRooms');
 const adminUsersRoutes = require('./routes/adminUsers');
+const reviewRoutes = require('./routes/reviews');
 
 app.use('/api/admin', adminAuthRoutes);
 app.use('/api/auth', authRoutes);
@@ -88,6 +89,7 @@ app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/admin/rooms', adminRoomsRoutes);
 app.use('/api/admin/users', adminUsersRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Test Route for API
 app.get('/api', (req, res) => {

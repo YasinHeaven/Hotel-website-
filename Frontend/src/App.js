@@ -8,6 +8,7 @@ import AboutPage from './pages/AboutPage';
 import AdminBookings from './pages/AdminBookings';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
+import AdminReviewsPage from './pages/AdminReviewsPage';
 import AdminRooms from './pages/AdminRooms';
 import AdminUsers from './pages/AdminUsers';
 // import BeachHotelsPage from './pages/BeachHotelsPage';
@@ -81,6 +82,11 @@ function App() {
             <Route path="/admin/users" element={
               <ProtectedRoute requireAuth={true} redirectTo="/admin/login">
                 <AdminUsers />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/reviews" element={
+              <ProtectedRoute requireAuth={true} redirectTo="/admin/login">
+                <AdminReviewsPage />
               </ProtectedRoute>
             } />
           </Routes>

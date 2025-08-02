@@ -4,6 +4,7 @@ import Snackbar from '@mui/material/Snackbar';
 import { useState } from "react";
 import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWhatsapp, FaWifi } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import ReviewsSection from '../components/ReviewsSection';
 import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './HomePage.css';
 import './RoomsPage.css';
@@ -621,6 +622,9 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Reviews Section */}
+      <ReviewsSection />
 
       {/* Newsletter Section */}
       <section className="section newsletter-section">

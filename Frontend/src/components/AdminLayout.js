@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaBed, FaCalendarCheck, FaSignOutAlt, FaTachometerAlt, FaUsers } from 'react-icons/fa';
+import { FaBed, FaCalendarCheck, FaSignOutAlt, FaStar, FaTachometerAlt, FaUsers } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import './AdminLayout.css';
 
@@ -86,6 +86,10 @@ const AdminLayout = ({ children }) => {
           <Link to="/admin/users" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <FaUsers />
             <span>Users</span>
+          </Link>
+          <Link to="/admin/reviews" className="nav-item" onClick={() => setSidebarOpen(false)}>
+            <FaStar />
+            <span>Reviews</span>
           </Link>
           {/* Removed Gallery and Settings options as requested */}
         </nav>
