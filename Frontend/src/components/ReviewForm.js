@@ -56,17 +56,25 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    console.log('🚀🚀🚀 HANDLESUBMIT CALLED! 🚀🚀🚀');
+    alert('HandleSubmit function was called!'); // Temporary alert for testing
+    console.log('📊 Form data:', formData);
+    console.log('🌐 API URL:', process.env.REACT_APP_API_URL);
+    
     // Basic validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.title.trim() || !formData.comment.trim()) {
+      console.log('❌ Validation failed: Missing required fields');
       setError('Please fill in all required fields');
       return;
     }
 
     if (formData.comment.trim().length < 10) {
+      console.log('❌ Validation failed: Comment too short');
       setError('Please write a more detailed review (at least 10 characters)');
       return;
     }
 
+    console.log('✅ Validation passed, submitting...');
     setIsSubmitting(true);
     setError('');
 
@@ -79,17 +87,28 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
       // Add auth header only if token exists
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
+        console.log('🔑 Token found, adding auth header');
+      } else {
+        console.log('👤 No token found, submitting as guest');
       }
       
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/reviews`, {
+      const apiUrl = `${process.env.REACT_APP_API_URL}/reviews`;
+      console.log('📡 Making request to:', apiUrl);
+      console.log('📋 Headers:', headers);
+      console.log('📤 Body:', JSON.stringify(formData));
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(formData)
       });
 
+      console.log('📨 Response received:', response.status);
       const data = await response.json();
+      console.log('📊 Response data:', data);
 
       if (data.success) {
+        console.log('✅ Review submitted successfully!');
         setSuccess('🎉 Review submitted successfully! It will be visible after admin approval.');
         setError('');
         onSubmitSuccess && onSubmitSuccess('🎉 Thank you for your review! It will appear on the website after approval.');
@@ -108,20 +127,30 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
           onClose();
         }, 3000);
       } else {
+        console.log('❌ Review submission failed:', data.message);
         setError(data.message || 'Failed to submit review. Please try again.');
         setSuccess('');
       }
     } catch (error) {
-      console.error('Error submitting review:', error);
+      console.error('💥 Exception during review submission:', error);
+      console.error('📍 Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+      
       if (error.message.includes('404')) {
         setError('⚠️ Service temporarily unavailable. Please try again later.');
       } else if (error.message.includes('401')) {
         setError('🔒 Please login first to submit a review.');
+      } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        setError('🌐 Network error. Please check your internet connection and try again.');
       } else {
         setError('❌ Failed to submit review. Please check your connection and try again.');
       }
       setSuccess('');
     } finally {
+      console.log('🏁 Form submission completed, resetting loading state');
       setIsSubmitting(false);
     }
   };
@@ -275,6 +304,13 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
               type="submit" 
               className="submit-btn"
               disabled={isSubmitting}
+              onClick={(e) => {
+                console.log('🖱️ Submit button clicked!');
+                alert('Submit button was clicked!'); // Temporary alert for testing
+                console.log('🔄 Is submitting:', isSubmitting);
+                console.log('📝 Form data at click:', formData);
+                // Don't prevent default here, let the form handle it
+              }}
             >
               {isSubmitting ? 'Submitting...' : 'Submit Review'}
             </button>
