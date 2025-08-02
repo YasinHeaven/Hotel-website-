@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaBars, FaSignInAlt, FaSignOutAlt, FaTimes, FaUser, FaUserPlus } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthDropdownOpen, setIsAuthDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [userType, setUserType] = useState(null);
+  const dropdownRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -34,6 +36,20 @@ const Header = () => {
       setUserType(null);
     }
   }, [location]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsAuthDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     // Clear all authentication data
@@ -75,6 +91,9 @@ const Header = () => {
             <nav className="desktop-nav">
               <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}> 
                 Home
+              </Link>
+              <Link to="/about" className={`nav-link ${isActive('/about') ? 'active' : ''}`}> 
+                About
               </Link>
               <Link to="/rooms" className={`nav-link ${isActive('/rooms') ? 'active' : ''}`}> 
                 Rooms
@@ -131,19 +150,42 @@ const Header = () => {
                 </button>
               </div>
             ) : (
-              <div className="auth-buttons">
-                <Link to="/login" className="btn-login">
-                  <FaSignInAlt />
-                  Login
-                </Link>
-                <Link to="/signup" className="btn-signup">
-                  <FaUserPlus />
-                  Sign Up
-                </Link>
-                <Link to="/admin/login" className="btn-admin">
+              <div className="auth-dropdown" ref={dropdownRef}>
+                <button 
+                  className="auth-dropdown-trigger"
+                  onClick={() => setIsAuthDropdownOpen(!isAuthDropdownOpen)}
+                >
                   <FaUser />
-                  Admin
-                </Link>
+                  Account
+                </button>
+                {isAuthDropdownOpen && (
+                  <div className="auth-dropdown-menu">
+                    <Link 
+                      to="/login" 
+                      className="auth-dropdown-item"
+                      onClick={() => setIsAuthDropdownOpen(false)}
+                    >
+                      <FaSignInAlt />
+                      Login
+                    </Link>
+                    <Link 
+                      to="/signup" 
+                      className="auth-dropdown-item"
+                      onClick={() => setIsAuthDropdownOpen(false)}
+                    >
+                      <FaUserPlus />
+                      Sign Up
+                    </Link>
+                    <Link 
+                      to="/admin/login" 
+                      className="auth-dropdown-item admin-item"
+                      onClick={() => setIsAuthDropdownOpen(false)}
+                    >
+                      <FaUser />
+                      Admin Login
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -158,6 +200,9 @@ const Header = () => {
             <div className="mobile-nav-content">
                 <Link to="/" className={`mobile-nav-link ${isActive('/') ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>
                   Home
+                </Link>
+                <Link to="/about" className={`mobile-nav-link ${isActive('/about') ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>
+                  About
                 </Link>
                 <Link to="/rooms" className={`mobile-nav-link ${isActive('/rooms') ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>
                   Rooms

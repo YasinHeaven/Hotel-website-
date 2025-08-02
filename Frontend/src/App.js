@@ -4,6 +4,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AdminProvider } from './contexts/AdminContext';
+import AboutPage from './pages/AboutPage';
 import AdminBookings from './pages/AdminBookings';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
@@ -31,6 +32,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="/rooms" element={<RoomsPage />} />
             <Route path="/deals" element={<DealsPage />} />
             <Route path="/booking" element={<UserBookingsPage />} />

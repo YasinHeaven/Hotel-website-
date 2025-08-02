@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Railway Backend Status Check</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .testing { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Railway Backend Status</h1>
+    <div id="status">Testing backend...</div>
+    
+    <script>
+        async function checkBackend() {
+            const statusDiv = document.getElementById('status');
+            
+            try {
+                statusDiv.innerHTML = '<div class="testing">🔄 Testing Railway backend connection...</div>';
+                
+                const response = await fetch('https://hotel-website-production-672b.up.railway.app/api/rooms');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.innerHTML = `
+                        <div class="success">
+                            ✅ <strong>Railway Backend is WORKING!</strong><br>
+                            📊 Found ${data.length} rooms in database<br>
+                            🔗 API endpoint responding correctly<br>
+                            ⏰ Tested at: ${new Date().toLocaleTimeString()}
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="error">
+                            ❌ <strong>Backend responded with error:</strong><br>
+                            Status: ${response.status}<br>
+                            ⏰ Tested at: ${new Date().toLocaleTimeString()}
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="error">
+                        ❌ <strong>Cannot connect to Railway backend!</strong><br>
+                        Error: ${error.message}<br>
+                        🔄 Railway might still be redeploying...<br>
+                        ⏰ Tested at: ${new Date().toLocaleTimeString()}
+                    </div>
+                `;
+            }
+        }
+        
+        // Test immediately and then every 10 seconds
+        checkBackend();
+        setInterval(checkBackend, 10000);
+    </script>
+    
+    <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 5px;">
+        <h3>📋 What's Happening:</h3>
+        <ol>
+            <li><strong>Railway Configuration Fixed:</strong> Changed from "npm start" to "node server.js"</li>
+            <li><strong>Removed Seeding:</strong> No more seeding during startup (prevents timeouts)</li>
+            <li><strong>Direct Server Start:</strong> Bypasses npm script issues</li>
+            <li><strong>This page auto-refreshes</strong> every 10 seconds to show status</li>
+        </ol>
+        
+        <p><strong>Expected Result:</strong> Backend should start successfully without the SIGTERM errors!</p>
+    </div>
+</body>
+</html>

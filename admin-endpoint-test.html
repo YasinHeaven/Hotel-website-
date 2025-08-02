@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel Quick Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; }
+        .error { background-color: #f8d7da; }
+        .loading { background-color: #fff3cd; }
+        .token-input { width: 100%; padding: 8px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Admin Panel Endpoint Test</h1>
+    <p>Test if the admin endpoints are working properly after the fix.</p>
+    
+    <div>
+        <label>Admin Token (get from browser localStorage after login):</label>
+        <input type="text" id="adminToken" class="token-input" placeholder="Paste your admin token here">
+        <button onclick="testEndpoints()">Test Admin Endpoints</button>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        const API_BASE = 'https://hotel-website-production-672b.up.railway.app/api';
+        
+        async function testEndpoints() {
+            const token = document.getElementById('adminToken').value;
+            const results = document.getElementById('results');
+            
+            if (!token) {
+                results.innerHTML = '<div class="error">Please provide admin token</div>';
+                return;
+            }
+            
+            results.innerHTML = '<div class="loading">Testing endpoints...</div>';
+            
+            const tests = [
+                {
+                    name: 'Get Admin Rooms',
+                    url: `${API_BASE}/admin/rooms`,
+                    method: 'GET'
+                },
+                {
+                    name: 'Get Admin Users', 
+                    url: `${API_BASE}/admin/users`,
+                    method: 'GET'
+                }
+            ];
+            
+            let html = '';
+            
+            for (const test of tests) {
+                try {
+                    const response = await fetch(test.url, {
+                        method: test.method,
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        html += `<div class="test success">
+                            <h3>✅ ${test.name}</h3>
+                            <p>Status: ${response.status}</p>
+                            <p>Data: ${Array.isArray(data) ? data.length + ' items' : 'Object'}</p>
+                        </div>`;
+                    } else {
+                        html += `<div class="test error">
+                            <h3>❌ ${test.name}</h3>
+                            <p>Status: ${response.status}</p>
+                            <p>Error: ${data.message || 'Unknown error'}</p>
+                        </div>`;
+                    }
+                } catch (error) {
+                    html += `<div class="test error">
+                        <h3>❌ ${test.name}</h3>
+                        <p>Network Error: ${error.message}</p>
+                    </div>`;
+                }
+            }
+            
+            results.innerHTML = html;
+        }
+        
+        // Auto-fill token if available in localStorage (for testing)
+        if (localStorage.getItem('adminToken')) {
+            document.getElementById('adminToken').value = localStorage.getItem('adminToken');
+        }
+    </script>
+</body>
+</html>
