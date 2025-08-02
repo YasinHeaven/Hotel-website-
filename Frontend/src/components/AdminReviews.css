@@ -43,13 +43,33 @@
 
 /* Alert Message */
 .alert-message {
-  background: #d4edda;
-  color: #155724;
   padding: 12px 20px;
   border-radius: 8px;
   margin-bottom: 20px;
-  border: 1px solid #c3e6cb;
+  border: 1px solid transparent;
   text-align: center;
+  font-weight: 500;
+  
+  /* Default (info/success) styling */
+  background: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+/* Error styling when message starts with ❌ */
+.alert-message:has-text('❌'), 
+.alert-message[data-type="error"] {
+  background: #ffe6e6;
+  color: #d32f2f;
+  border-color: #ffcdd2;
+}
+
+/* Success styling when message starts with ✅ */
+.alert-message:has-text('✅'), 
+.alert-message[data-type="success"] {
+  background: #e8f5e8;
+  color: #2e7d32;
+  border-color: #c8e6c9;
 }
 
 /* Filters */
@@ -507,4 +527,34 @@
   .filter-btn {
     width: 100%;
   }
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button disabled state */
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
 }

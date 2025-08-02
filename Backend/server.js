@@ -14,7 +14,7 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     
     const allowedOrigins = process.env.NODE_ENV === 'production' 
-      ? ['https://yasinheavenstarhotel.com'] 
+      ? ['https://yasinheavenstarhotel.com', 'http://localhost:3000', 'http://127.0.0.1:3000', 'https://main--yasinheavenstarhotel.netlify.app'] 
       : ['http://localhost:3000', 'http://127.0.0.1:3000'];
     
     // Remove trailing slash from origin for comparison
@@ -25,6 +25,7 @@ const corsOptions = {
       callback(null, true);
     } else {
       console.log(`CORS blocked origin: ${origin} (normalized: ${normalizedOrigin})`);
+      console.log(`Allowed origins: ${normalizedAllowed.join(', ')}`);
       callback(new Error('Not allowed by CORS'));
     }
   },

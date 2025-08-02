@@ -7,6 +7,7 @@ const AdminReviews = () => {
   const [filter, setFilter] = useState('all'); // all, pending, approved
   const [message, setMessage] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [newReview, setNewReview] = useState({
     name: '',
     email: '',
@@ -171,8 +172,21 @@ const AdminReviews = () => {
       return;
     }
 
+    setIsSubmittingReview(true);
+    setMessage('');
+
     try {
       const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        setMessage('Admin authentication required. Please login again.');
+        setIsSubmittingReview(false);
+        return;
+      }
+
+      console.log('Submitting new review:', newReview);
+      console.log('API URL:', `${process.env.REACT_APP_API_URL}/api/reviews`);
+
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews`, {
         method: 'POST',
         headers: {
@@ -182,9 +196,17 @@ const AdminReviews = () => {
         body: JSON.stringify(newReview)
       });
 
+      console.log('Add review response status:', response.status);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
+      console.log('Add review response data:', data);
+
       if (data.success) {
-        setMessage('Review added successfully!');
+        setMessage('✅ Review added successfully!');
         setShowAddForm(false);
         setNewReview({
           name: '',
@@ -196,19 +218,35 @@ const AdminReviews = () => {
           isApproved: true
         });
         
-        // If the new review is approved, approve it immediately
-        if (newReview.isApproved) {
-          // Find the review ID from the response and approve it
-          setTimeout(() => fetchReviews(), 500);
-        } else {
-          fetchReviews();
+        // If the new review needs approval, approve it immediately if isApproved is true
+        if (newReview.isApproved && data.review && data.review._id) {
+          try {
+            const approveResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/${data.review._id}/approve`, {
+              method: 'PUT',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            if (approveResponse.ok) {
+              console.log('Review auto-approved successfully');
+            }
+          } catch (approveError) {
+            console.log('Auto-approve failed, but review was created:', approveError);
+          }
         }
+        
+        // Refresh the reviews list
+        setTimeout(() => fetchReviews(), 1000);
       } else {
-        setMessage(data.message || 'Failed to add review');
+        setMessage(`❌ ${data.message || 'Failed to add review'}`);
       }
     } catch (error) {
       console.error('Error adding review:', error);
-      setMessage('Error adding review');
+      setMessage(`❌ Error adding review: ${error.message}`);
+    } finally {
+      setIsSubmittingReview(false);
     }
   };
 
@@ -361,11 +399,27 @@ const AdminReviews = () => {
               </div>
 
               <div className="form-actions">
-                <button type="button" onClick={() => setShowAddForm(false)} className="btn cancel-btn">
+                <button 
+                  type="button" 
+                  onClick={() => setShowAddForm(false)} 
+                  className="btn cancel-btn"
+                  disabled={isSubmittingReview}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="btn submit-btn">
-                  Add Review
+                <button 
+                  type="submit" 
+                  className="btn submit-btn"
+                  disabled={isSubmittingReview}
+                >
+                  {isSubmittingReview ? (
+                    <>
+                      <span className="loading-spinner"></span>
+                      Adding Review...
+                    </>
+                  ) : (
+                    'Add Review'
+                  )}
                 </button>
               </div>
             </form>
