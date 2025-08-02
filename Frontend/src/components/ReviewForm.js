@@ -56,13 +56,6 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Check if user is logged in
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setError('Please login to submit a review. You need to be a registered user.');
-      return;
-    }
-    
     // Basic validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.title.trim() || !formData.comment.trim()) {
       setError('Please fill in all required fields');
@@ -79,12 +72,18 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
 
     try {
       const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      // Add auth header only if token exists
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       const response = await fetch(`${process.env.REACT_APP_API_URL}/reviews`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+        headers: headers,
         body: JSON.stringify(formData)
       });
 
@@ -136,21 +135,7 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="review-form">
-          {!isLoggedIn && (
-            <div className="login-notice" style={{
-              background: '#fff3cd',
-              border: '1px solid #ffeaa7',
-              color: '#856404',
-              padding: '12px',
-              borderRadius: '8px',
-              marginBottom: '20px',
-              fontSize: '14px'
-            }}>
-              📝 <strong>Login Required:</strong> You need to be logged in as a registered user to submit reviews.
-            </div>
-          )}
-
-          {isLoggedIn && (
+          {isLoggedIn ? (
             <div className="login-success" style={{
               background: '#d4edda',
               border: '1px solid #c3e6cb',
@@ -161,6 +146,18 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
               fontSize: '14px'
             }}>
               ✅ <strong>Logged in as:</strong> {formData.name} ({formData.email})
+            </div>
+          ) : (
+            <div className="guest-notice" style={{
+              background: '#e3f2fd',
+              border: '1px solid #90caf9',
+              color: '#0d47a1',
+              padding: '12px',
+              borderRadius: '8px',
+              marginBottom: '20px',
+              fontSize: '14px'
+            }}>
+              📝 <strong>Guest Review:</strong> You can submit a review as a guest. Reviews require admin approval before appearing on the website.
             </div>
           )}
 

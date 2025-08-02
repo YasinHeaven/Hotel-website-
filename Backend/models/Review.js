@@ -4,7 +4,7 @@ const reviewSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: false // Make optional to allow guest reviews
   },
   name: {
     type: String,

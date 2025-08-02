@@ -70,15 +70,29 @@ router.get('/', async (req, res) => {
 });
 
 // @route   POST /api/reviews
-// @desc    Submit a new review (requires user login)
-// @access  Private (User must be logged in)
-router.post('/', auth, async (req, res) => {
+// @desc    Submit a new review (requires user login OR allows guest)
+// @access  Public with optional authentication
+router.post('/', async (req, res) => {
   try {
     const { name, email, rating, title, comment, location } = req.body;
-    const userId = req.user.id; // Get user ID from auth middleware
+    
+    // Get user ID from auth token if provided
+    let userId = null;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    if (token) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        userId = decoded.id || decoded.userId || decoded.adminId;
+        console.log('📝 Review submission from authenticated user:', decoded.email);
+      } catch (error) {
+        console.log('⚠️ Invalid token provided, treating as guest review');
+      }
+    }
 
-    console.log('📝 Review submission from user:', req.user.email);
-    console.log('🔍 Review data:', { name, email, rating, title, comment, location });
+    console.log('🔍 Review data:', { name, email, rating, title, comment, location, userId });
 
     // Validation
     if (!name || !email || !rating || !title || !comment) {
@@ -95,16 +109,16 @@ router.post('/', auth, async (req, res) => {
       });
     }
 
-    // Check for duplicate review from same user within last 7 days
+    // Check for duplicate review from same email within last 24 hours
     const existingReview = await Review.findOne({
-      userId: userId,
-      createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+      email: email.toLowerCase(),
+      createdAt: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) }
     });
 
     if (existingReview) {
       return res.status(400).json({
         success: false,
-        message: 'You can only submit one review per week. Please try again later.'
+        message: 'You can only submit one review per day from this email. Please try again later.'
       });
     }
 
@@ -115,7 +129,7 @@ router.post('/', auth, async (req, res) => {
       title: title.trim(),
       comment: comment.trim(),
       location: location ? location.trim() : undefined,
-      userId: userId, // Associate review with user
+      userId: userId, // Optional: Associate with user if authenticated
       isApproved: false // Reviews need admin approval
     });
 
