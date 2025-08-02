@@ -9,10 +9,20 @@ const AdminUsers = () => {
   const [error, setError] = useState('');
 
   const fetchUsers = async () => {
-    const res = await fetch('/api/users', {
-      headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
-    });
-    setUsers(await res.json());
+    try {
+      const res = await fetch('/api/admin/users', {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
+      });
+      if (res.ok) {
+        setUsers(await res.json());
+      } else {
+        console.error('Failed to fetch users:', res.status);
+        setError('Failed to load users');
+      }
+    } catch (err) {
+      console.error('Error fetching users:', err);
+      setError('Failed to load users');
+    }
   };
 
   useEffect(() => { fetchUsers(); }, []);
@@ -24,7 +34,7 @@ const AdminUsers = () => {
     setError('');
     try {
       const method = editingId ? 'PUT' : 'POST';
-      const url = editingId ? `/api/users/${editingId}` : '/api/users';
+      const url = editingId ? `/api/admin/users/${editingId}` : '/api/admin/users';
       const res = await fetch(url, {
         method,
         headers: {
@@ -33,12 +43,18 @@ const AdminUsers = () => {
         },
         body: JSON.stringify(form)
       });
-      if (!res.ok) throw new Error('Error saving user');
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Error saving user');
+      }
+      
       setForm({ name: '', email: '', password: '' });
       setEditingId(null);
       fetchUsers();
     } catch (err) {
-      setError('Failed to save user');
+      console.error('Save user error:', err);
+      setError(err.message || 'Failed to save user');
     }
   };
 
@@ -49,11 +65,22 @@ const AdminUsers = () => {
 
   const handleDelete = async id => {
     if (!window.confirm('Delete this user?')) return;
-    await fetch(`/api/users/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
-    });
-    fetchUsers();
+    try {
+      const res = await fetch(`/api/admin/users/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Error deleting user');
+      }
+      
+      fetchUsers();
+    } catch (err) {
+      console.error('Delete user error:', err);
+      setError(err.message || 'Failed to delete user');
+    }
   };
 
   return (

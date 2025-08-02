@@ -9,10 +9,20 @@ const AdminRooms = () => {
   const [error, setError] = useState('');
 
   const fetchRooms = async () => {
-    const res = await fetch('/api/rooms', {
-      headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
-    });
-    setRooms(await res.json());
+    try {
+      const res = await fetch('/api/admin/rooms', {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
+      });
+      if (res.ok) {
+        setRooms(await res.json());
+      } else {
+        console.error('Failed to fetch rooms:', res.status);
+        setError('Failed to load rooms');
+      }
+    } catch (err) {
+      console.error('Error fetching rooms:', err);
+      setError('Failed to load rooms');
+    }
   };
 
   useEffect(() => { fetchRooms(); }, []);
@@ -36,7 +46,7 @@ const AdminRooms = () => {
     setError('');
     try {
       const method = editingId ? 'PUT' : 'POST';
-      const url = editingId ? `/api/rooms/${editingId}` : '/api/rooms';
+      const url = editingId ? `/api/admin/rooms/${editingId}` : '/api/admin/rooms';
       const res = await fetch(url, {
         method,
         headers: {
@@ -45,12 +55,18 @@ const AdminRooms = () => {
         },
         body: JSON.stringify(form)
       });
-      if (!res.ok) throw new Error('Error saving room');
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Error saving room');
+      }
+      
       setForm({ number: '', type: '', price: '', status: 'available', description: '', image: '' });
       setEditingId(null);
       fetchRooms();
     } catch (err) {
-      setError('Failed to save room');
+      console.error('Save room error:', err);
+      setError(err.message || 'Failed to save room');
     }
   };
 
@@ -68,11 +84,22 @@ const AdminRooms = () => {
 
   const handleDelete = async id => {
     if (!window.confirm('Delete this room?')) return;
-    await fetch(`/api/rooms/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
-    });
-    fetchRooms();
+    try {
+      const res = await fetch(`/api/admin/rooms/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Error deleting room');
+      }
+      
+      fetchRooms();
+    } catch (err) {
+      console.error('Delete room error:', err);
+      setError(err.message || 'Failed to delete room');
+    }
   };
 
   return (
