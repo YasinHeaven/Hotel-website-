@@ -14,7 +14,12 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     
     const allowedOrigins = process.env.NODE_ENV === 'production' 
-      ? ['https://yasinheavenstarhotel.com', 'http://localhost:3000', 'http://127.0.0.1:3000', 'https://main--yasinheavenstarhotel.netlify.app'] 
+      ? [
+          'https://yasinheavenstarhotel.com',
+          'https://www.yasinheavenstarhotel.com',
+          'http://localhost:3000', 
+          'http://127.0.0.1:3000'
+        ] 
       : ['http://localhost:3000', 'http://127.0.0.1:3000'];
     
     // Remove trailing slash from origin for comparison
