@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './AdminReviews.css';
 
 const AdminReviews = () => {
@@ -7,11 +7,7 @@ const AdminReviews = () => {
   const [filter, setFilter] = useState('all'); // all, pending, approved
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    fetchReviews();
-  }, [filter]);
-
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       const token = localStorage.getItem('adminToken');
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/admin?status=${filter}`, {
@@ -33,7 +29,11 @@ const AdminReviews = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    fetchReviews();
+  }, [fetchReviews]);
 
   const handleApprove = async (reviewId) => {
     try {

@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import FloatingReviewButton from './components/FloatingReviewButton';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -92,6 +93,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <FloatingReviewButton />
       </div>
     </AdminProvider>
   );
