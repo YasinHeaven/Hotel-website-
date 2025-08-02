@@ -85,8 +85,17 @@ router.post('/', async (req, res) => {
       try {
         const jwt = require('jsonwebtoken');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        userId = decoded.id || decoded.userId || decoded.adminId;
-        console.log('📝 Review submission from authenticated user:', decoded.email);
+        
+        // Handle both user and admin tokens
+        if (decoded.adminId) {
+          // This is an admin token - don't associate with userId, but log it
+          console.log('📝 Review submission from admin:', decoded.email);
+          userId = null; // Admin reviews don't need userId
+        } else if (decoded.id || decoded.userId) {
+          // This is a user token
+          userId = decoded.id || decoded.userId;
+          console.log('📝 Review submission from authenticated user:', decoded.email);
+        }
       } catch (error) {
         console.log('⚠️ Invalid token provided, treating as guest review');
       }
@@ -122,16 +131,22 @@ router.post('/', async (req, res) => {
       });
     }
 
-    const newReview = new Review({
+    const reviewData = {
       name: name.trim(),
       email: email.toLowerCase().trim(),
       rating: parseInt(rating),
       title: title.trim(),
       comment: comment.trim(),
       location: location ? location.trim() : undefined,
-      userId: userId, // Optional: Associate with user if authenticated
       isApproved: false // Reviews need admin approval
-    });
+    };
+
+    // Only add userId if it exists (for authenticated users, not admins or guests)
+    if (userId) {
+      reviewData.userId = userId;
+    }
+
+    const newReview = new Review(reviewData);
 
     await newReview.save();
 
