@@ -91,21 +91,36 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
       const data = await response.json();
 
       if (data.success) {
-        setSuccess(data.message);
+        setSuccess('🎉 Review submitted successfully! It will be visible after admin approval.');
         setError('');
-        onSubmitSuccess && onSubmitSuccess(data.message);
+        onSubmitSuccess && onSubmitSuccess('🎉 Thank you for your review! It will appear on the website after approval.');
         
-        // Close form after showing success message for 2 seconds
+        // Reset form
+        setFormData(prev => ({
+          ...prev,
+          rating: 5,
+          title: '',
+          comment: '',
+          location: ''
+        }));
+        
+        // Close form after showing success message for 3 seconds
         setTimeout(() => {
           onClose();
-        }, 2000);
+        }, 3000);
       } else {
-        setError(data.message || 'Failed to submit review');
+        setError(data.message || 'Failed to submit review. Please try again.');
         setSuccess('');
       }
     } catch (error) {
       console.error('Error submitting review:', error);
-      setError('Failed to submit review. Please check your connection and try again.');
+      if (error.message.includes('404')) {
+        setError('⚠️ Service temporarily unavailable. Please try again later.');
+      } else if (error.message.includes('401')) {
+        setError('🔒 Please login first to submit a review.');
+      } else {
+        setError('❌ Failed to submit review. Please check your connection and try again.');
+      }
       setSuccess('');
     } finally {
       setIsSubmitting(false);

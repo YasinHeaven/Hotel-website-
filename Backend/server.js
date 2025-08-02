@@ -22,7 +22,9 @@ const corsOptions = {
       'https://yasinheavenstarhotel.com',
       'https://www.yasinheavenstarhotel.com',
       'http://localhost:3000', 
-      'http://127.0.0.1:3000'
+      'http://127.0.0.1:3000',
+      'https://688e67bf7aa5470008940006--stately-daffodil-b205f8.netlify.app',
+      'https://stately-daffodil-b205f8.netlify.app'
     ];
     
     // Remove trailing slash from origin for comparison

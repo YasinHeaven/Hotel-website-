@@ -1,7 +1,7 @@
 // API Configuration
 const API_CONFIG = {
     // Base URL for API requests
-    BASE_URL: process.env.REACT_APP_API_URL || 'https://hotel-website-production-672b.up.railway.app/api',
+    BASE_URL: process.env.REACT_APP_API_URL || 'https://hotel-website-production-672b.up.railway.app',
 
     // Timeout for requests
     TIMEOUT: 10000,

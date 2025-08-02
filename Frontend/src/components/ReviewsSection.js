@@ -15,7 +15,7 @@ const ReviewsSection = () => {
 
   const fetchReviews = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews?limit=6`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/reviews?limit=6`);
       const data = await response.json();
       
       if (data.success) {
