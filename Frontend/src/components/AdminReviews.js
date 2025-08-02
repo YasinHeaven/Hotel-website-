@@ -32,7 +32,7 @@ const AdminReviews = () => {
         return;
       }
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/admin?status=${filter}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/reviews/admin?status=${filter}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -70,7 +70,7 @@ const AdminReviews = () => {
   const handleApprove = async (reviewId) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/${reviewId}/approve`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/reviews/${reviewId}/approve`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -96,7 +96,7 @@ const AdminReviews = () => {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/${reviewId}/reject`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/reviews/${reviewId}/reject`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -122,7 +122,7 @@ const AdminReviews = () => {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/${reviewId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/reviews/${reviewId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -185,9 +185,9 @@ const AdminReviews = () => {
       }
 
       console.log('Submitting new review:', newReview);
-      console.log('API URL:', `${process.env.REACT_APP_API_URL}/api/reviews`);
+      console.log('API URL:', `${process.env.REACT_APP_API_URL}/reviews`);
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/reviews`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -221,7 +221,7 @@ const AdminReviews = () => {
         // If the new review needs approval, approve it immediately if isApproved is true
         if (newReview.isApproved && data.review && data.review._id) {
           try {
-            const approveResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/${data.review._id}/approve`, {
+            const approveResponse = await fetch(`${process.env.REACT_APP_API_URL}/reviews/${data.review._id}/approve`, {
               method: 'PUT',
               headers: {
                 'Authorization': `Bearer ${token}`,

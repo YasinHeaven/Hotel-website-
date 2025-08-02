@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Review = require('../models/Review');
 const adminAuth = require('../middleware/adminAuth');
+const auth = require('../middleware/auth'); // Add user auth middleware
 
 // @route   GET /api/reviews
 // @desc    Get all approved and visible reviews
@@ -69,11 +70,15 @@ router.get('/', async (req, res) => {
 });
 
 // @route   POST /api/reviews
-// @desc    Submit a new review
-// @access  Public
-router.post('/', async (req, res) => {
+// @desc    Submit a new review (requires user login)
+// @access  Private (User must be logged in)
+router.post('/', auth, async (req, res) => {
   try {
     const { name, email, rating, title, comment, location } = req.body;
+    const userId = req.user.id; // Get user ID from auth middleware
+
+    console.log('📝 Review submission from user:', req.user.email);
+    console.log('🔍 Review data:', { name, email, rating, title, comment, location });
 
     // Validation
     if (!name || !email || !rating || !title || !comment) {
@@ -90,16 +95,16 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // Check for duplicate review from same email within last 24 hours
+    // Check for duplicate review from same user within last 7 days
     const existingReview = await Review.findOne({
-      email: email.toLowerCase(),
-      createdAt: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) }
+      userId: userId,
+      createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
     });
 
     if (existingReview) {
       return res.status(400).json({
         success: false,
-        message: 'You can only submit one review per day. Please try again later.'
+        message: 'You can only submit one review per week. Please try again later.'
       });
     }
 
@@ -110,6 +115,7 @@ router.post('/', async (req, res) => {
       title: title.trim(),
       comment: comment.trim(),
       location: location ? location.trim() : undefined,
+      userId: userId, // Associate review with user
       isApproved: false // Reviews need admin approval
     });
 

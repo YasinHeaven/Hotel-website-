@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './ReviewForm.css';
 
 const ReviewForm = ({ onClose, onSubmitSuccess }) => {
@@ -13,6 +13,27 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check if user is logged in and auto-fill their details
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    
+    if (token && userData) {
+      try {
+        const user = JSON.parse(userData);
+        setFormData(prev => ({
+          ...prev,
+          name: user.name || user.firstName + ' ' + (user.lastName || ''),
+          email: user.email
+        }));
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +56,13 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Please login to submit a review. You need to be a registered user.');
+      return;
+    }
+    
     // Basic validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.title.trim() || !formData.comment.trim()) {
       setError('Please fill in all required fields');
@@ -50,10 +78,12 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
     setError('');
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews`, {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData)
       });
@@ -91,6 +121,34 @@ const ReviewForm = ({ onClose, onSubmitSuccess }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="review-form">
+          {!isLoggedIn && (
+            <div className="login-notice" style={{
+              background: '#fff3cd',
+              border: '1px solid #ffeaa7',
+              color: '#856404',
+              padding: '12px',
+              borderRadius: '8px',
+              marginBottom: '20px',
+              fontSize: '14px'
+            }}>
+              📝 <strong>Login Required:</strong> You need to be logged in as a registered user to submit reviews.
+            </div>
+          )}
+
+          {isLoggedIn && (
+            <div className="login-success" style={{
+              background: '#d4edda',
+              border: '1px solid #c3e6cb',
+              color: '#155724',
+              padding: '12px',
+              borderRadius: '8px',
+              marginBottom: '20px',
+              fontSize: '14px'
+            }}>
+              ✅ <strong>Logged in as:</strong> {formData.name} ({formData.email})
+            </div>
+          )}
+
           {error && (
             <div className="error-message">
               {error}
