@@ -9,10 +9,28 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL || false // Allow frontend URL in production
-    : ['http://localhost:3000', 'http://127.0.0.1:3000'], // Development origins
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = process.env.NODE_ENV === 'production' 
+      ? ['https://yasinheavenstarhotel.com'] 
+      : ['http://localhost:3000', 'http://127.0.0.1:3000'];
+    
+    // Remove trailing slash from origin for comparison
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    const normalizedAllowed = allowedOrigins.map(url => url.replace(/\/$/, ''));
+    
+    if (normalizedAllowed.includes(normalizedOrigin)) {
+      callback(null, true);
+    } else {
+      console.log(`CORS blocked origin: ${origin} (normalized: ${normalizedOrigin})`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
   optionsSuccessStatus: 200
 };
 
