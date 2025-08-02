@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
+import { getApiUrl } from '../config/api';
 import './AdminUsers.css';
 
 const AdminUsers = () => {
@@ -10,7 +11,7 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch('/api/admin/users', {
+      const res = await fetch(getApiUrl('/admin/users'), {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
       });
       if (res.ok) {
@@ -34,7 +35,7 @@ const AdminUsers = () => {
     setError('');
     try {
       const method = editingId ? 'PUT' : 'POST';
-      const url = editingId ? `/api/admin/users/${editingId}` : '/api/admin/users';
+      const url = editingId ? getApiUrl(`/admin/users/${editingId}`) : getApiUrl('/admin/users');
       const res = await fetch(url, {
         method,
         headers: {
@@ -66,7 +67,7 @@ const AdminUsers = () => {
   const handleDelete = async id => {
     if (!window.confirm('Delete this user?')) return;
     try {
-      const res = await fetch(`/api/admin/users/${id}`, {
+      const res = await fetch(getApiUrl(`/admin/users/${id}`), {
         method: 'DELETE',
         headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
       });

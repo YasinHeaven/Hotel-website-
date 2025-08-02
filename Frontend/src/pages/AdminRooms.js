@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
+import { getApiUrl } from '../config/api';
 import './AdminRooms.css';
 
 const AdminRooms = () => {
@@ -10,7 +11,7 @@ const AdminRooms = () => {
 
   const fetchRooms = async () => {
     try {
-      const res = await fetch('/api/admin/rooms', {
+      const res = await fetch(getApiUrl('/admin/rooms'), {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
       });
       if (res.ok) {
@@ -46,7 +47,7 @@ const AdminRooms = () => {
     setError('');
     try {
       const method = editingId ? 'PUT' : 'POST';
-      const url = editingId ? `/api/admin/rooms/${editingId}` : '/api/admin/rooms';
+      const url = editingId ? getApiUrl(`/admin/rooms/${editingId}`) : getApiUrl('/admin/rooms');
       const res = await fetch(url, {
         method,
         headers: {
@@ -85,7 +86,7 @@ const AdminRooms = () => {
   const handleDelete = async id => {
     if (!window.confirm('Delete this room?')) return;
     try {
-      const res = await fetch(`/api/admin/rooms/${id}`, {
+      const res = await fetch(getApiUrl(`/admin/rooms/${id}`), {
         method: 'DELETE',
         headers: { Authorization: 'Bearer ' + localStorage.getItem('adminToken') }
       });
