@@ -52,6 +52,7 @@ mongoose.connection.on('disconnected', () => {
 });
 
 const adminAuthRoutes = require('./routes/adminAuth');
+const authRoutes = require('./routes/auth');
 const roomRoutes = require('./routes/room');
 const bookingRoutes = require('./routes/booking');
 const bookingsRoutes = require('./routes/bookings');
@@ -59,6 +60,7 @@ const userRoutes = require('./routes/user');
 const dashboardRoutes = require('./routes/dashboard');
 
 app.use('/api/admin', adminAuthRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/admin/bookings', bookingsRoutes);
