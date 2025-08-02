@@ -6,7 +6,7 @@ const User = require('./models/User');
 
 async function getRoomAndUserIds() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hotel');
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connected to MongoDB');
     
     const rooms = await Room.find().limit(3);

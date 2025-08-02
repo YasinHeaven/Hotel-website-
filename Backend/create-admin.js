@@ -5,7 +5,7 @@ const Admin = require('./models/Admin');
 async function createAdmin() {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/yasin_heaven_star_hotel');
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connected to MongoDB');
     
     // Remove all existing admins

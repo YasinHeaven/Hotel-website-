@@ -44,7 +44,7 @@ if (process.env.NODE_ENV === 'production' && process.env.SERVE_STATIC === 'true'
 }
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hotel')
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => {
   console.log('✅ MongoDB connected successfully');
   console.log('📍 Database:', mongoose.connection.db.databaseName);

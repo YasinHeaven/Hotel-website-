@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; }
+        .error { background-color: #f8d7da; }
+        .loading { background-color: #fff3cd; }
+    </style>
+</head>
+<body>
+    <h1>Hotel Website API Connection Test</h1>
+    <p>This page will test if the frontend can connect to the backend API.</p>
+    
+    <div id="tests">
+        <div id="rooms-test" class="test loading">
+            <h3>🏨 Rooms API Test</h3>
+            <p>Status: <span id="rooms-status">Testing...</span></p>
+            <div id="rooms-data"></div>
+        </div>
+        
+        <div id="health-test" class="test loading">
+            <h3>❤️ API Health Test</h3>
+            <p>Status: <span id="health-status">Testing...</span></p>
+            <div id="health-data"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://hotel-website-production-672b.up.railway.app/api';
+        
+        async function testAPI(endpoint, testId, dataId) {
+            try {
+                const response = await fetch(`${API_URL}${endpoint}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById(testId).className = 'test success';
+                    document.getElementById(`${testId.split('-')[0]}-status`).textContent = 
+                        `✅ Success (${response.status})`;
+                    document.getElementById(dataId).innerHTML = 
+                        `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    document.getElementById(testId).className = 'test error';
+                    document.getElementById(`${testId.split('-')[0]}-status`).textContent = 
+                        `❌ Error (${response.status})`;
+                    document.getElementById(dataId).innerHTML = 
+                        `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
+            } catch (error) {
+                document.getElementById(testId).className = 'test error';
+                document.getElementById(`${testId.split('-')[0]}-status`).textContent = 
+                    `❌ Network Error`;
+                document.getElementById(dataId).innerHTML = 
+                    `<p>Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Run tests
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Testing API connection...');
+            testAPI('/rooms', 'rooms-test', 'rooms-data');
+            testAPI('', 'health-test', 'health-data');
+        });
+    </script>
+</body>
+</html>

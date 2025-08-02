@@ -10,7 +10,7 @@ const Gallery = require('../models/Gallery');
 // Connect to MongoDB
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/yasin_heaven_star_hotel');
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connected to MongoDB');
   } catch (error) {
     console.error('❌ MongoDB connection error:', error);
