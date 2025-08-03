@@ -1,7 +1,7 @@
 import MuiAlert from '@mui/material/Alert';
 import Modal from '@mui/material/Modal';
 import Snackbar from '@mui/material/Snackbar';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowRight, FaCar, FaCheckCircle, FaConciergeBell, FaMapMarkerAlt, FaShoppingBag, FaShower, FaStar, FaUtensils, FaWhatsapp, FaWifi } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import ReviewsSection from '../components/ReviewsSection';
@@ -93,10 +93,30 @@ const facilities = [
 
 const HomePage = () => {
   const navigate = useNavigate();
+  
+  // Slideshow images
+  const slideImages = [
+    '/assets/SlideShow/slide1.jpg',
+    '/assets/SlideShow/slide2.jpg',
+    '/assets/SlideShow/slide3.jpg',
+    '/assets/SlideShow/slide4.jpg',
+    '/assets/SlideShow/slide5.jpg'
+  ];
+  
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [facilityImgIndexes, setFacilityImgIndexes] = useState(() => facilities.map(() => 0));
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [bookingSuccess, setBookingSuccess] = useState(null);
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
+
+  // Auto-advance slideshow
+  useEffect(() => {
+    const slideInterval = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % slideImages.length);
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(slideInterval);
+  }, [slideImages.length]);
 
   const handleSnackbarClose = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
@@ -213,28 +233,45 @@ const HomePage = () => {
       >
         <FaWhatsapp style={{ color: '#fff', fontSize: '2rem' }} />
       </a>
-      {/* Hero Section */}
+      {/* Hero Section with Slideshow */}
       <section className="hero-section">
-        <div className="hero-overlay"></div>
-        <div className="hero-gradient-overlay"></div>
-        {/* Animated background elements */}
-        <div className="hero-bg-element hero-bg-1"></div>
-        <div className="hero-bg-element hero-bg-2"></div>
-        <div className="hero-content">
-          <div className="container">
-            <div className="hero-text">
-              <div className="hero-badge">
-                ⭐ Premium Hotel Experience
+        <div className="slideshow-container">
+          {slideImages.map((image, index) => (
+            <div
+              key={index}
+              className={`slide ${index === currentSlide ? 'active' : ''}`}
+              style={{
+                backgroundImage: `url(${image})`,
+              }}
+            />
+          ))}
+          <div className="hero-overlay"></div>
+          <div className="hero-content">
+            <div className="container">
+              <div className="hero-text">
+                <div className="hero-badge">
+                  ⭐ Premium Hotel Experience
+                </div>
+                <h1 className="hero-title">
+                  Welcome to <span className="hero-title-gradient">Yasin Heaven Star Hotel</span>
+                  <br />
+                </h1>
+                <p className="hero-description">
+                  Discover luxury hotels and unforgettable experiences worldwide. Your perfect stay awaits.
+                </p>
               </div>
-              <h1 className="hero-title">
-                Welcome to <span className="hero-title-gradient">Yasin Heaven Star Hotel</span>
-                <br />
-                <span className="hero-subtitle">Premium Hospitality Experience</span>
-              </h1>
-              <p className="hero-description">
-                Discover luxury hotels and unforgettable experiences worldwide. Your perfect stay awaits.
-              </p>
             </div>
+          </div>
+          
+          {/* Slideshow navigation dots */}
+          <div className="slideshow-dots">
+            {slideImages.map((_, index) => (
+              <button
+                key={index}
+                className={`dot ${index === currentSlide ? 'active' : ''}`}
+                onClick={() => setCurrentSlide(index)}
+              />
+            ))}
           </div>
         </div>
       </section>

@@ -127,15 +127,38 @@
   padding-top: 80px;
 }
 
-/* Hero Section */
+/* Hero Section with Slideshow */
 .hero-section {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, #ffffff 0%, #fef2f2 30%, #fee2e2 70%, #fecaca 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.slideshow-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
 }
 
 .hero-overlay {
@@ -144,49 +167,43 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(220, 38, 38, 0.1);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 1;
 }
 
-.hero-gradient-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(248, 113, 113, 0.1) 100%);
+.hero-content {
+  position: relative;
   z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.hero-bg-element {
+.slideshow-dots {
   position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 3;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  filter: blur(60px);
-  animation: float 6s ease-in-out infinite;
-  opacity: 0.3;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.hero-bg-1 {
-  top: 80px;
-  left: 80px;
-  width: 288px;
-  height: 288px;
-  background: rgba(251, 191, 36, 0.1);
-  animation-delay: 0s;
-}
-
-.hero-bg-2 {
-  bottom: 80px;
-  right: 80px;
-  width: 384px;
-  height: 384px;
-  background: rgba(59, 130, 246, 0.1);
-  animation-delay: 3s;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+.dot.active {
+  background: white;
+  border-color: white;
 }
 
 .hero-content {
@@ -211,16 +228,16 @@
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  padding: 8px 16px;
-  background: rgba(251, 191, 36, 0.9);
+  padding: 12px 24px;
+  background: rgba(212, 165, 116, 0.9);
   border-radius: 24px;
-  color: #1f2937;
+  color: white;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 24px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(251, 191, 36, 0.5);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(212, 165, 116, 0.7);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .hero-title {
@@ -228,12 +245,12 @@
   font-weight: 700;
   margin-bottom: 24px;
   line-height: 1.1;
-  color: #1f2937;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .hero-title-gradient {
-  background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+  background: linear-gradient(135deg, #d4a574 0%, #f4c752 50%, #d4a574 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -241,17 +258,53 @@
 }
 
 .hero-subtitle {
-  color: #374151;
+  color: white;
   font-weight: 400;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
 }
 
 .hero-description {
   font-size: 1.25rem;
-  color: #4b5563;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 48px;
   line-height: 1.6;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Slideshow Responsive Styles */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-description {
+    font-size: 1.1rem;
+  }
+  
+  .slideshow-dots {
+    bottom: 20px;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-description {
+    font-size: 1rem;
+    margin-bottom: 32px;
+  }
+  
+  .hero-badge {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
 }
 
 /* Search Card */

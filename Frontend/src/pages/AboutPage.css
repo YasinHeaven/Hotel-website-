@@ -5,8 +5,8 @@
 
 /* Hero Section */
 .about-hero {
-  height: 60vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  height: 80vh;
+  background: url('../assets/bgimages/aboutbg.jpg') center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,17 +15,33 @@
   position: relative;
 }
 
+.about-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
 .hero-overlay {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-content {
   max-width: 800px;
   padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-title {
@@ -34,6 +50,8 @@
   margin-bottom: 1rem;
   letter-spacing: 2px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  color: white !important;
+  display: block;
 }
 
 .hero-subtitle {
@@ -41,6 +59,11 @@
   font-weight: 300;
   opacity: 0.9;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  color: white !important;
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  width: 100%;
 }
 
 /* Main Content */
@@ -179,10 +202,10 @@
 
 .directors-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 50px;
   margin-top: 80px;
-  max-width: 1000px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }

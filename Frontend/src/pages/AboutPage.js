@@ -8,7 +8,7 @@ const AboutPage = () => {
         <div className="hero-overlay">
           <div className="hero-content">
             <h1 className="hero-title">About Us</h1>
-            <p className="hero-subtitle">A brief history about Yasin Heaven Star Hotel</p>
+            <span className="hero-subtitle">A brief history about Yasin Heaven Star Hotel</span>
           </div>
         </div>
       </section>
