@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaClock, FaCoffee, FaFire, FaLeaf, FaMugHot, FaSnowflake, FaUsers, FaUtensils } from 'react-icons/fa';
+import restaurantBg from '../assets/bgimages/resturantbg.png';
 import './RestaurantPage.css';
 
 const RestaurantPage = () => {
@@ -95,7 +96,7 @@ const RestaurantPage = () => {
     <div className="restaurant-page">
       {/* Hero Section */}
       <section className="restaurant-hero">
-        <div className="hero-background">
+        <div className="hero-background" style={{ backgroundImage: `url(${restaurantBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
           <div className="hero-overlay"></div>
         </div>
         <div className="restaurant-hero-content">

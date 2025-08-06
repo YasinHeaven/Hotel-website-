@@ -35,7 +35,7 @@ const AboutPage = () => {
               </div>
               <div className="journey-image">
                 <img 
-                  src="/assets/about/about2.jpg" 
+                  src="/assets/about/grandparents.png" 
                   alt="Yasin Heaven Star Hotel" 
                   className="about-main-image"
                 />
@@ -108,13 +108,13 @@ const AboutPage = () => {
           </section>
 
           {/* Features Section */}
-          <section className="about-features">
+          <section className="about-features" style={{ backgroundImage: "url('/assets/resturantbg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
             <div className="features-grid">
-              <div className="feature-item">
+              <divappl className="feature-item">
                 <div className="feature-icon">🏨</div>
                 <h3>Premium Accommodation</h3>
                 <p>10 comfortable rooms with private bathrooms and modern amenities</p>
-              </div>
+              </divappl>
               
               <div className="feature-item">
                 <div className="feature-icon">🍽️</div>
@@ -128,7 +128,7 @@ const AboutPage = () => {
                 <p>Well-equipped conference room for meetings and events</p>
               </div>
               
-              <div className="feature-item">
+              <div className="feature-item" style={{ backgroundImage: "url('/assets/facilities.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <div className="feature-icon">🏔️</div>
                 <h3>Scenic Location</h3>
                 <p>Located in the heart of beautiful Yasin Valley, Gilgit Baltistan</p>

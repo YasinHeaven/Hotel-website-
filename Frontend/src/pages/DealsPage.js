@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaMapMarkerAlt, FaTag } from 'react-icons/fa';
+import dealsBg from '../assets/bgimages/dealsbg.jpg';
 import './DealsPage.css';
 
 const DealsPage = () => {
@@ -46,12 +47,21 @@ const DealsPage = () => {
 
   return (
     <div className="deals-page">
-      <div className="deals-header">
-        <div className="container">
-          <h1>Exclusive Deals & Offers</h1>
-          <p>Don't miss out on amazing savings for your next getaway</p>
+      {/* Hero Section */}
+      <section className="deals-hero">
+        <div className="hero-background" style={{ backgroundImage: `url(${dealsBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          <div className="hero-overlay"></div>
         </div>
-      </div>
+        <div className="deals-hero-content">
+          <div className="container">
+            <div className="deals-hero-text">
+              <div className="hero-badge">🎯 Special Offers</div>
+              <h1 className="hero-title">Exclusive <span className="hero-highlight">Deals & Offers</span></h1>
+              <p className="hero-description">Don't miss out on amazing savings for your next getaway</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Featured Deals */}
       <section className="featured-deals-section">

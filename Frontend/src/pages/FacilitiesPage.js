@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaCar, FaCheckCircle, FaClock, FaConciergeBell, FaRoute, FaShoppingBag, FaUsers, FaWifi } from 'react-icons/fa';
+import facilitiesBg from '../assets/bgimages/facilities.jpg';
 import { createImageErrorHandler, getAssetPath } from '../utils/assetUtils';
 import './FacilitiesPage.css';
 
@@ -113,7 +114,7 @@ const FacilitiesPage = () => {
       {/* Hero Section */}
       {/* ...existing highlights and facilities sections... */}
       <section className="facilities-hero">
-        <div className="hero-background">
+        <div className="hero-background" style={{ backgroundImage: `url(${facilitiesBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
           <div className="hero-overlay"></div>
         </div>
         <div className="facilities-hero-content">
